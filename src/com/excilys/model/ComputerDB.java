@@ -1,5 +1,7 @@
 package com.excilys.model;
 
+import com.excilys.exceptions.ExceptionMessage;
+
 import java.sql.*;
 import java.util.*;
 
@@ -12,9 +14,11 @@ public class ComputerDB {
 	private static final String USER = "admincdb";
 	private static final String PASS = "qwerty1234";
 	 
-	 private Connection conn = null;
-	 
-	 public ComputerDB() throws ClassNotFoundException, SQLException{
+	private Connection conn = null;
+	
+	
+	
+	public ComputerDB() throws ClassNotFoundException, SQLException{
 		 
 		      Class.forName(JDBC_DRIVER);
 		      
@@ -23,82 +27,101 @@ public class ComputerDB {
 		      conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
 		      System.out.println("Connected to " + DB_NAME);
-	 }
+	}
 	 
-	 public ArrayList<Computer> listComputers () throws SQLException {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("Select c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName from computer c "
-											+"Left join company cn on cn.id = c.company_id");
-			stmt.close();
-			ArrayList<Computer> res = new ArrayList<>();
-			while (rs.next()) {
-				res.add(new Computer(rs.getInt("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),new Company(rs.getInt("cId"),rs.getString("cName"))));
-			}
-			return res;
-	 }
+	public ArrayList<Computer> listComputers () throws SQLException {
+		ArrayList<Computer> computer_list = new ArrayList<>();
+		Statement stmt = conn.createStatement();
+		ResultSet resultSet = stmt.executeQuery("Select c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName from computer c "
+										+"Left join company cn on cn.id = c.company_id");
+		while (resultSet.next()) {
+			Computer computer = new Computer(resultSet.getInt("id"),resultSet.getString("name"),resultSet.getTimestamp("introduced"),resultSet.getTimestamp("discontinued"),new Company(resultSet.getInt("cId"),resultSet.getString("cName")));
+			computer_list.add(computer);
+		}
+		stmt.close();
+		return computer_list;
+	}
 	
-	 public ArrayList<Company> listCompanies () throws SQLException {
+	public ArrayList<Company> listCompanies () throws SQLException {
+		ArrayList<Company> company_list = new ArrayList<>();
+		Statement stmt = conn.createStatement();
+		ResultSet resultSet = stmt.executeQuery("Select id, name from company");
+		while (resultSet.next()) {
+			Company company = new Company(resultSet.getInt("id"),resultSet.getString("name"));
+			company_list.add(company);
+		}
+		return company_list;
+	}
+	 
+	private Computer findComputer(int id) throws SQLException {
+		Statement stmt = conn.createStatement();
+		ResultSet resultSet = stmt.executeQuery("Select c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName from computer c "
+				 						 	+"Left join company cn on cn.id = c.company_id "
+				 						 	+"WHERE c.id = "+id);
+		if (resultSet.next()) {
+			return new Computer(resultSet.getInt("id"),resultSet.getString("name"),resultSet.getTimestamp("introduced"),resultSet.getTimestamp("discontinued"),new Company(resultSet.getInt("cId"),resultSet.getString("cName")));
+		}
+		else 
+			return null;
+	}
+	 
+	public int showDetails(int id) throws SQLException {
+		Computer c = findComputer(id);
+		if (c!=null) {
+			System.out.println(c + "\n");
+			return 0;
+		} else {
+			System.out.println("This computer id doesn't exist.\n");
+			return -1;
+		}
+	}
+	 
+	public void createComputer(String name, Timestamp introduced, Timestamp discontinued , int companyId) throws ExceptionMessage {
+		try {
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO computer (name, introduced, discontinued,company_id) VALUES (?,?,?,?)");
+			stmt.setString(1, name);
+			stmt.setTimestamp(2, introduced);
+			stmt.setTimestamp(3, discontinued);
+			stmt.setInt(4, companyId);
+			stmt.executeUpdate();
+			System.out.println("Computer "+ name + " has been created\n");
+		} catch (SQLException e){
+			throw new ExceptionMessage("Error when creating the computer");
+		}
+	}
+	 
+	public void updateComputer(int id, String name, Timestamp introduced, Timestamp discontinued , Integer companyId) throws ExceptionMessage {
+		try {
+			PreparedStatement stmt = conn.prepareStatement("UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?");
+			stmt.setString(1, name);
+			stmt.setTimestamp(2, introduced);
+			stmt.setTimestamp(3, discontinued);
+			stmt.setInt(4, companyId);
+			stmt.setInt(5, id);
+			stmt.executeUpdate();
+			System.out.println("Computer "+ id + " has been updated\n");
+		} catch (SQLException e){
+			e.printStackTrace();
+			throw new ExceptionMessage("Error when updating the computer");
+		}
+	}
+	 
+	public void deleteComputer(int id) throws SQLException {
+		if (findComputer(id)==null) {
+			System.out.println("This computer id doesn't exist.\n");
+		} else { 
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("Select id, name from company");
-			ArrayList<Company> res = new ArrayList<>();
-			while (rs.next()) {
-				res.add(new Company(rs.getInt("id"),rs.getString("name")));
-			}
-			return res;
-	 }
-	 
-	 private Computer findComputer(int id) throws SQLException {
-		 Statement stmt = conn.createStatement();
-		 ResultSet rs = stmt.executeQuery("Select c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName from computer c "
-				 						 +"Left join company cn on cn.id = c.company_id "
-				 						 +"WHERE c.id = "+id);
-		 if (rs.next()) {
-			 return new Computer(rs.getInt("id"),rs.getString("name"),rs.getTimestamp("introduced"),rs.getTimestamp("discontinued"),new Company(rs.getInt("cId"),rs.getString("cName")));
-		 }
-		 else 
-			 return null;
-	 }
-	 
-	 public void showDetails(int id) throws SQLException {
-		 Computer c = findComputer(id);
-		 if (c!=null)
-			 System.out.println(c);
-		 else 
-			 System.out.println("This computer doesn't exist.");
-	 }
-	 
-	 public void createComputer(String name, Timestamp introduced, Timestamp discontinued , int company_id) throws SQLException {
-		 Statement stmt = conn.createStatement();
-		 stmt.executeUpdate("INSERT INTO computer VALUES ("+name+","+introduced+","+discontinued+","+company_id+")");
-		 System.out.println("Computer "+ name + " has been deleted");
-	 }
-	 
-	 public boolean updateComputer(int id) throws SQLException {
-		 if (findComputer(id)==null)
-			 return false;
-		 
-		 Statement stmt = conn.createStatement();
-		 Scanner in = new Scanner(System. in);
-		 System.out.println("Entrer un nouveau nom :");
-		 String name = in. nextLine();
-		 return true;//TODO	 
-		 
-		 //stmt.executeUpdate("INSERT INTO computer VALUES ("+name+","+introduced+","+discontinued+","+company_id+")");
-	 }
-	 
-	 public void deleteComputer(int id) throws SQLException {
-		 Statement stmt = conn.createStatement();
-		 stmt.executeUpdate("DELETE FROM computer c "
-				 		   +"WHERE c.id =" + id);
-		 System.out.println("Computer "+id+" has been deleted");
-	 }
+			stmt.executeUpdate("DELETE FROM computer WHERE id = " + id);
+			System.out.println("The computer has been deleted.\n");
+		}
+	}
 	 
 	@Override
 	protected void finalize()
 	{
 		try {
 			if (conn != null && !conn.isClosed())
-				conn.close();
+				conn.close();			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

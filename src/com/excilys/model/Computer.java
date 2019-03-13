@@ -1,7 +1,7 @@
 
 package com.excilys.model;
 
-import java.sql.*;
+import java.sql.Timestamp;
 
 public class Computer {
 	private Integer id;

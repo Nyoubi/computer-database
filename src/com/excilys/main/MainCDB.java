@@ -1,10 +1,14 @@
 package com.excilys.main;
 
 import java.sql.Timestamp;
-import java.text.*;
-import java.util.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Scanner;
 
 import com.excilys.exceptions.ExceptionMessage;
+import com.excilys.exceptions.ExceptionViewMessage;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.model.ComputerDB;
@@ -40,7 +44,7 @@ public class MainCDB  {
 		}
 	}
 
-	public static Timestamp stringToTimestamp(String stringDate) throws ExceptionMessage{
+	public static Timestamp stringToTimestamp(String stringDate) throws ExceptionViewMessage{
 		try {
 			if(stringDate.equals("null")) {
 				return null;
@@ -51,7 +55,7 @@ public class MainCDB  {
 				return timeStampDate;
 			}
 	    } catch (ParseException e) {
-	    	throw new ExceptionMessage("Format de date incorrect");
+	    	throw new ExceptionViewMessage("Format de date incorrect");
 	    }
 	  }
 	

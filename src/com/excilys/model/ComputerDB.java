@@ -1,5 +1,6 @@
 package com.excilys.model;
 
+import com.excilys.exceptions.ExceptionDaoMessage;
 import com.excilys.exceptions.ExceptionMessage;
 
 import java.sql.*;
@@ -86,7 +87,7 @@ public class ComputerDB {
 			stmt.executeUpdate();
 			System.out.println("Computer "+ name + " has been created\n");
 		} catch (SQLException e){
-			throw new ExceptionMessage("Error when creating the computer");
+			throw new ExceptionDaoMessage("Error when creating the computer");
 		}
 	}
 	 

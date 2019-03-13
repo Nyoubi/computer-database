@@ -1,7 +1,6 @@
 package com.excilys.model;
 
 import com.excilys.exceptions.ExceptionDaoMessage;
-import com.excilys.exceptions.ExceptionMessage;
 
 import java.sql.*;
 import java.util.*;
@@ -77,7 +76,7 @@ public class ComputerDB {
 		}
 	}
 	 
-	public void createComputer(String name, Timestamp introduced, Timestamp discontinued , int companyId) throws ExceptionMessage {
+	public void createComputer(String name, Timestamp introduced, Timestamp discontinued , int companyId) throws ExceptionDaoMessage {
 		try {
 			PreparedStatement stmt = conn.prepareStatement("INSERT INTO computer (name, introduced, discontinued,company_id) VALUES (?,?,?,?)");
 			stmt.setString(1, name);
@@ -91,7 +90,7 @@ public class ComputerDB {
 		}
 	}
 	 
-	public void updateComputer(int id, String name, Timestamp introduced, Timestamp discontinued , Integer companyId) throws ExceptionMessage {
+	public void updateComputer(int id, String name, Timestamp introduced, Timestamp discontinued , Integer companyId) throws ExceptionDaoMessage {
 		try {
 			PreparedStatement stmt = conn.prepareStatement("UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?");
 			stmt.setString(1, name);
@@ -103,7 +102,7 @@ public class ComputerDB {
 			System.out.println("Computer "+ id + " has been updated\n");
 		} catch (SQLException e){
 			e.printStackTrace();
-			throw new ExceptionMessage("Error when updating the computer");
+			throw new ExceptionDaoMessage("Error when updating the computer");
 		}
 	}
 	 

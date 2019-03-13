@@ -4,9 +4,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Dao{
 	
-	private static Connection conn;
+	private static Connection conn = null;
 	
 	private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
 	private static final String DB_NAME = "computer-database-db";
@@ -15,16 +18,34 @@ public class Dao{
 	private static final String USER = "admincdb";
 	private static final String PASS = "qwerty1234";
 	
+	private static Logger logger = LoggerFactory.getLogger(Dao.class);
 	
-	public static Connection getConnection() throws SQLException{
-		    try {
+	public static Connection openConnection(){
+		    if (conn != null)
+		    	return conn;
+			try {
 				Class.forName(JDBC_DRIVER);
+				logger.info("Connecting to database...");
+			    conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			    logger.info("Connected to " + DB_NAME);
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
+				logger.error("Error in Dao.openConnection, class not found");
+			} catch (SQLException e) {
+				e.printStackTrace();
+				logger.error("Error in Dao.openConnection, sql error");
 			}
-		      System.out.println("Connecting to database...");
-		      conn = DriverManager.getConnection(DB_URL,USER,PASS);
-		      System.out.println("Connected to " + DB_NAME);
-		      return conn;
+		    return conn;
 	}
+	
+	public void closeConnection() throws SQLException{
+		if (conn != null)
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	}
+	
+	
 }

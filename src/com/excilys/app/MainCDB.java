@@ -1,4 +1,4 @@
-package com.excilys.main;
+package com.excilys.app;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
-import com.excilys.exceptions.ExceptionMessage;
 import com.excilys.exceptions.ExceptionViewMessage;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
@@ -126,7 +125,7 @@ public class MainCDB  {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 
-		}  catch(ExceptionMessage e){
+		}  catch(ExceptionViewMessage e){
 		     System.out.println(e);
 		} catch(Exception e){
 		      e.printStackTrace();

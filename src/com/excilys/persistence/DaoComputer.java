@@ -6,184 +6,149 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.model.Company;
+import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.Computer;
 
 public class DaoComputer {
-	
+
 	private final String SELECT_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName FROM computer c "
-									+ "LEFT JOIN company cn ON c.company_id=cn.id ";
+			+ "LEFT JOIN company cn ON c.company_id=cn.id ";
 	private final String SELECT_ID = SELECT_ALL + "WHERE c.id=? ";
 	private final String UPDATE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 	private final String DELETE_ID = "DELETE FROM computer WHERE id=?";
 	private final String CREATE = "INSERT INTO computer (name, introduced, discontinued,company_id) VALUES (?,?,?,?)";
 	private static Logger logger = LoggerFactory.getLogger(DaoComputer.class);
-	
-	private Connection conn;
-	public DaoComputer() {
-		this.conn = Dao.openConnection();
-	}
-	
-//	DaoComputer() {
-//		try {
-//			this.conn = Dao.getConnection();
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//	}
-	
-	private Computer resultSetToComputer(ResultSet resultSet){
-		Computer computer = null;
-		try {
-			Integer id = resultSet.getInt("id");
-			String name = resultSet.getString("name");
-			Timestamp introduced = resultSet.getTimestamp("introduced");
-			Timestamp discontinued = resultSet.getTimestamp("discontinued");
-			Integer companyId = resultSet.getInt("cId");
-			String companyName = resultSet.getString("cName");
-			computer = new Computer(id,name,introduced,discontinued,new Company(companyId,companyName));
-		} catch (SQLException e){
-			e.printStackTrace();
-			logger.error("Error when converting the resultSet to computer.");
-		}
-		return computer;
-	}
-	
-	
-	public Optional<Computer> findComputerById(Integer id){
+
+	public Optional<Computer> findComputerById(Integer id) {
 		
 		Optional<Computer> result = Optional.empty();
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-		
-		try {
-			statement = conn.prepareStatement(SELECT_ID);
+		try (Connection conn = Dao.openConnection();
+			 PreparedStatement statement = conn.prepareStatement(SELECT_ID);){
 			statement.setInt(1, id);
-			resultSet = statement.executeQuery();
-			
-			while(resultSet.next()) {
-				result= Optional.of(resultSetToComputer(resultSet));				
+			try (ResultSet resultSet = statement.executeQuery();) {
+				while (resultSet.next()) {
+					result = Optional.of(ComputerMapper.resultSetToComputer(resultSet));
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.error("Error when searching the computer id " + id + ".");
-		} finally {
-			try {
-				resultSet.close();
-				statement.close();
-			} catch (SQLException ex){
-				ex.printStackTrace();
-			}
 		}
 		return result;
 	}
-	
-	public ArrayList<Computer> listAllComputer(){
-		
+
+	public ArrayList<Computer> listAllComputer() {
+
 		ArrayList<Computer> computer_list = new ArrayList<>();
-		Statement statement = null;
-		ResultSet resultSet = null;
-		
-		try {
-			statement = conn.createStatement();
-			resultSet = statement.executeQuery(SELECT_ALL);
-			
-			while(resultSet.next()) {
-				computer_list.add(resultSetToComputer(resultSet));				
+
+		try (Connection conn = Dao.openConnection();
+			 Statement statement = conn.createStatement();
+			 ResultSet resultSet = statement.executeQuery(SELECT_ALL);) {
+			while (resultSet.next()) {
+				computer_list.add(ComputerMapper.resultSetToComputer(resultSet));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.error("Error when listing all computers.");
-		} finally {
-			try {
-				resultSet.close();
-				statement.close();
-			} catch (SQLException ex){
-				ex.printStackTrace();
-			}
 		}
 		return computer_list;
 	}
-	
-	public Optional<Computer> createComputer(String name, Timestamp introduced, Timestamp discontinued , Integer companyId){
-		
-		Optional<Computer> result = Optional.empty();
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-		
-		try {
-			statement = conn.prepareStatement(CREATE);
-			statement.setString(1, name);
-			statement.setTimestamp(2, introduced);
-			statement.setTimestamp(3, discontinued);
-			statement.setInt(4, companyId);
-			statement.executeUpdate();
-			resultSet = statement.getGeneratedKeys();
-			if(resultSet.next()) {
-				result= Optional.of(resultSetToComputer(resultSet));
-			}
-		} catch (SQLException e){
-			e.printStackTrace();
-			logger.error("Error when creating the computer.");
-		} finally {
-			try {
-				resultSet.close();
-				statement.close();
-			} catch (SQLException ex){
-				ex.printStackTrace();
-			}
-		}
-		return result;
-	}
-	
-	public boolean updateComputer(Integer id, String name, Timestamp introduced, Timestamp discontinued , Integer companyId){
-		PreparedStatement statement = null;
+
+	public Boolean createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
+
 		Integer lineAffected = 0;
-		try {
-			statement = conn.prepareStatement(UPDATE);
+		try (Connection conn = Dao.openConnection();
+			 PreparedStatement statement = conn.prepareStatement(CREATE);){
 			statement.setString(1, name);
-			statement.setTimestamp(2, introduced);
-			statement.setTimestamp(3, discontinued);
-			statement.setInt(4, companyId);
+
+			if (introduced != null) {
+				statement.setTimestamp(2, introduced);
+			} else {
+				statement.setNull(2, Types.TIMESTAMP);
+			}
+
+			if (discontinued != null) {
+				statement.setTimestamp(3, discontinued);
+			} else {
+				statement.setNull(3, Types.TIMESTAMP);
+			}
+
+			if (companyId != null) {
+				if(DaoCompany.findCompanyById(companyId).isPresent())
+					statement.setInt(4, companyId);
+				else
+					logger.error("The company " + companyId + " doesn't exist in the database.");
+			} else {
+				statement.setNull(4, Types.INTEGER);
+			}
+
 			lineAffected = statement.executeUpdate();
 
-		} catch (SQLException e){
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.error("Error when creating the computer.");
+		}
+		return lineAffected > 0;
+	}
+
+	public boolean updateComputer(Integer id, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
+		Integer lineAffected = 0;
+		try (Connection conn = Dao.openConnection();
+			 PreparedStatement statement = conn.prepareStatement(UPDATE);){
+			statement.setString(1, name);
+			if (introduced != null) {
+				statement.setTimestamp(2, introduced);
+			} else {
+				statement.setNull(2, Types.TIMESTAMP);
+			}
+
+			if (discontinued != null) {
+				statement.setTimestamp(3, discontinued);
+			} else {
+				statement.setNull(3, Types.TIMESTAMP);
+			}
+
+			if (companyId != null) {
+				statement.setInt(4, companyId);
+			} else {
+				statement.setNull(4, Types.INTEGER);
+			}
+
+			if (id != null) {
+				statement.setInt(4, companyId);
+			} else {
+				logger.error("Id can't be null when updating a computer");
+			}
+
+			
+			lineAffected = statement.executeUpdate();
+
+		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.error("Error when updating the computer.");
-		} finally {
-			try {
-				statement.close();
-			} catch (SQLException ex){
-				ex.printStackTrace();
-			}
 		}
-		
+
 		return lineAffected > 0;
-		
+
 	}
-	
-	public boolean deleteComputerById(Integer id){
-		PreparedStatement statement = null;
+
+	public boolean deleteComputerById(Integer id) {
 		Integer lineAffected = 0;
-		try {
-			statement = conn.prepareStatement(DELETE_ID);
+		
+		try (Connection conn = Dao.openConnection();
+			 PreparedStatement statement = conn.prepareStatement(DELETE_ID);){
 			statement.setInt(1, id);
 			lineAffected = statement.executeUpdate();
-		} catch (SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.error("Error when deleting the computer id " + id + ".");
-		} finally {
-			try {
-				statement.close();
-			} catch (SQLException ex){
-				ex.printStackTrace();
-			}
 		}
 		return lineAffected > 0;
 	}

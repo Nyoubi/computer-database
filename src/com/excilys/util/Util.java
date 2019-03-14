@@ -5,8 +5,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class Util {
+
+	private static Logger logger = LoggerFactory.getLogger(Util.class);
 	public static Integer parseInt(String input) {
+		if (input.equals("null"))
+		{
+			return null;
+		}
 		try {
 			return Integer.parseInt(input);
 		} catch (NumberFormatException e){
@@ -26,6 +35,7 @@ public abstract class Util {
 			}
 	    } catch (ParseException e) {
 	    	e.printStackTrace();
+	    	logger.error("Error when parsing " + stringDate + ". Date must be in format yyyy-MM-dd hh:mm:ss or null");
 	    }
 		return timeStampDate;
 	  }

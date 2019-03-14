@@ -16,13 +16,17 @@ public class ComputerView extends View{
 	@Override
 	public String show() {
 		this.input = new Scanner(System.in);
-		System.out.println("Choose a computer id you want to see");
+		System.out.println("Choose a computer id you want to see:");
 		return input.nextLine();
 		
 	}
 	
-	public void exec(Optional<Computer> computer) {
+	public static void exec(Optional<Computer> computer) {
 		System.out.println(Util.boxMessage("Computer details"));
-		System.out.println(computer);
+		if(computer.isPresent()) {
+		    System.out.println(computer.get());
+		} else {
+		    System.out.println("Empty");
+		}	
 	}
 }

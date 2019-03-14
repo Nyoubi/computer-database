@@ -1,6 +1,7 @@
 package com.excilys.view.menu;
 
-public enum menuViewOptions {
+public enum MenuViewOptions {
+	ERROR(-1),
 	LIST_COMPUTERS(1),
 	LIST_COMPANIES(2),
 	COMPUTER_DETAILS(3),
@@ -11,12 +12,12 @@ public enum menuViewOptions {
 	
 	private final Integer id;
 	
-	menuViewOptions(Integer id) {
+	MenuViewOptions(Integer id) {
 		this.id = id;
 	}
 	
-	public static menuViewOptions getById(Integer id) {
-		menuViewOptions[] options = menuViewOptions.values();
+	public static MenuViewOptions getById(Integer id) {
+		MenuViewOptions[] options = MenuViewOptions.values();
 		Integer i = 0;
 		
 		while(i < options.length) {
@@ -24,11 +25,9 @@ public enum menuViewOptions {
 				return options[i];
 			}else {
 				i ++;
-			}
-			
+			}	
 		}
-		
-		return null;		
+		return ERROR;		
 	}
 	
 	public Integer getId() {

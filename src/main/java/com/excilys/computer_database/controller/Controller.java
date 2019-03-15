@@ -18,19 +18,46 @@ import com.excilys.computer_database.view.menu.MenuView;
 import com.excilys.computer_database.view.menu.MenuViewOptions;
 import com.excilys.computer_database.view.menu.UpdateComputerView;
 
-
+/** Unique controller of the application
+ * 	
+ * @author Killian Martin
+ *
+ */
 public class Controller {
+	/**
+	 * The computer service
+	 */
 	private ComputerService computerService;
+	/**
+	 * The company service
+	 */
 	private CompanyService companyService;
 	
+	/**
+	 * The instance of computer, singleton pattern
+	 */
     private static volatile Controller instance = null;
+    
+    /**
+     * Controller logger, used to trace logs
+     */
 	private static Logger logger = LoggerFactory.getLogger(Controller.class);
 
+	/**
+	 * Controller constructor, initialize services
+	 * @see CompanyService
+	 * @see ComputerService
+	 * @
+	 */
 	private Controller () {
 		this.companyService = CompanyService.getInstance();
 		this.computerService = ComputerService.getInstance();
 	}
 	
+	/**
+	 * This method check if instance is initialized, and create a new one if not.
+	 * @return Return an instance
+	 */
 	public static Controller getInstance()
     {   
 		if (instance == null) {
@@ -43,6 +70,13 @@ public class Controller {
 		return instance;
     }
 	
+	/**
+	 * This method is the main method, running until the client choose to close the app.
+	 * 
+	 * The loop will ask for utilisator input and compared it to menu options, then call the respected view.
+	 * @see View
+	 * @see Util
+	 */
 	public void run() {
 		MenuView menu = MenuView.getInstance();
 		boolean run = true;

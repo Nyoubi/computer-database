@@ -70,20 +70,32 @@ public class Computer {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Computer other = (Computer) obj;
-		if (id != other.id)
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (this.getClass() != obj.getClass()) return false;
+		
+		Computer computer = (Computer) obj;
+
+		if (this.id == null && computer.id != null) return false;
+		if (this.id != null && computer.id == null) return false;
+		if (this.id != null && computer.id != null && !this.id.equals(computer.id)) return false;
+		
+		if (this.name == null && computer.name != null) return false;
+		if (this.name != null && computer.name == null) return false;
+		if (this.name != null && computer.name != null && !this.name.equals(computer.name)) return false;
+		
+		if (this.introduced == null && computer.introduced != null) return false;
+		if (this.introduced != null && computer.introduced == null) return false;
+		if (this.introduced != null && computer.introduced != null && !this.introduced.equals(computer.introduced)) return false;
+		
+		if (this.discontinued == null && computer.discontinued != null) return false;
+		if (this.discontinued != null && computer.discontinued == null) return false;
+		if (this.discontinued != null && computer.discontinued != null && !this.discontinued.equals(computer.discontinued)) return false;
+		
+		if (this.company == null && computer.company != null) return false;
+		if (this.company != null && computer.company == null) return false;
+		if (this.company != null && computer.company != null && !this.company.equals(computer.company)) return false;
+		
 		return true;
 	}
 }

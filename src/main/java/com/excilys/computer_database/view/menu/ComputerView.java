@@ -3,15 +3,28 @@ package com.excilys.computer_database.view.menu;
 import java.util.Optional;
 import java.util.Scanner;
 
+import com.excilys.computer_database.controller.Controller;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.util.Util;
 import com.excilys.computer_database.view.View;
 
 public class ComputerView extends View{
 	
-	public ComputerView() {
-
-	}
+	private ComputerView() {}
+	
+    private static volatile ComputerView instance = null;
+    
+	public static ComputerView getInstance()
+    {   
+		if (instance == null) {
+			synchronized(Controller.class) {
+				if (instance == null) {
+					instance = new ComputerView();
+				}
+			}
+		}
+		return instance;
+    }
 
 	@Override
 	public String show() {

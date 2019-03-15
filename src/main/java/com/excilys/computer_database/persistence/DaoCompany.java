@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computer_database.controller.Controller;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 
@@ -21,6 +22,21 @@ public class DaoCompany {
 
 	private static Logger logger = LoggerFactory.getLogger(DaoCompany.class);
 	
+    private static volatile DaoCompany instance = null;
+    
+    private DaoCompany() {}
+    
+	public static DaoCompany getInstance()
+    {   
+		if (instance == null) {
+			synchronized(Controller.class) {
+				if (instance == null) {
+					instance = new DaoCompany();
+				}
+			}
+		}
+		return instance;
+    }
 
 	public static Optional<Company> findCompanyById(Integer id){
 		

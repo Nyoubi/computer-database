@@ -3,13 +3,27 @@ package com.excilys.computer_database.view.menu;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.excilys.computer_database.controller.Controller;
+
 
 public class UpdateComputerView{
 	private Scanner input;
 
-	public UpdateComputerView() {
-
-	}
+	private UpdateComputerView() {}
+	
+    private static volatile UpdateComputerView instance = null;
+    
+	public static UpdateComputerView getInstance()
+    {   
+		if (instance == null) {
+			synchronized(Controller.class) {
+				if (instance == null) {
+					instance = new UpdateComputerView();
+				}
+			}
+		}
+		return instance;
+    }
 	
 	public ArrayList<String> show() {
 		ArrayList<String> result= new ArrayList<>();

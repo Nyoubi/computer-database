@@ -23,33 +23,46 @@ public class Controller {
 	private ComputerService computerService;
 	private CompanyService companyService;
 	
+    private static volatile Controller instance = null;
 	private static Logger logger = LoggerFactory.getLogger(Controller.class);
 
-	public Controller () {
-		this.companyService = new CompanyService();
-		this.computerService = new ComputerService();
+	private Controller () {
+		this.companyService = CompanyService.getInstance();
+		this.computerService = ComputerService.getInstance();
 	}
 	
+	public static Controller getInstance()
+    {   
+		if (instance == null) {
+			synchronized(Controller.class) {
+				if (instance == null) {
+					instance = new Controller();
+				}
+			}
+		}
+		return instance;
+    }
+	
 	public void run() {
-		MenuView menu = new MenuView();
+		MenuView menu = MenuView.getInstance();
 		boolean run = true;
 		while (run) {
 			String input = menu.show();
 			switch(MenuViewOptions.getById(Util.parseInt(input))) {
-				case LIST_COMPUTERS: ComputerListView computerListView = new ComputerListView(computerService.listComputers());
+				case LIST_COMPUTERS: ComputerListView computerListView = ComputerListView.getInstance(computerService.listComputers());
 					 computerListView.show();
 					 break;
 					 
-				case LIST_COMPANIES: CompanyListView companyListView = new CompanyListView(companyService.listCompanies());
+				case LIST_COMPANIES: CompanyListView companyListView = CompanyListView.getInstance(companyService.listCompanies());
 					 companyListView.show();
 					 break;
 					 
-				case COMPUTER_DETAILS: ComputerView computerView = new ComputerView();
+				case COMPUTER_DETAILS: ComputerView computerView = ComputerView.getInstance();
 					 Integer id = Util.parseInt(computerView.show());
 					 ComputerView.exec(computerService.showDetails(id));
 					 break;
 					 
-				case CREATE_COMPUTER: CreateComputerView createComputerView = new CreateComputerView();
+				case CREATE_COMPUTER: CreateComputerView createComputerView = CreateComputerView.getInstance();
 					 ArrayList<String> info = createComputerView.show();
 					 createComputerView.exec(computerService.createComputer(info.get(0),
 							 												Util.stringToTimestamp(info.get(1)),
@@ -57,7 +70,7 @@ public class Controller {
 							 												Util.parseInt(info.get(3))));
 					 break;
 					 
-				case UPDATE_COMPUTER: UpdateComputerView updateComputerView = new UpdateComputerView();
+				case UPDATE_COMPUTER: UpdateComputerView updateComputerView = UpdateComputerView.getInstance();
 					 ArrayList<String> infoUpdate = updateComputerView.show();
 					 updateComputerView.exec(computerService.updateComputer(Util.parseInt(infoUpdate.get(0)),
 							 												infoUpdate.get(1),
@@ -66,7 +79,7 @@ public class Controller {
 																			Util.parseInt(infoUpdate.get(4))));
 					 break;
 					 
-				case DELETE_COMPUTER: DeleteComputerView deleteComputerView = new DeleteComputerView();
+				case DELETE_COMPUTER: DeleteComputerView deleteComputerView = DeleteComputerView.getInstance();
 					 Integer idd = Util.parseInt(deleteComputerView.show());
 					 deleteComputerView.exec(computerService.deleteComputer(idd));
 					 break;

@@ -13,6 +13,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computer_database.controller.Controller;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Computer;
 
@@ -26,6 +27,22 @@ public class DaoComputer {
 	private final String CREATE = "INSERT INTO computer (name, introduced, discontinued,company_id) VALUES (?,?,?,?)";
 	private static Logger logger = LoggerFactory.getLogger(DaoComputer.class);
 
+    private static volatile DaoComputer instance = null;
+    
+    private DaoComputer() {}
+    
+	public static DaoComputer getInstance()
+    {   
+		if (instance == null) {
+			synchronized(Controller.class) {
+				if (instance == null) {
+					instance = new DaoComputer();
+				}
+			}
+		}
+		return instance;
+    }
+	
 	public Optional<Computer> findComputerById(Integer id) {
 		
 		Optional<Computer> result = Optional.empty();

@@ -9,7 +9,7 @@ public class App {
 	private static Logger logger = LoggerFactory.getLogger(App.class);
 	public static void main(String[] args) {
 			logger.trace("Main started");
-			Controller controller = new Controller();
+			Controller controller = Controller.getInstance();
 			controller.run();
 	}
 }

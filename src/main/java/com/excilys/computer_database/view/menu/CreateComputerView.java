@@ -13,9 +13,22 @@ public class CreateComputerView{
 	private Scanner input;
 	private static Logger logger = LoggerFactory.getLogger(Controller.class);
 
-	public CreateComputerView() {
+	private CreateComputerView() {}
+	
+    private static volatile CreateComputerView instance = null;
+    
+	public static CreateComputerView getInstance()
+    {   
+		if (instance == null) {
+			synchronized(Controller.class) {
+				if (instance == null) {
+					instance = new CreateComputerView();
+				}
+			}
+		}
+		return instance;
+    }
 
-	}
 	
 	public ArrayList<String> show() {
 		ArrayList<String> result= new ArrayList<>();

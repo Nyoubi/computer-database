@@ -4,14 +4,30 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.excilys.computer_database.controller.Controller;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.persistence.DaoComputer;
 
 
 public class ComputerService {
 	private DaoComputer daoComputer;
-	public ComputerService () {
-		this.daoComputer = new DaoComputer();
+	
+    private static volatile ComputerService instance = null;
+    
+	public static ComputerService getInstance()
+    {   
+		if (instance == null) {
+			synchronized(Controller.class) {
+				if (instance == null) {
+					instance = new ComputerService();
+				}
+			}
+		}
+		return instance;
+    }
+	
+	private ComputerService () {
+		this.daoComputer = DaoComputer.getInstance();
 	}
 	
 	public ArrayList<Computer> listComputers(){

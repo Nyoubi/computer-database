@@ -2,13 +2,26 @@ package com.excilys.computer_database.view.menu;
 
 import java.util.Scanner;
 
+import com.excilys.computer_database.controller.Controller;
 import com.excilys.computer_database.view.View;
 
 public class DeleteComputerView extends View{
 	
-	public DeleteComputerView() {
-
-	}
+	private DeleteComputerView() {}
+	
+    private static volatile DeleteComputerView instance = null;
+    
+	public static DeleteComputerView getInstance()
+    {   
+		if (instance == null) {
+			synchronized(Controller.class) {
+				if (instance == null) {
+					instance = new DeleteComputerView();
+				}
+			}
+		}
+		return instance;
+    }
 
 	@Override
 	public String show() {

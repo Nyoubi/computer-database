@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.sql.Timestamp;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.excilys.computer_database.util.PojoTestUtils;
@@ -13,7 +14,21 @@ import junit.framework.TestCase;
 
 public class ComputerTest extends TestCase {
 
-	public ComputerTest() {}
+	Computer computer1;
+	Computer computer2;
+	
+	@BeforeEach
+	public void setUp() {
+		computer1 = new Computer(null,null,null,null,null);
+		computer2 = new Computer(null,null,null,null,null);
+	}
+	
+	@Test
+	public void equalsTest() {
+		assertEquals(computer1, computer1);
+		assertNotEquals(computer1, null);
+		assertNotEquals(computer1, new Object());
+	}
 	
 	@Test
 	public void testAccesors() {
@@ -21,108 +36,84 @@ public class ComputerTest extends TestCase {
 	}
 	
 	@Test
-	public void equalsTest() {
-		ComputerBuilder computerBuilder1 = new ComputerBuilder();
-		Computer computer1 = computerBuilder1.build();
-		ComputerBuilder computerBuilder2 = new ComputerBuilder();
-		Computer computer2;
-		
-		
-		assertEquals(computer1, computer1);
-		assertNotEquals(computer1, null);
-		assertNotEquals(computer1, new Object());
-		
-		computer1 = computerBuilder1.setId(null).build();
-		computer2 = computerBuilder2.setId(null).build();
-		assertEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setId(0).build();
-		computer2 = computerBuilder2.setId(1).build();
+	public void equalsTestId() {
+		computer1.setId(0);
 		assertNotEquals(computer1, computer2);
 		
-		computer2 = computerBuilder2.setId(0).build();
-		
-		computer1 = computerBuilder1.setName(null).build();
-		computer2 = computerBuilder2.setName(null).build();
-		assertEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setName(null).build();
-		computer2 = computerBuilder2.setName("notNull").build();
+		computer2.setId(1);
 		assertNotEquals(computer1, computer2);
 		
-		computer1 = computerBuilder1.setName("notNull").build();
-		computer2 = computerBuilder2.setName(null).build();
-		assertNotEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setName("Different").build();
-		computer2 = computerBuilder2.setName("Names").build();
-		assertNotEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setName("same").build();
-		computer2 = computerBuilder2.setName("same").build();
-		assertEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setIntroduced(null).build();
-		computer2 = computerBuilder2.setIntroduced(null).build();
-		assertEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setIntroduced(null).build();
-		computer2 = computerBuilder2.setIntroduced(Timestamp.valueOf("2000-01-01 00:00:00")).build();
-		assertNotEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setIntroduced(Timestamp.valueOf("2000-01-01 00:00:00")).build();
-		computer2 = computerBuilder2.setIntroduced(null).build();
-		assertNotEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setIntroduced(Timestamp.valueOf("2011-11-11 11:11:11")).build();
-		computer2 = computerBuilder2.setIntroduced(Timestamp.valueOf("2000-01-01 00:00:00")).build();
-		assertNotEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setIntroduced(Timestamp.valueOf("2000-01-01 00:00:00")).build();
-		computer2 = computerBuilder2.setIntroduced(Timestamp.valueOf("2000-01-01 00:00:00")).build();
-		assertEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setDiscontinued(null).build();
-		computer2 = computerBuilder2.setDiscontinued(null).build();
-		assertEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setDiscontinued(null).build();
-		computer2 = computerBuilder2.setDiscontinued(Timestamp.valueOf("2000-01-01 00:00:00")).build();
-		assertNotEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setDiscontinued(Timestamp.valueOf("2000-01-01 00:00:00")).build();
-		computer2 = computerBuilder2.setDiscontinued(null).build();
-		assertNotEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setDiscontinued(Timestamp.valueOf("2011-11-11 11:11:11")).build();
-		computer2 = computerBuilder2.setDiscontinued(Timestamp.valueOf("2000-01-01 00:00:00")).build();
-		assertNotEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setDiscontinued(Timestamp.valueOf("2000-01-01 00:00:00")).build();
-		computer2 = computerBuilder2.setDiscontinued(Timestamp.valueOf("2000-01-01 00:00:00")).build();
-		assertEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setCompany(null).build();
-		computer2 = computerBuilder2.setCompany(null).build();
-		assertEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setCompany(null).build();
-		computer2 = computerBuilder2.setCompany(new Company(1,"test")).build();
-		assertNotEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setCompany(new Company(1,"test")).build();
-		computer2 = computerBuilder2.setCompany(null).build();
-		assertNotEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setCompany(new Company(1,"test")).build();
-		computer2 = computerBuilder2.setCompany(new Company(2,"test")).build();
-		assertNotEquals(computer1, computer2);
-		
-		computer1 = computerBuilder1.setCompany(new Company(1,"test")).build();
-		computer2 = computerBuilder2.setCompany(new Company(1,"test")).build();
+		computer2.setId(0);
 		assertEquals(computer1, computer2);
 	}
 	
+	@Test
+	public void equalsTestName() {
+		computer2.setName("notNull");
+		assertNotEquals(computer1, computer2);
+		
+		computer1.setName("Different");
+		assertNotEquals(computer1, computer2);
+		
+		computer1.setName("same");
+		computer2.setName("same");
+		assertEquals(computer1, computer2);
+	}
 	
+	@Test
+	public void equalsTestIntroduced() {		
+		computer2.setIntroduced(Timestamp.valueOf("2000-01-01 00:00:00"));
+		assertNotEquals(computer1, computer2);
+		
+		computer1.setIntroduced(Timestamp.valueOf("2000-01-01 00:00:00"));
+		computer2.setIntroduced(null);
+		assertNotEquals(computer1, computer2);
+		
+		computer2.setIntroduced(Timestamp.valueOf("2011-11-11 11:11:11"));
+		assertNotEquals(computer1, computer2);
+		
+		computer1.setIntroduced(Timestamp.valueOf("2011-11-11 11:11:11"));
+		assertEquals(computer1, computer2);
+	}
 
+	@Test
+	public void equalsTestDiscontinued() {
+		computer2.setDiscontinued(Timestamp.valueOf("2000-01-01 00:00:00"));
+		assertNotEquals(computer1, computer2);
+		
+		computer1.setDiscontinued(Timestamp.valueOf("2000-01-01 00:00:00"));
+		computer2.setDiscontinued(null);
+		assertNotEquals(computer1, computer2);
+		
+		computer2.setDiscontinued(Timestamp.valueOf("2011-11-11 11:11:11"));
+		assertNotEquals(computer1, computer2);
+		
+		computer1.setDiscontinued(Timestamp.valueOf("2011-11-11 11:11:11"));
+		assertEquals(computer1, computer2);
+	}
+	
+	@Test
+	public void equalsTestCompany() {
+		computer1.setCompany(new Company(1,"NotNull"));
+		assertNotEquals(computer1, computer2);
+		
+		computer2.setCompany(new Company(1,"NotNull"));
+		computer1.setCompany(null);
+		assertNotEquals(computer1, computer2);
+		
+		computer1.setCompany(new Company(2,"NotNull"));
+		assertNotEquals(computer1, computer2);
+		
+		computer2.setCompany(new Company(2,"NotNull"));
+		assertEquals(computer1, computer2);
+	}
+	
+	@Test
+	public void equalsTestComputer() {
+		equalsTestId();
+		equalsTestName();
+		equalsTestIntroduced();
+		equalsTestDiscontinued();
+		equalsTestCompany();
+	}
 }

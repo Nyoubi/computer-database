@@ -9,11 +9,13 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
+import com.excilys.computer_database.model.ComputerBuilder;
 
 public abstract class ComputerMapper {
 	private static Logger logger = LoggerFactory.getLogger(ComputerMapper.class);
 
 	public static Computer resultSetToComputer(ResultSet resultSet){
+		ComputerBuilder computerBuilder = new ComputerBuilder();
 		Computer computer = null;
 		try {
 			Integer id = resultSet.getInt("id");
@@ -21,7 +23,11 @@ public abstract class ComputerMapper {
 			Timestamp introduced = resultSet.getTimestamp("introduced");
 			Timestamp discontinued = resultSet.getTimestamp("discontinued");
 			Company company = CompanyMapper.resultSetToCompany(resultSet.getInt("cId"),resultSet.getString("cName"));
-			computer = new Computer(id,name,introduced,discontinued,company);
+			computer = computerBuilder.setId(id)
+									  .setName(name)
+									  .setIntroduced(introduced)
+									  .setDiscontinued(discontinued)
+									  .setCompany(company).build();
 		} catch (SQLException e){
 			e.printStackTrace();
 			logger.error("Error when converting the resultSet to computer.");

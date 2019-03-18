@@ -7,16 +7,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.model.CompanyBuilder;
+import com.excilys.computer_database.model.Computer;
+import com.excilys.computer_database.model.ComputerBuilder;
 
 public abstract class CompanyMapper {
 	private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
 
 	public static Company resultSetToCompany(ResultSet resultSet){
 		Company company = null;
+		CompanyBuilder companyBuilder = new CompanyBuilder();
 		try {
-			Integer companyId = resultSet.getInt("id");
-			String companyName = resultSet.getString("name");
-			company = new Company(companyId,companyName);
+			Integer id = resultSet.getInt("id");
+			String name = resultSet.getString("name");
+			company = companyBuilder.setId(id).setName(name).build();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.error("Error when converting the resultSet to company.");
@@ -25,8 +29,7 @@ public abstract class CompanyMapper {
 	}
 	
 	public static Company resultSetToCompany(Integer id, String name){
-
-			Company company = new Company(id,name);
-			return company;
+			CompanyBuilder companyBuilder = new CompanyBuilder();
+			return companyBuilder.setId(id).setName(name).build();
 	}
 }

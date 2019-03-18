@@ -32,15 +32,4 @@ public abstract class Dao{
 			}
 		    return conn;
 	}
-	
-//	public void closeConnection() throws SQLException{
-//		if (conn != null)
-//			try {
-//				conn.close();
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//	}
-	
-	
 }

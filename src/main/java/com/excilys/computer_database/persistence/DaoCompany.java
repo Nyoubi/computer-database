@@ -17,7 +17,7 @@ import com.excilys.computer_database.model.Company;
 
 public class DaoCompany {
 	
-	private final static String SELECT_ALL = "SELECT id, name FROM company ";
+	private final static String SELECT_ALL = "SELECT id as cId, name as cName FROM company ";
 	private final static String SELECT_ID = SELECT_ALL + "WHERE id=? ";
 
 	private static Logger logger = LoggerFactory.getLogger(DaoCompany.class);

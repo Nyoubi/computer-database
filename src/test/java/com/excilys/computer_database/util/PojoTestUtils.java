@@ -13,8 +13,8 @@ public class PojoTestUtils {
                                                     .with(new SetterTester())
                                                     .build();
  
-    public static void validateAccessors(final Class<?> clazz) {
-        ACCESSOR_VALIDATOR.validate(PojoClassFactory.getPojoClass(clazz));
+    public static void validateAccessors(final Class<?> classe) {
+        ACCESSOR_VALIDATOR.validate(PojoClassFactory.getPojoClass(classe));
     }
     
 }

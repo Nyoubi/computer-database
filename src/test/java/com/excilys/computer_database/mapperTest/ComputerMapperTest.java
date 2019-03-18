@@ -1,4 +1,4 @@
-package com.excilys.computer_database.MapperTest;
+package com.excilys.computer_database.mapperTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -22,7 +22,7 @@ public abstract class ComputerMapper {
 			String name = resultSet.getString("name");
 			Timestamp introduced = resultSet.getTimestamp("introduced");
 			Timestamp discontinued = resultSet.getTimestamp("discontinued");
-			Company company = CompanyMapper.resultSetToCompany(resultSet.getInt("cId"),resultSet.getString("cName"));
+			Company company = CompanyMapper.resultSetToCompany(resultSet);
 			computer = computerBuilder.setId(id)
 									  .setName(name)
 									  .setIntroduced(introduced)

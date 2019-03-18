@@ -15,7 +15,15 @@ public class ComputerBuilder {
 
 	public Computer build() {
 		Computer computer = new Computer();
+		if (this.id == null) {
+			logger.warn("Can't set id to null. Computer build canceled, return null.");
+			return null;
+		} 
 		computer.setId(this.id);
+		if (this.name == null) {
+			logger.warn("Can't set name to null. Computer build canceled, return null.");
+			return null;
+		} 
 		computer.setName(this.name);
 		computer.setIntroduced(this.introduced);
 		if (this.introduced == null && this.discontinued != null) {
@@ -54,6 +62,22 @@ public class ComputerBuilder {
 	public ComputerBuilder setCompany(Company company) {
 		this.company = company;
 		return this;
+	}
+	
+	public Integer getId() {
+		return this.id;
+	}
+	public String getName() {
+		return this.name;
+	}
+	public Timestamp getIntroduced() {
+		return this.introduced;
+	}
+	public Timestamp getDiscontinued() {
+		return this.discontinued;
+	}
+	public Company getCompany() {
+		return this.company;
 	}
 	
 }

@@ -14,7 +14,7 @@ public class DeleteComputerView extends View{
 	public static DeleteComputerView getInstance()
     {   
 		if (instance == null) {
-			synchronized(Controller.class) {
+			synchronized(DeleteComputerView.class) {
 				if (instance == null) {
 					instance = new DeleteComputerView();
 				}

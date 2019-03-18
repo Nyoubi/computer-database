@@ -17,7 +17,7 @@ public class ComputerView extends View{
 	public static ComputerView getInstance()
     {   
 		if (instance == null) {
-			synchronized(Controller.class) {
+			synchronized(ComputerView.class) {
 				if (instance == null) {
 					instance = new ComputerView();
 				}

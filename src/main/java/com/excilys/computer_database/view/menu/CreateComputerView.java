@@ -20,7 +20,7 @@ public class CreateComputerView{
 	public static CreateComputerView getInstance()
     {   
 		if (instance == null) {
-			synchronized(Controller.class) {
+			synchronized(CreateComputerView.class) {
 				if (instance == null) {
 					instance = new CreateComputerView();
 				}

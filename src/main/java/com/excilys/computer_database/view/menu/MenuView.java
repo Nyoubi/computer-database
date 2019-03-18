@@ -15,7 +15,7 @@ public class MenuView extends View{
 	public static MenuView getInstance()
     {   
 		if (instance == null) {
-			synchronized(Controller.class) {
+			synchronized(MenuView.class) {
 				if (instance == null) {
 					instance = new MenuView();
 				}

@@ -16,7 +16,7 @@ public class UpdateComputerView{
 	public static UpdateComputerView getInstance()
     {   
 		if (instance == null) {
-			synchronized(Controller.class) {
+			synchronized(UpdateComputerView.class) {
 				if (instance == null) {
 					instance = new UpdateComputerView();
 				}

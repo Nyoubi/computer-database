@@ -19,7 +19,7 @@ public class ComputerListView extends View{
 	public static ComputerListView getInstance(ArrayList<Computer> computerList)
     {   
 		if (instance == null) {
-			synchronized(Controller.class) {
+			synchronized(ComputerListView.class) {
 				if (instance == null) {
 					instance = new ComputerListView(computerList);
 				}

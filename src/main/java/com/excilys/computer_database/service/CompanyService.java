@@ -15,7 +15,7 @@ public class CompanyService {
 	public static CompanyService getInstance()
     {   
 		if (instance == null) {
-			synchronized(Controller.class) {
+			synchronized(CompanyService.class) {
 				if (instance == null) {
 					instance = new CompanyService();
 				}

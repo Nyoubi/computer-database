@@ -29,7 +29,7 @@ public class DaoCompany {
 	public static DaoCompany getInstance()
     {   
 		if (instance == null) {
-			synchronized(Controller.class) {
+			synchronized(DaoCompany.class) {
 				if (instance == null) {
 					instance = new DaoCompany();
 				}

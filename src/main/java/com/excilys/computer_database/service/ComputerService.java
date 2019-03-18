@@ -17,7 +17,7 @@ public class ComputerService {
 	public static ComputerService getInstance()
     {   
 		if (instance == null) {
-			synchronized(Controller.class) {
+			synchronized(ComputerService.class) {
 				if (instance == null) {
 					instance = new ComputerService();
 				}

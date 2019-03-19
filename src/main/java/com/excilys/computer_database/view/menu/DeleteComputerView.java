@@ -2,7 +2,6 @@ package com.excilys.computer_database.view.menu;
 
 import java.util.Scanner;
 
-import com.excilys.computer_database.controller.Controller;
 import com.excilys.computer_database.view.View;
 
 public class DeleteComputerView extends View{

@@ -1,4 +1,4 @@
-package com.excilys.computer_database;
+package com.excilys.computer_database.appTest;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

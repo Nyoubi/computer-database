@@ -34,7 +34,7 @@ public class DaoComputer {
 	public static DaoComputer getInstance()
     {   
 		if (instance == null) {
-			synchronized(Controller.class) {
+			synchronized(DaoComputer.class) {
 				if (instance == null) {
 					instance = new DaoComputer();
 				}

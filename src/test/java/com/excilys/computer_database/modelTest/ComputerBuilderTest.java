@@ -1,11 +1,13 @@
-package com.excilys.computer_database.model;
+package com.excilys.computer_database.modelTest;
 
 
 import java.sql.Timestamp;
 
 import org.junit.jupiter.api.Test;
 
-import com.excilys.computer_database.util.PojoTestUtils;
+import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.model.ComputerBuilder;
+import com.excilys.computer_database.utilTest.PojoTestUtils;
 
 import junit.framework.TestCase;
 

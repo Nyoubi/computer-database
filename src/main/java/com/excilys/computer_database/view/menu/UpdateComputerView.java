@@ -3,8 +3,6 @@ package com.excilys.computer_database.view.menu;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import com.excilys.computer_database.controller.Controller;
-
 
 public class UpdateComputerView{
 	private Scanner input;

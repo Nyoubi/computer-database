@@ -1,4 +1,4 @@
-package com.excilys.computer_database.util;
+package com.excilys.computer_database.utilTest;
 
 import com.openpojo.reflection.impl.PojoClassFactory;
 import com.openpojo.validation.Validator;

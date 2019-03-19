@@ -1,9 +1,10 @@
-package com.excilys.computer_database.model;
+package com.excilys.computer_database.modelTest;
 
 
 import org.junit.jupiter.api.Test;
 
-import com.excilys.computer_database.util.PojoTestUtils;
+import com.excilys.computer_database.model.CompanyBuilder;
+import com.excilys.computer_database.utilTest.PojoTestUtils;
 
 import junit.framework.TestCase;
 

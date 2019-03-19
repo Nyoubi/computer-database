@@ -2,9 +2,7 @@ package com.excilys.computer_database.view.menu;
 
 import java.util.ArrayList;
 
-import com.excilys.computer_database.controller.Controller;
 import com.excilys.computer_database.model.Computer;
-import com.excilys.computer_database.util.Util;
 import com.excilys.computer_database.view.View;
 
 public class ComputerListView extends View{
@@ -31,7 +29,7 @@ public class ComputerListView extends View{
 	@Override
 	public String show() {
 		
-		System.out.println(Util.boxMessage("Database's computers list"));
+		System.out.println("Database's computers list");
 		
 		computerList.forEach(System.out::println);
 		

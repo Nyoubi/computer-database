@@ -5,13 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computer_database.controller.Controller;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 
@@ -19,7 +20,7 @@ public class DaoCompany {
 	
 	private final static String SELECT_ALL = "SELECT id as cId, name as cName FROM company ";
 	private final static String SELECT_ID = SELECT_ALL + "WHERE id=? ";
-
+	private final static String CREATE = "INSERT INTO company (id,name) VALUES (?,?)";
 	private static Logger logger = LoggerFactory.getLogger(DaoCompany.class);
 	
     private static volatile DaoCompany instance = null;
@@ -75,5 +76,4 @@ public class DaoCompany {
 		}
 		return company_list;
 	}
-	
 }

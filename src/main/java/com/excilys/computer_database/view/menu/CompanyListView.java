@@ -20,7 +20,7 @@ public class CompanyListView extends View{
 	public static CompanyListView getInstance(ArrayList<Company> companyList)
     {   
 		if (instance == null) {
-			synchronized(Controller.class) {
+			synchronized(CompanyListView.class) {
 				if (instance == null) {
 					instance = new CompanyListView(companyList);
 				}
@@ -33,7 +33,7 @@ public class CompanyListView extends View{
 	@Override
 	public String show() {
 		
-		System.out.println(Util.boxMessage("Database's companies list"));
+		System.out.println("Database's companies list");
 		
 		companyList.forEach(System.out::println);
 		

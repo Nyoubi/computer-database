@@ -1,9 +1,11 @@
-package com.excilys.computer_database.persistence;
+package com.excilys.computer_database.persistenceTest;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.junit.jupiter.api.Test;
+
+import com.excilys.computer_database.persistence.Dao;
 
 import junit.framework.TestCase;
 

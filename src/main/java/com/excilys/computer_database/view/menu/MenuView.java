@@ -1,9 +1,14 @@
 package com.excilys.computer_database.view.menu;
-import static com.excilys.computer_database.view.menu.MenuViewOptions.*;
+import static com.excilys.computer_database.view.menu.MenuViewOptions.COMPUTER_DETAILS;
+import static com.excilys.computer_database.view.menu.MenuViewOptions.CREATE_COMPUTER;
+import static com.excilys.computer_database.view.menu.MenuViewOptions.DELETE_COMPUTER;
+import static com.excilys.computer_database.view.menu.MenuViewOptions.EXIT;
+import static com.excilys.computer_database.view.menu.MenuViewOptions.LIST_COMPANIES;
+import static com.excilys.computer_database.view.menu.MenuViewOptions.LIST_COMPUTERS;
+import static com.excilys.computer_database.view.menu.MenuViewOptions.UPDATE_COMPUTER;
 
 import java.util.Scanner;
 
-import com.excilys.computer_database.controller.Controller;
 import com.excilys.computer_database.view.View;
 
 public class MenuView extends View{

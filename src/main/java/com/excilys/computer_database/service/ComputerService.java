@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import com.excilys.computer_database.controller.Controller;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.persistence.DaoComputer;
 

@@ -11,7 +11,7 @@ public class Company {
 	
 	public Company() {}
 	
-	public long getId() {
+	public Integer getId() {
 		return id;
 	}
 

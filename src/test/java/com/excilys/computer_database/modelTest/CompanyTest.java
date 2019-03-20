@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.excilys.computer_database.model.Company;
-import com.excilys.computer_database.utilTest.PojoTestUtils;
 
 import junit.framework.TestCase;
 
@@ -23,15 +22,10 @@ public class CompanyTest extends TestCase {
 	}
 	
 	@Test
-	public void equalsTest() {
+	public void testEquals() {
 		assertEquals(company1, company1);
 		assertNotEquals(company1, null);
 		assertNotEquals(company1, new Object());
-	}
-	
-	@Test
-	public void testAccesors() {
-		 PojoTestUtils.validateAccessors(Company.class);
 	}
 	
 	@Test
@@ -62,5 +56,12 @@ public class CompanyTest extends TestCase {
 	public void equalsTestCompany() {
 		equalsTestId();
 		equalsTestName();
+	}
+	
+	@Test
+	public void testToString() {
+		company1.setId(1);
+		company1.setName("test");
+		assertEquals(company1.toString(),"Id: '1', Name: 'test'");
 	}
 }

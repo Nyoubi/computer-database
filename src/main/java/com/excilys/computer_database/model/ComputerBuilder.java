@@ -15,10 +15,6 @@ public class ComputerBuilder {
 
 	public Computer build() {
 		Computer computer = new Computer();
-		if (this.id == null) {
-			logger.warn("Can't set id to null. Computer build canceled, return null.");
-			return null;
-		} 
 		computer.setId(this.id);
 		if (this.name == null) {
 			logger.warn("Can't set name to null. Computer build canceled, return null.");

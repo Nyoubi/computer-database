@@ -44,10 +44,10 @@ public class CreateComputerView{
 		return result;
 	}
 	
-	public void exec (Boolean created) {
-		if(created)
-			System.out.println("Computer has been created");
+	public void exec (Integer idCreated) {
+		if(idCreated != null)
+			System.out.println("Computer " + idCreated + " has been created.");
 		else 
-			logger.error("Problem occured when creating the computer");
+			logger.error("Problem occured when creating the computer.");
 	}
 }

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
-import com.excilys.computer_database.utilTest.PojoTestUtils;
 
 import junit.framework.TestCase;
 
@@ -26,15 +25,10 @@ public class ComputerTest extends TestCase {
 	}
 	
 	@Test
-	public void equalsTest() {
+	public void testEquals() {
 		assertEquals(computer1, computer1);
 		assertNotEquals(computer1, null);
 		assertNotEquals(computer1, new Object());
-	}
-	
-	@Test
-	public void testAccesors() {
-		 PojoTestUtils.validateAccessors(Computer.class);
 	}
 	
 	@Test
@@ -118,4 +112,12 @@ public class ComputerTest extends TestCase {
 		equalsTestDiscontinued();
 		equalsTestCompany();
 	}
+	
+	@Test
+	public void testToString() {
+		computer1 = new Computer(1,"Test",Timestamp.valueOf("2000-01-01 00:00:00"),Timestamp.valueOf("2000-01-01 02:00:00"),new Company(1,"Name"));
+		assertEquals(computer1.toString(),"Id: 1, Name: Test, Introduced: 2000-01-01 00:00:00.0, Discontinued: 2000-01-01 02:00:00.0, Company: (Id: '1', Name: 'Name')");
+	}
+	
+	
 }

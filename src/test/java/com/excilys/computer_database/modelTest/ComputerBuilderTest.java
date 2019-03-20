@@ -7,16 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.ComputerBuilder;
-import com.excilys.computer_database.utilTest.PojoTestUtils;
 
 import junit.framework.TestCase;
 
 public class ComputerBuilderTest extends TestCase {
-	
-	@Test
-	public void testAccesors() {
-		 PojoTestUtils.validateAccessors(ComputerBuilderTest.class);
-	}
 	
 	@Test
 	public void testComputerBuilder() {

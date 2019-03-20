@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 
 public class DaoTest extends TestCase {
 	@Test
-	public void daoTest() {
+	public void testDao() {
 		try (Connection conn = Dao.openConnection()){
 			assertNotNull(conn);
 		} catch (SQLException e) {

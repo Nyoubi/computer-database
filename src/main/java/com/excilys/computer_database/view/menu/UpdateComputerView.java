@@ -43,7 +43,7 @@ public class UpdateComputerView{
 		if (result) {
 			System.out.println("Computer has been updated");
 		} else {
-			System.out.println("Computer has been updated");
+			System.out.println("Computer has not been updated");
 		}
 	}
 }

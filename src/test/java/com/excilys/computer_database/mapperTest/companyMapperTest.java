@@ -23,8 +23,8 @@ public class companyMapperTest {
 	
 	@BeforeEach
 	public void setUp() throws SQLException {
-		Mockito.when(rs.getInt("id")).thenReturn(Integer.valueOf(1));
-		Mockito.when(rs.getString("name")).thenReturn("Company name");
+		Mockito.when(rs.getInt("cId")).thenReturn(Integer.valueOf(1));
+		Mockito.when(rs.getString("cName")).thenReturn("Company name");
 	}
 	
 	@Test

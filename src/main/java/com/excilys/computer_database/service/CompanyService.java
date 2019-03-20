@@ -1,6 +1,7 @@
 package com.excilys.computer_database.service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.persistence.DaoCompany;
@@ -33,4 +34,7 @@ public class CompanyService {
 		return result;
 	}
 	
+	public Optional<Company> findCompanyById(Integer id){
+		return DaoCompany.findCompanyById(id);
+	}
 }

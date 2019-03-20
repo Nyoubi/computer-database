@@ -4,7 +4,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
+import com.excilys.computer_database.model.ComputerBuilder;
 import com.excilys.computer_database.persistence.DaoComputer;
 
 
@@ -43,12 +45,28 @@ public class ComputerService {
 		return daoComputer.deleteComputerById(id);
 	}
 	
-	public Boolean createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
-		return daoComputer.createComputer(name,introduced,discontinued,companyId);
+	public Integer createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
+		ComputerBuilder computerBuilder = new ComputerBuilder();
+		CompanyService companyService = CompanyService.getInstance();
+		Company company = null;
+		if (companyId != null && companyId != -1)
+			company = companyService.findCompanyById(companyId).get();
+		return daoComputer.createComputer(computerBuilder.setName(name).setIntroduced(introduced).setDiscontinued(discontinued).setCompany(company).build());
 	}
 	
+	
 	public Boolean updateComputer(Integer id, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
-		return daoComputer.updateComputer(id, name, introduced, discontinued, companyId);
+		ComputerBuilder computerBuilder = new ComputerBuilder();
+		CompanyService companyService = CompanyService.getInstance();
+		Company company = null;
+		if (companyId != null && companyId != -1)
+			company = companyService.findCompanyById(companyId).get();
+		return daoComputer.updateComputer(computerBuilder.setId(id)
+														 .setName(name)
+														 .setIntroduced(introduced)
+														 .setDiscontinued(discontinued)
+														 .setCompany(company)
+														 .build());
 	}
 	
 }

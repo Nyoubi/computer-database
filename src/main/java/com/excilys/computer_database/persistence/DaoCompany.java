@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -20,7 +18,7 @@ public class DaoCompany {
 	
 	private final static String SELECT_ALL = "SELECT id as cId, name as cName FROM company ";
 	private final static String SELECT_ID = SELECT_ALL + "WHERE id=? ";
-	private final static String CREATE = "INSERT INTO company (id,name) VALUES (?,?)";
+	//private final static String CREATE = "INSERT INTO company (id,name) VALUES (?,?)";
 	private static Logger logger = LoggerFactory.getLogger(DaoCompany.class);
 	
     private static volatile DaoCompany instance = null;
@@ -47,7 +45,7 @@ public class DaoCompany {
 		    PreparedStatement statement = conn.prepareStatement(SELECT_ID);){
 			statement.setInt(1, id);
 			try (ResultSet resultSet = statement.executeQuery();) {
-				while(resultSet.next()) {
+				if(resultSet.next()) {
 					result= Optional.of(CompanyMapper.resultSetToCompany(resultSet));				
 				}
 			}

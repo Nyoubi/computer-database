@@ -34,7 +34,6 @@ public abstract class Util {
 				timeStampDate = new Timestamp(date.getTime());
 			}
 	    } catch (ParseException e) {
-	    	e.printStackTrace();
 	    	logger.error("Error when parsing " + stringDate + ". Date must be in format yyyy-MM-dd hh:mm:ss or null");
 	    }
 		return timeStampDate;

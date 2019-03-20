@@ -2,9 +2,7 @@ package com.excilys.computer_database.view.menu;
 
 import java.util.ArrayList;
 
-import com.excilys.computer_database.controller.Controller;
 import com.excilys.computer_database.model.Company;
-import com.excilys.computer_database.util.Util;
 import com.excilys.computer_database.view.View;
 
 public class CompanyListView extends View{

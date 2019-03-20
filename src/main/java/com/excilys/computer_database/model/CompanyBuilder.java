@@ -11,6 +11,7 @@ public class CompanyBuilder {
 	public Company build() {
 		Company company = new Company();
 		if (this.id == null) {
+			System.out.println("testidcompany");
 			logger.warn("Can't set id to null. Company build canceled, return null.");
 			return null;
 		} 

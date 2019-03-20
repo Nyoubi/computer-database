@@ -18,7 +18,11 @@ public abstract class CompanyMapper {
 		try {
 			Integer id = resultSet.getInt("cId");
 			String name = resultSet.getString("cName");
-			company = companyBuilder.setId(id).setName(name).build();
+			if (id == 0 && name == null)  {
+				company = null;
+			}
+			else 
+				company = companyBuilder.setId(id).setName(name).build();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.error("Error when converting the resultSet to company.");

@@ -10,6 +10,7 @@ import com.excilys.computer_database.persistence.Dao;
 import junit.framework.TestCase;
 
 public class DaoTest extends TestCase {
+	
 	@Test
 	public void testDao() {
 		try (Connection conn = Dao.openConnection()){

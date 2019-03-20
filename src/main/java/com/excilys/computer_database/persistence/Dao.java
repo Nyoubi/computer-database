@@ -8,21 +8,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class Dao{
-		
-	private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
-	private static final String DB_NAME = "computer-database-db";
-	private static final String DB_URL = "jdbc:mysql://localhost:3306/"+ DB_NAME;
-
-	private static final String USER = "admincdb";
-	private static final String PASS = "qwerty1234";
+    
+	protected static String driver;
+	protected static String dbUrl;
+	protected static String user;
+	protected static String pass;
 	
 	private static Logger logger = LoggerFactory.getLogger(Dao.class);
 	
 	public static Connection openConnection(){
 		Connection conn = null;
 			try {
-				Class.forName(JDBC_DRIVER);
-			    conn = DriverManager.getConnection(DB_URL,USER,PASS);
+				Class.forName(driver);
+			    conn = DriverManager.getConnection(dbUrl,user,pass);
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 				logger.error("Error in Dao.openConnection, class not found");

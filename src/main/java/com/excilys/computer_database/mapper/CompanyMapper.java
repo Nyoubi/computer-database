@@ -10,23 +10,18 @@ import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.CompanyBuilder;
 
 public abstract class CompanyMapper {
-	private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
-
-	public static Company resultSetToCompany(ResultSet resultSet){
+	public static Company resultSetToCompany(ResultSet resultSet) throws SQLException{
 		Company company = null;
 		CompanyBuilder companyBuilder = new CompanyBuilder();
-		try {
-			Integer id = resultSet.getInt("cId");
-			String name = resultSet.getString("cName");
-			if (id == 0 && name == null)  {
-				company = null;
-			}
-			else 
-				company = companyBuilder.setId(id).setName(name).build();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			logger.error("Error when converting the resultSet to company.");
+
+		Integer id = resultSet.getInt("cId");
+		String name = resultSet.getString("cName");
+		if (id == 0 && name == null)  {
+			company = null;
 		}
+		else 
+			company = companyBuilder.setId(id).setName(name).build();
+
 		return company;
 	}
 }

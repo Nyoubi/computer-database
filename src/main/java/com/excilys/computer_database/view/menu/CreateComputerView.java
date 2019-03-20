@@ -1,6 +1,7 @@
 package com.excilys.computer_database.view.menu;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
@@ -44,9 +45,9 @@ public class CreateComputerView{
 		return result;
 	}
 	
-	public void exec (Integer idCreated) {
-		if(idCreated != null)
-			System.out.println("Computer " + idCreated + " has been created.");
+	public void exec (Optional<Integer> id) {
+		if(id.isPresent())
+			System.out.println("Computer " + id + " has been created.");
 		else 
 			logger.error("Problem occured when creating the computer.");
 	}

@@ -14,39 +14,43 @@ import org.slf4j.LoggerFactory;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 
-public class DaoCompany {
+public class DaoCompany  extends Dao{
 	
 	private final static String SELECT_ALL = "SELECT id as cId, name as cName FROM company ";
 	private final static String SELECT_ID = SELECT_ALL + "WHERE id=? ";
-	//private final static String CREATE = "INSERT INTO company (id,name) VALUES (?,?)";
 	private static Logger logger = LoggerFactory.getLogger(DaoCompany.class);
 	
     private static volatile DaoCompany instance = null;
+	
+	private DaoCompany(String driver, String dbUrl, String user, String pass) {
+		Dao.driver = driver;  
+		Dao.dbUrl = dbUrl;
+		Dao.user = user;
+		Dao.pass = pass;
+	}
     
-    private DaoCompany() {}
-    
-	public static DaoCompany getInstance()
+	public static DaoCompany getInstance(String driver, String dbUrl, String user, String pass)
     {   
 		if (instance == null) {
 			synchronized(DaoCompany.class) {
 				if (instance == null) {
-					instance = new DaoCompany();
+					instance = new DaoCompany(driver,dbUrl,user,pass);
 				}
 			}
 		}
 		return instance;
     }
 
-	public static Optional<Company> findCompanyById(Integer id){
+	public Optional<Company> findCompanyById(Integer id){
 		
 		Optional<Company> result = Optional.empty();
 		
-		try (Connection conn = Dao.openConnection();
+		try (Connection conn = openConnection();
 		    PreparedStatement statement = conn.prepareStatement(SELECT_ID);){
 			statement.setInt(1, id);
 			try (ResultSet resultSet = statement.executeQuery();) {
 				if(resultSet.next()) {
-					result= Optional.of(CompanyMapper.resultSetToCompany(resultSet));				
+					result= Optional.of(CompanyMapper.resultSetToCompany(resultSet));			
 				}
 			}
 		} catch (SQLException e) {
@@ -60,12 +64,15 @@ public class DaoCompany {
 		
 		ArrayList<Company> company_list = new ArrayList<>();
 		
-		try (Connection conn = Dao.openConnection();
+		try (Connection conn = openConnection();
 			 Statement statement = conn.createStatement();){
 			
 			try (ResultSet resultSet = statement.executeQuery(SELECT_ALL);) {
 				while(resultSet.next()) {
-					company_list.add(CompanyMapper.resultSetToCompany(resultSet));				
+					Optional<Company> company = Optional.of(CompanyMapper.resultSetToCompany(resultSet));
+					if (company.isPresent()) {
+						company_list.add(company.get());	
+					}
 				}
 			}
 		} catch (SQLException e) {

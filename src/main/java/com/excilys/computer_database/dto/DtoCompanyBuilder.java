@@ -1,15 +1,16 @@
-package com.excilys.computer_database.model;
+package com.excilys.computer_database.dto;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CompanyBuilder {
+public class DtoCompanyBuilder {
 	private Integer id;
 	private String name;
-	private static Logger logger = LoggerFactory.getLogger(CompanyBuilder.class);
+	private static Logger logger = LoggerFactory.getLogger(DtoCompanyBuilder.class);
 
-	public Company build() {
-		Company company = new Company();
+	public DtoCompany build() {
+		DtoCompany company = new DtoCompany();
 		if (this.id == null) {
 			logger.warn("Can't set id to null. Company build canceled, return null.");
 			return null;
@@ -20,12 +21,12 @@ public class CompanyBuilder {
 		return company;
 	}
 	
-	public CompanyBuilder setId(Integer id) {
+	public DtoCompanyBuilder setId(Integer id) {
 		this.id = id;
 		return this;
 	}
 	
-	public CompanyBuilder setName(String name) {
+	public DtoCompanyBuilder setName(String name) {
 		this.name = name;
 		return this;
 	}

@@ -1,20 +1,22 @@
-package com.excilys.computer_database.model;
+package com.excilys.computer_database.dto;
 
 import java.sql.Timestamp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ComputerBuilder {
+import com.excilys.computer_database.model.Company;
+
+public class DtoComputerBuilder {
 	private Integer id;
 	private String name;
 	private Timestamp introduced;
 	private Timestamp discontinued;
 	private Company company;
-	private static Logger logger = LoggerFactory.getLogger(ComputerBuilder.class);
+	private static Logger logger = LoggerFactory.getLogger(DtoComputerBuilder.class);
 
-	public Computer build() {
-		Computer computer = new Computer();
+	public DtoComputer build() {
+		DtoComputer computer = new DtoComputer();
 
 		computer.setId(this.id);
 		if (this.name == null) {
@@ -36,27 +38,27 @@ public class ComputerBuilder {
 		return computer;
 	}
 	
-	public ComputerBuilder setId(Integer id) {
+	public DtoComputerBuilder setId(Integer id) {
 		this.id = id;
 		return this;
 	}
 	
-	public ComputerBuilder setName(String name) {
+	public DtoComputerBuilder setName(String name) {
 		this.name = name;
 		return this;
 	}
 
-	public ComputerBuilder setIntroduced(Timestamp introduced) {
+	public DtoComputerBuilder setIntroduced(Timestamp introduced) {
 		this.introduced = introduced;
 		return this;
 	}
 
-	public ComputerBuilder setDiscontinued(Timestamp discontinued) {
+	public DtoComputerBuilder setDiscontinued(Timestamp discontinued) {
 		this.discontinued = discontinued;
 		return this;
 	}
 
-	public ComputerBuilder setCompany(Company company) {
+	public DtoComputerBuilder setCompany(Company company) {
 		this.company = company;
 		return this;
 	}

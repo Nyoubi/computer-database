@@ -24,7 +24,6 @@ public class DaoComputer extends Dao{
 	private final String UPDATE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 	private final String DELETE_ID = "DELETE FROM computer WHERE id=?";
 	private final String CREATE = "INSERT INTO computer (name, introduced, discontinued,company_id) VALUES (?,?,?,?)";
-	private final String CREATE_WITH_ID = "INSERT INTO computer (name, introduced, discontinued,company_id,id) VALUES (?,?,?,?,?)";
 	private final String ALTER_AUTO_INCREMENTE = "ALTER TABLE computer AUTO_INCREMENT = ?";
 	private static Logger logger = LoggerFactory.getLogger(DaoComputer.class);
 
@@ -87,11 +86,8 @@ public class DaoComputer extends Dao{
 	public Optional<Integer> createComputer(Computer computer) {
 		Optional<Integer> idCreated = Optional.empty();
 		Integer lineAffected = null;
-		String request = CREATE;
-		if (computer.getId() != null)
-			request = CREATE_WITH_ID;
 		try (Connection conn = openConnection();
-				PreparedStatement statement = conn.prepareStatement(request,Statement.RETURN_GENERATED_KEYS);){
+				PreparedStatement statement = conn.prepareStatement(CREATE,Statement.RETURN_GENERATED_KEYS);){
 			fillComputer(computer, statement);
 			lineAffected = statement.executeUpdate();
 			try (ResultSet resultSet = statement.getGeneratedKeys();) {

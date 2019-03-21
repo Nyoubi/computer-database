@@ -24,7 +24,7 @@ import com.excilys.computer_database.view.menu.UpdateComputerView;
  * @author Killian Martin
  *
  */
-public class Controller {
+public class ControlerCLI {
 	/**
 	 * The computer service
 	 */
@@ -37,12 +37,12 @@ public class Controller {
 	/**
 	 * The instance of computer, singleton pattern
 	 */
-	private static volatile Controller instance = null;
+	private static volatile ControlerCLI instance = null;
 
 	/**
 	 * Controller logger, used to trace logs
 	 */
-	private static Logger logger = LoggerFactory.getLogger(Controller.class);
+	private static Logger logger = LoggerFactory.getLogger(ControlerCLI.class);
 
 	/**
 	 * Controller constructor, initialize services
@@ -50,7 +50,7 @@ public class Controller {
 	 * @see ComputerService
 	 * @
 	 */
-	private Controller () {
+	private ControlerCLI () {
 		this.companyService = CompanyService.getInstance();
 		this.computerService = ComputerService.getInstance();
 	}
@@ -59,12 +59,12 @@ public class Controller {
 	 * This method check if instance is initialized, and create a new one if not.
 	 * @return Return an instance
 	 */
-	public static Controller getInstance()
+	public static ControlerCLI getInstance()
 	{   
 		if (instance == null) {
-			synchronized(Controller.class) {
+			synchronized(ControlerCLI.class) {
 				if (instance == null) {
-					instance = new Controller();
+					instance = new ControlerCLI();
 				}
 			}
 		}
@@ -83,7 +83,7 @@ public class Controller {
 		boolean run = true;
 		while (run) {
 			String input = menu.show();
-			switch(MenuViewOptions.getById(Util.parseInt(input))) {
+			switch(MenuViewOptions.getById(Util.parseInt(input).get())) {
 			case LIST_COMPUTERS: ComputerListView computerListView = ComputerListView.getInstance(computerService.listComputers());
 			computerListView.show();
 			break;
@@ -93,16 +93,16 @@ public class Controller {
 			break;
 
 			case COMPUTER_DETAILS: ComputerView computerView = ComputerView.getInstance();
-			Integer id = Util.parseInt(computerView.show());
+			Integer id = Util.parseInt(computerView.show()).get();
 			ComputerView.exec(computerService.showDetails(id));
 			break;
 
 			case CREATE_COMPUTER: CreateComputerView createComputerView = CreateComputerView.getInstance();
 			ArrayList<String> info = createComputerView.show();
 			createComputerView.exec(computerService.createComputer(info.get(0),
-					Util.stringToTimestamp(info.get(1)),
-					Util.stringToTimestamp(info.get(2)),
-					Util.parseInt(info.get(3))));
+					Util.stringToTimestamp(info.get(1)).get(),
+					Util.stringToTimestamp(info.get(2)).get(),
+					Util.parseInt(info.get(3)).get()));
 			break;
 
 			case UPDATE_COMPUTER: UpdateComputerView updateComputerView = UpdateComputerView.getInstance();
@@ -111,7 +111,7 @@ public class Controller {
 			break;
 
 			case DELETE_COMPUTER: DeleteComputerView deleteComputerView = DeleteComputerView.getInstance();
-			Integer idd = Util.parseInt(deleteComputerView.show());
+			Integer idd = Util.parseInt(deleteComputerView.show()).get();
 			deleteAndShowView(deleteComputerView, idd);
 			break;
 			case EXIT:
@@ -130,11 +130,11 @@ public class Controller {
 
 	private void updateAndShowView(UpdateComputerView updateComputerView, ArrayList<String> infoUpdate) {
 		try {
-			computerService.updateComputer(Util.parseInt(infoUpdate.get(0)),
+			computerService.updateComputer(Util.parseInt(infoUpdate.get(0)).get(),
 					infoUpdate.get(1),
-					Util.stringToTimestamp(infoUpdate.get(2)),
-					Util.stringToTimestamp(infoUpdate.get(3)),
-					Util.parseInt(infoUpdate.get(4)));
+					Util.stringToTimestamp(infoUpdate.get(2)).get(),
+					Util.stringToTimestamp(infoUpdate.get(3)).get(),
+					Util.parseInt(infoUpdate.get(4)).get());
 			updateComputerView.exec(true);
 		} catch (ExceptionDao e) {
 			updateComputerView.exec(false);

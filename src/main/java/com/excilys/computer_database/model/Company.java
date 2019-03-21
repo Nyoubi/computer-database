@@ -3,14 +3,14 @@ package com.excilys.computer_database.model;
 public class Company {
 	private Integer id;
 	private String name;
-	
+
 	public Company(Integer id, String name) {
 		this.id = id;
 		this.name = name;
 	}
-	
+
 	public Company() {}
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -28,8 +28,8 @@ public class Company {
 	}
 
 	public String toString() { 
-	    return "Id: '" + this.id 
-	    		+ "', Name: '" + this.name  + "'";
+		return "Id: '" + this.id 
+				+ "', Name: '" + this.name  + "'";
 	}
 
 	@Override
@@ -56,18 +56,17 @@ public class Company {
 		if (id == null) {
 			if (other.id != null) {
 				return false;
-			}
-		} else if (!id.equals(other.id)) {
-			return false;
-		}
-		if (name == null) {
-			if (other.name != null) {
+			} else if (!id.equals(other.id))
+				return false;
+			if (name == null) {
+				if (other.name != null) {
+					return false;
+				}
+			} else if (!name.equals(other.name)) {
 				return false;
 			}
-		} else if (!name.equals(other.name)) {
-			return false;
+			return true;
 		}
 		return true;
 	}
-	
 }

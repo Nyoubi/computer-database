@@ -62,7 +62,7 @@ public class DaoCompany  extends Dao{
 	
 	public ArrayList<Company> listAllCompany(){
 		
-		ArrayList<Company> company_list = new ArrayList<>();
+		ArrayList<Company> companyList = new ArrayList<>();
 		
 		try (Connection conn = openConnection();
 			 Statement statement = conn.createStatement();){
@@ -71,7 +71,7 @@ public class DaoCompany  extends Dao{
 				while(resultSet.next()) {
 					Optional<Company> company = Optional.of(CompanyMapper.resultSetToCompany(resultSet));
 					if (company.isPresent()) {
-						company_list.add(company.get());	
+						companyList.add(company.get());	
 					}
 				}
 			}
@@ -79,6 +79,6 @@ public class DaoCompany  extends Dao{
 			e.printStackTrace();
 			logger.error("Error when listing all companies.");
 		}
-		return company_list;
+		return companyList;
 	}
 }

@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import com.excilys.computer_database.dto.DtoComputer;
+import com.excilys.computer_database.dto.DtoComputerBuilder;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
@@ -22,7 +24,18 @@ public abstract class ComputerMapper {
 				.setIntroduced(introduced)
 				.setDiscontinued(discontinued)
 				.setCompany(company).build();
-
 		return computer;
+	}
+	
+	public static DtoComputer computerToDtoComputer(Computer computer){
+		DtoComputerBuilder dtoComputerBuilder = new DtoComputerBuilder();
+		
+		DtoComputer dtoComputer = dtoComputerBuilder.setId(computer.getId())
+				.setName(computer.getName())
+				.setIntroduced(computer.getIntroduced())
+				.setDiscontinued(computer.getDiscontinued())
+				.setCompany(CompanyMapper.companyToDtoCompany(computer.getCompany()))
+				.build();
+		return dtoComputer;
 	}
 }

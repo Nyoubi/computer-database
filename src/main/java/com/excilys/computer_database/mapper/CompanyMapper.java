@@ -3,9 +3,8 @@ package com.excilys.computer_database.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.excilys.computer_database.dto.DtoCompany;
+import com.excilys.computer_database.dto.DtoCompanyBuilder;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.CompanyBuilder;
 
@@ -22,6 +21,22 @@ public abstract class CompanyMapper {
 		else 
 			company = companyBuilder.setId(id).setName(name).build();
 
+		return company;
+	}
+	
+	public static DtoCompany companyToDtoCompany(Company company){
+		DtoCompanyBuilder dtoCompanyBuilder = new DtoCompanyBuilder();
+		
+		DtoCompany dtoCompany = dtoCompanyBuilder.setId(company.getId())
+				.setName(company.getName()).build();
+		return dtoCompany;
+	}
+	
+	public static Company dtoCompanyToCompany(DtoCompany dtoCompany){
+		CompanyBuilder companyBuilder = new CompanyBuilder();
+		
+		Company company = companyBuilder.setId(dtoCompany.getId())
+				.setName(dtoCompany.getName()).build();
 		return company;
 	}
 }

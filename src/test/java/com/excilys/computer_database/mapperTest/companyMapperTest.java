@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 
@@ -32,5 +33,9 @@ public class companyMapperTest {
 		Company company = CompanyMapper.resultSetToCompany(rs);
 		assertEquals((int)company.getId(), 1);
 		assertEquals(company.getName(),"Company name");
+		
+		DtoCompany dtoCompany = CompanyMapper.companyToDtoCompany(company);
+		assertEquals(dtoCompany.getName(),"Company name");
+		assertEquals((int)dtoCompany.getId(), 1);
 	}
 }

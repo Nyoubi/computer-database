@@ -5,14 +5,12 @@ import java.sql.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computer_database.model.Company;
-
 public class DtoComputerBuilder {
 	private Integer id;
 	private String name;
 	private Timestamp introduced;
 	private Timestamp discontinued;
-	private Company company;
+	private DtoCompany company;
 	private static Logger logger = LoggerFactory.getLogger(DtoComputerBuilder.class);
 
 	public DtoComputer build() {
@@ -58,11 +56,11 @@ public class DtoComputerBuilder {
 		return this;
 	}
 
-	public DtoComputerBuilder setCompany(Company company) {
+	public DtoComputerBuilder setCompany(DtoCompany company) {
 		this.company = company;
 		return this;
 	}
-	
+
 	public Integer getId() {
 		return this.id;
 	}
@@ -75,8 +73,10 @@ public class DtoComputerBuilder {
 	public Timestamp getDiscontinued() {
 		return this.discontinued;
 	}
-	public Company getCompany() {
+	public DtoCompany getCompany() {
 		return this.company;
 	}
+
+
 	
 }

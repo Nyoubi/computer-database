@@ -7,12 +7,12 @@ import java.util.Scanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.computer_database.controller.Controller;
+import com.excilys.computer_database.controller.ControlerCLI;
 
 
 public class CreateComputerView{
 	private Scanner input;
-	private static Logger logger = LoggerFactory.getLogger(Controller.class);
+	private static Logger logger = LoggerFactory.getLogger(ControlerCLI.class);
 
 	private CreateComputerView() {}
 	

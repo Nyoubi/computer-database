@@ -4,15 +4,14 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.excilys.computer_database.controller.Controller;
+import com.excilys.computer_database.dto.DtoComputer;
 import com.excilys.computer_database.exception.ExceptionDao;
+import com.excilys.computer_database.mapper.CompanyMapper;
+import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Company;
-import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
 import com.excilys.computer_database.persistence.DaoComputer;
+import com.excilys.computer_database.util.Util;
 
 
 public class ComputerService {
@@ -41,46 +40,43 @@ public class ComputerService {
 		this.daoComputer = DaoComputer.getInstance(JDBC_DRIVER, DB_URL, USER, PASS);
 	}
 
-	public ArrayList<Computer> listComputers(){
-		ArrayList<Computer> result = new ArrayList<>();
-		result = daoComputer.listAllComputer();
+	public ArrayList<DtoComputer> listComputers()  throws ExceptionDao {
+		ArrayList<DtoComputer> result = new ArrayList<>();
+		daoComputer.listAllComputer().forEach(computer -> result.add(ComputerMapper.computerToDtoComputer(computer)));
 		return result;
 	}
 
-	public Optional<Computer> showDetails(Integer id) {
-		return daoComputer.findComputerById(id);
+	public Optional<DtoComputer> showDetails(Integer id)  throws ExceptionDao {
+		return Optional.of(ComputerMapper.computerToDtoComputer(Util.checkOptional(daoComputer.findComputerById(id))));
 	}
 
 	public void deleteComputer(Integer id) throws ExceptionDao {
 		daoComputer.deleteComputerById(id);
 	}
 
-	public Optional<Integer> createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) {
-		ComputerBuilder computerBuilder = new ComputerBuilder();
+	public Optional<DtoComputer> createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId)  throws ExceptionDao{
 		CompanyService companyService = CompanyService.getInstance();
-		Company company = null;
-		if (companyId != null && companyId != -1)
-			company = companyService.findCompanyById(companyId).get();
-		return daoComputer.createComputer(computerBuilder.setName(name)
+		Optional<Company> company = Optional.of(CompanyMapper.dtoCompanyToCompany(Util.checkOptional(companyService.findCompanyById(companyId))));
+		Optional<Integer> createdId = daoComputer.createComputer(new ComputerBuilder().setName(name)
 				.setIntroduced(introduced)
 				.setDiscontinued(discontinued)
-				.setCompany(company)
+				.setCompany(Util.checkOptional(company))
 				.build());
+		Optional<DtoComputer> computer = showDetails(createdId.get());
+		return computer;
 	}
 
 
-	public void updateComputer(Integer id, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) throws ExceptionDao {
-		ComputerBuilder computerBuilder = new ComputerBuilder();
+	public Optional<DtoComputer> updateComputer(Integer id, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) throws ExceptionDao {
 		CompanyService companyService = CompanyService.getInstance();
-		Company company = null;
-		if (companyId != null && companyId != -1) {
-			company = companyService.findCompanyById(companyId).get();
-		}
-		daoComputer.updateComputer(computerBuilder.setId(id)
+		Optional<Company> company = Optional.of(CompanyMapper.dtoCompanyToCompany(Util.checkOptional(companyService.findCompanyById(companyId))));
+		daoComputer.updateComputer(new ComputerBuilder().setId(companyId)
 				.setName(name)
 				.setIntroduced(introduced)
 				.setDiscontinued(discontinued)
-				.setCompany(company)
+				.setCompany(Util.checkOptional(company))
 				.build());
+		Optional<DtoComputer> computer = showDetails(id);
+		return computer;
 	}
 }

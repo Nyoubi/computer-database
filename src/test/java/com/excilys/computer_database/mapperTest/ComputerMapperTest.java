@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.excilys.computer_database.dto.DtoComputer;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
@@ -41,5 +42,12 @@ public class ComputerMapperTest {
 		assertEquals(computer.getIntroduced(),Timestamp.valueOf("2010-09-11 11:11:11"));
 		assertEquals(computer.getDiscontinued(),Timestamp.valueOf("2011-10-11 11:11:11"));
 		assertEquals(computer.getCompany(),new Company(1,"Company name"));
+		
+		DtoComputer dtoComputer = ComputerMapper.computerToDtoComputer(computer);
+		assertEquals((int)dtoComputer.getId(), 1);
+		assertEquals(dtoComputer.getName(),"Computer name");
+		assertEquals(dtoComputer.getIntroduced(),Timestamp.valueOf("2010-09-11 11:11:11"));
+		assertEquals(dtoComputer.getDiscontinued(),Timestamp.valueOf("2011-10-11 11:11:11"));
+		assertEquals(dtoComputer.getCompany(),new Company(1,"Company name"));
 	}
 }

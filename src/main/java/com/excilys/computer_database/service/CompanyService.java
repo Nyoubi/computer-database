@@ -3,8 +3,11 @@ package com.excilys.computer_database.service;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.dto.DtoCompany;
+import com.excilys.computer_database.exception.ExceptionDao;
+import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.persistence.DaoCompany;
+import com.excilys.computer_database.util.Util;
 
 
 public class CompanyService {
@@ -33,13 +36,13 @@ public class CompanyService {
 		this.daoCompany = DaoCompany.getInstance(JDBC_DRIVER, DB_URL, USER, PASS);
 	}
 	
-	public ArrayList<Company> listCompanies(){
-		ArrayList<Company> result = new ArrayList<>();
-		result = daoCompany.listAllCompany();
+	public ArrayList<DtoCompany> listCompanies()  throws ExceptionDao {
+		ArrayList<DtoCompany> result = new ArrayList<>();
+		daoCompany.listAllCompany().forEach(company -> result.add(CompanyMapper.companyToDtoCompany(company)));
 		return result;
 	}
 	
-	public Optional<Company> findCompanyById(Integer id){
-		return daoCompany.findCompanyById(id);
+	public Optional<DtoCompany> findCompanyById(Integer id){
+		return Optional.of(CompanyMapper.companyToDtoCompany(Util.checkOptional(daoCompany.findCompanyById(id))));
 	}
 }

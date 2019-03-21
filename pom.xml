@@ -24,7 +24,10 @@
 		<jupiterapi>5.4.1</jupiterapi>
 		<junit>4.12</junit>
 		<mockito>2.23.0</mockito>
-		
+		<selenium>3.141.59</selenium>
+		<servletapi>3.1.0</servletapi>
+		<jstl>1.2</jstl>
+		<taglibs>1.2.5</taglibs>
 	</properties>
 
 	<dependencies>
@@ -61,6 +64,32 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${selenium}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servletapi}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${jstl}</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.apache.taglibs</groupId>
+			<artifactId>taglibs-standard-impl</artifactId>
+			<version>${taglibs}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit}</version>
@@ -73,6 +102,9 @@
 			<version>${mockito}</version>
 			<scope>test</scope>
 		</dependency>
+
+
 	</dependencies>
+
 
 </project>

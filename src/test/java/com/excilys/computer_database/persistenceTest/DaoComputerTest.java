@@ -30,7 +30,7 @@ public class DaoComputerTest {
 	public void setUp() {
 		daoComputer = DaoComputer.getInstance("com.mysql.cj.jdbc.Driver","jdbc:mysql://localhost:3306/computer-database-test",
 											  "admintest","test1234");
-		computerBuilder = new ComputerBuilder().setName("Test")
+		computerBuilder = new ComputerBuilder().setName("Computer 1")
 				.setIntroduced(Timestamp.valueOf("2000-12-12 10:10:10"))
 				.setDiscontinued(Timestamp.valueOf("2000-12-12 11:10:10"))
 				.setCompany(null);
@@ -110,8 +110,8 @@ public class DaoComputerTest {
 	@Test
 	public void testFindComputerById() {
 		computer = daoComputer.findComputerById(1).get();
-		assertNotNull(computer);
 		
+		assertNotNull(computer);
 		computer2.setId(1);
 		computer2.setName("Computer 1");
 		computer2.setIntroduced(Timestamp.valueOf("2000-12-12 10:10:10"));

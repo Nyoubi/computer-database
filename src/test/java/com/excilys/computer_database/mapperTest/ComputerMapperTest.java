@@ -1,5 +1,6 @@
 package com.excilys.computer_database.mapperTest;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.ResultSet;
@@ -14,6 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.excilys.computer_database.dto.DtoComputer;
+import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
@@ -35,8 +37,15 @@ public class ComputerMapperTest {
 	}
 	
 	@Test
-	public void testComputerMapper() throws SQLException {
-		Computer computer = ComputerMapper.resultSetToComputer(rs);
+	public void testComputerMapper(){
+		Computer computer = null;
+		try {
+			computer = ComputerMapper.resultSetToComputer(rs);
+		} catch (SQLException e) {
+			fail();
+		} catch (ExceptionModel e) {
+			fail();
+		}
 		assertEquals((int)computer.getId(), 1);
 		assertEquals(computer.getName(),"Computer name");
 		assertEquals(computer.getIntroduced(),Timestamp.valueOf("2010-09-11 11:11:11"));
@@ -44,10 +53,12 @@ public class ComputerMapperTest {
 		assertEquals(computer.getCompany(),new Company(1,"Company name"));
 		
 		DtoComputer dtoComputer = ComputerMapper.computerToDtoComputer(computer);
+		
 		assertEquals((int)dtoComputer.getId(), 1);
 		assertEquals(dtoComputer.getName(),"Computer name");
-		assertEquals(dtoComputer.getIntroduced(),Timestamp.valueOf("2010-09-11 11:11:11"));
-		assertEquals(dtoComputer.getDiscontinued(),Timestamp.valueOf("2011-10-11 11:11:11"));
-		assertEquals(dtoComputer.getCompany(),new Company(1,"Company name"));
+		assertEquals(dtoComputer.getIntroduced(),"2010-09-11 11:11:11.0");
+		assertEquals(dtoComputer.getDiscontinued(),"2011-10-11 11:11:11.0");
+		assertEquals(dtoComputer.getCompanyId(),1);
+		assertEquals(dtoComputer.getCompanyName(), "Company name");
 	}
 }

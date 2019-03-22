@@ -3,12 +3,9 @@ package com.excilys.computer_database.dtoTest;
 
 import static org.junit.Assert.assertNotEquals;
 
-import java.sql.Timestamp;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.dto.DtoComputer;
 
 import junit.framework.TestCase;
@@ -20,8 +17,8 @@ public class DtoComputerTest extends TestCase {
 	
 	@BeforeEach
 	public void setUp() {
-		computer1 = new DtoComputer(null,null,null,null,null);
-		computer2 = new DtoComputer(null,null,null,null,null);
+		computer1 = new DtoComputer(0,"Name","2000-01-01 01:01:01","2000-01-01 01:01:05",1,"Name");
+		computer2 = new DtoComputer(0,"Name","2000-01-01 01:01:01","2000-01-01 01:01:05",1,"Name");
 	}
 	
 	@Test
@@ -33,75 +30,44 @@ public class DtoComputerTest extends TestCase {
 	
 	@Test
 	public void equalsTestId() {
-		computer1.setId(0);
-		assertNotEquals(computer1, computer2);
-		
+				
 		computer2.setId(1);
 		assertNotEquals(computer1, computer2);
-		
-		computer2.setId(0);
-		assertEquals(computer1, computer2);
 	}
 	
 	@Test
 	public void equalsTestName() {
-		computer2.setName("notNull");
-		assertNotEquals(computer1, computer2);
 		
-		computer1.setName("Different");
+		computer2.setName("Test");
 		assertNotEquals(computer1, computer2);
-		
-		computer1.setName("same");
-		computer2.setName("same");
-		assertEquals(computer1, computer2);
 	}
 	
 	@Test
 	public void equalsTestIntroduced() {		
-		computer2.setIntroduced(Timestamp.valueOf("2000-01-01 00:00:00"));
-		assertNotEquals(computer1, computer2);
 		
-		computer1.setIntroduced(Timestamp.valueOf("2000-01-01 00:00:00"));
-		computer2.setIntroduced(null);
+		computer2.setIntroduced("2000-01-01 01:00:01");
 		assertNotEquals(computer1, computer2);
-		
-		computer2.setIntroduced(Timestamp.valueOf("2011-11-11 11:11:11"));
-		assertNotEquals(computer1, computer2);
-		
-		computer1.setIntroduced(Timestamp.valueOf("2011-11-11 11:11:11"));
-		assertEquals(computer1, computer2);
 	}
 
 	@Test
 	public void equalsTestDiscontinued() {
-		computer2.setDiscontinued(Timestamp.valueOf("2000-01-01 00:00:00"));
-		assertNotEquals(computer1, computer2);
 		
-		computer1.setDiscontinued(Timestamp.valueOf("2000-01-01 00:00:00"));
-		computer2.setDiscontinued(null);
+		computer2.setDiscontinued("2000-01-01 01:01:02");
 		assertNotEquals(computer1, computer2);
-		
-		computer2.setDiscontinued(Timestamp.valueOf("2011-11-11 11:11:11"));
-		assertNotEquals(computer1, computer2);
-		
-		computer1.setDiscontinued(Timestamp.valueOf("2011-11-11 11:11:11"));
-		assertEquals(computer1, computer2);
 	}
 	
 	@Test
 	public void equalsTestCompany() {
-		computer1.setCompany(new DtoCompany(1,"NotNull"));
+		
+		computer2.setCompanyName("Test");
+		assertNotEquals(computer1, computer2);
+				
+		computer2.setCompanyId(0);
+		computer2.setName("Name");
 		assertNotEquals(computer1, computer2);
 		
-		computer2.setCompany(new DtoCompany(1,"NotNull"));
-		computer1.setCompany(null);
+		computer2.setCompanyId(1);
 		assertNotEquals(computer1, computer2);
-		
-		computer1.setCompany(new DtoCompany(2,"NotNull"));
-		assertNotEquals(computer1, computer2);
-		
-		computer2.setCompany(new DtoCompany(2,"NotNull"));
-		assertEquals(computer1, computer2);
 	}
 	
 	@Test
@@ -115,8 +81,8 @@ public class DtoComputerTest extends TestCase {
 	
 	@Test
 	public void testToString() {
-		computer1 = new DtoComputer(1,"Test",Timestamp.valueOf("2000-01-01 00:00:00"),Timestamp.valueOf("2000-01-01 02:00:00"),new DtoCompany(1,"Name"));
-		assertEquals(computer1.toString(),"Id: 1, Name: Test, Introduced: 2000-01-01 00:00:00.0, Discontinued: 2000-01-01 02:00:00.0, Company: (Id: '1', Name: 'Name')");
+		computer1 = new DtoComputer(1,"Test","2000-01-01 00:00:00","2000-01-01 02:00:00",1,"Name");
+		assertEquals(computer1.toString(),"Id: 1, Name: Test, Introduced: 2000-01-01 00:00:00.0, Discontinued: 2000-01-01 02:00:00.0, Company: Name: Name)");
 	}
 	
 	

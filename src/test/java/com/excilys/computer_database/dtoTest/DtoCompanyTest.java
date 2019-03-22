@@ -17,8 +17,8 @@ public class DtoCompanyTest extends TestCase {
 	
 	@BeforeEach
 	public void setUp() {
-		company1 = new DtoCompany(null,null);
-		company2 = new DtoCompany(null,null);
+		company1 = new DtoCompany(0,"Name");
+		company2 = new DtoCompany(0,"Name");
 	}
 	
 	@Test
@@ -30,27 +30,18 @@ public class DtoCompanyTest extends TestCase {
 	
 	@Test
 	public void equalsTestId() {
-		company1.setId(0);
-		assertNotEquals(company1, company2);
-		
+			
 		company2.setId(1);
 		assertNotEquals(company1, company2);
 		
-		company2.setId(0);
-		assertEquals(company1, company2);
 	}
 	
 	@Test
 	public void equalsTestName() {
-		company2.setName("notNull");
+		
+		company2.setName("Test");
 		assertNotEquals(company1, company2);
 		
-		company1.setName("Different");
-		assertNotEquals(company1, company2);
-		
-		company1.setName("same");
-		company2.setName("same");
-		assertEquals(company1, company2);
 	}
 	@Test
 	public void equalsTestCompany() {
@@ -60,8 +51,6 @@ public class DtoCompanyTest extends TestCase {
 	
 	@Test
 	public void testToString() {
-		company1.setId(1);
-		company1.setName("test");
-		assertEquals(company1.toString(),"Id: '1', Name: 'test'");
+		assertEquals(company1.toString(),"Id: '0', Name: 'Name'");
 	}
 }

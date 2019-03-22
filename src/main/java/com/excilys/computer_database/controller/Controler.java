@@ -7,7 +7,8 @@ import java.util.Optional;
 import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.dto.DtoComputer;
 import com.excilys.computer_database.exception.ExceptionDao;
-import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.exception.ExceptionModel;
+import com.excilys.computer_database.model.Page;
 import com.excilys.computer_database.service.CompanyService;
 import com.excilys.computer_database.service.ComputerService;
 
@@ -33,32 +34,41 @@ public class Controler {
 		return instance;
 	}
 	
-	public ArrayList<DtoComputer> getListComputers() throws ExceptionDao{
+	public ArrayList<DtoComputer> getListComputers() throws ExceptionDao, ExceptionModel{
 		ArrayList<DtoComputer> computers = computerService.listComputers();
 		return computers;
 	}
 	
-	public Optional<DtoComputer> getComputerDetails(Integer id) throws ExceptionDao{
+	public Optional<Page<DtoComputer>> getPageListDtoComputer(Integer index, Integer size) throws ExceptionDao, ExceptionModel{
+		Optional<Page<DtoComputer>> pageListDtoComputer = computerService.pageDtoComputer(index, size);
+		return pageListDtoComputer;
+	}
+	
+	public Optional<DtoComputer> getComputerDetails(Integer id) throws ExceptionDao, ExceptionModel{
 		Optional<DtoComputer> computers = computerService.showDetails(id);
 		return computers;
 	}
 	
-	public ArrayList<DtoCompany> getListCompany() throws ExceptionDao{
+	public ArrayList<DtoCompany> getListCompany() throws ExceptionDao, ExceptionModel{
 		ArrayList<DtoCompany> companies = companyService.listCompanies();
 		return companies;
 	}
 	
-	public Optional<DtoComputer> createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) throws ExceptionDao {
+	public Optional<DtoComputer> createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
 		Optional<DtoComputer> computer =  computerService.createComputer(name,introduced,discontinued,companyId);
 		return computer;
 	}
 	
-	public Optional<DtoComputer> updateComputer(Integer id, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) throws ExceptionDao {
+	public Optional<DtoComputer> updateComputer(Integer id, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) throws ExceptionDao , ExceptionModel{
 		Optional<DtoComputer> computer = computerService.updateComputer(id,name,introduced,discontinued,companyId);
 		return computer;
 	}
 	
 	public void deleteComputer(Integer id) throws ExceptionDao{
 		computerService.deleteComputer(id);
+	}
+	
+	public Optional<Integer> getNbComputer() throws ExceptionDao{
+		return computerService.getNbComputer();
 	}
 }

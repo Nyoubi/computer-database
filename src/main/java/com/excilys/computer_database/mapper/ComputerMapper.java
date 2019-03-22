@@ -3,16 +3,19 @@ package com.excilys.computer_database.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Optional;
 
+import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.dto.DtoComputer;
 import com.excilys.computer_database.dto.DtoComputerBuilder;
+import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
 
 public abstract class ComputerMapper {
 
-	public static Computer resultSetToComputer(ResultSet resultSet) throws SQLException{
+	public static Computer resultSetToComputer(ResultSet resultSet) throws SQLException, ExceptionModel{
 		ComputerBuilder computerBuilder = new ComputerBuilder();
 		Integer id = resultSet.getInt("id");
 		String name = resultSet.getString("name");
@@ -26,16 +29,31 @@ public abstract class ComputerMapper {
 				.setCompany(company).build();
 		return computer;
 	}
-	
+
 	public static DtoComputer computerToDtoComputer(Computer computer){
 		DtoComputerBuilder dtoComputerBuilder = new DtoComputerBuilder();
-		
-		DtoComputer dtoComputer = dtoComputerBuilder.setId(computer.getId())
-				.setName(computer.getName())
-				.setIntroduced(computer.getIntroduced())
-				.setDiscontinued(computer.getDiscontinued())
-				.setCompany(CompanyMapper.companyToDtoCompany(computer.getCompany()))
-				.build();
-		return dtoComputer;
+
+		Optional<DtoCompany> dtoCompany = CompanyMapper.companyToDtoCompany(computer.getCompany());
+		if (computer.getId() == null) {
+			dtoComputerBuilder.setId(computer.getId());
+		}
+		dtoComputerBuilder.setId(computer.getId())
+				.setName(computer.getName().toString());
+		if (computer.getIntroduced() != null) {
+			dtoComputerBuilder.setIntroduced(computer.getIntroduced().toString());
+		} else {
+			dtoComputerBuilder.setIntroduced("");
+		}
+		if (computer.getDiscontinued() != null) {
+			dtoComputerBuilder.setDiscontinued(computer.getDiscontinued().toString());
+		} else {
+			dtoComputerBuilder.setIntroduced("");
+		}
+
+		if (dtoCompany.isPresent()) {
+			dtoComputerBuilder.setCompanyName(dtoCompany.get().getName().toString())
+							  .setCompanyId(dtoCompany.get().getId());
+		}
+		return dtoComputerBuilder.build();
 	}
 }

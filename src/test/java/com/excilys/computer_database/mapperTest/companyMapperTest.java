@@ -1,9 +1,11 @@
 package com.excilys.computer_database.mapperTest;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,8 +36,11 @@ public class companyMapperTest {
 		assertEquals((int)company.getId(), 1);
 		assertEquals(company.getName(),"Company name");
 		
-		DtoCompany dtoCompany = CompanyMapper.companyToDtoCompany(company);
-		assertEquals(dtoCompany.getName(),"Company name");
-		assertEquals((int)dtoCompany.getId(), 1);
+		Optional<DtoCompany> dtoCompany = CompanyMapper.companyToDtoCompany(company);
+		if (!dtoCompany.isPresent()) {
+			fail();
+		}
+		assertEquals(dtoCompany.get().getName(),"Company name");
+		assertEquals((int)dtoCompany.get().getId(), 1);
 	}
 }

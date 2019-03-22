@@ -31,8 +31,6 @@ public class CompanyTest extends TestCase {
 	@Test
 	public void equalsTestId() {
 		company1.setId(0);
-		assertNotEquals(company1, company2);
-		
 		company2.setId(1);
 		assertNotEquals(company1, company2);
 		

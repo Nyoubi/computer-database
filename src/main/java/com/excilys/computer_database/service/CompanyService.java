@@ -6,8 +6,8 @@ import java.util.Optional;
 import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.mapper.CompanyMapper;
+import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.persistence.DaoCompany;
-import com.excilys.computer_database.util.Util;
 
 
 public class CompanyService {
@@ -38,11 +38,21 @@ public class CompanyService {
 	
 	public ArrayList<DtoCompany> listCompanies()  throws ExceptionDao {
 		ArrayList<DtoCompany> result = new ArrayList<>();
-		daoCompany.listAllCompany().forEach(company -> result.add(CompanyMapper.companyToDtoCompany(company)));
+		for (Company company : daoCompany.listAllCompany()) {
+			Optional<DtoCompany> dtoCompany = CompanyMapper.companyToDtoCompany(company);
+			if (dtoCompany.isPresent()) {
+				result.add(dtoCompany.get());
+			}
+		}
 		return result;
 	}
 	
 	public Optional<DtoCompany> findCompanyById(Integer id){
-		return Optional.of(CompanyMapper.companyToDtoCompany(Util.checkOptional(daoCompany.findCompanyById(id))));
+		Optional<Company> company = daoCompany.findCompanyById(id);
+		Optional<DtoCompany> dtoCompany = Optional.empty();
+		if (company.isPresent()) {
+			dtoCompany = CompanyMapper.companyToDtoCompany(company.get());
+		}
+		return dtoCompany;
 	}
 }

@@ -1,42 +1,27 @@
 package com.excilys.computer_database.dto;
 
-import java.sql.Timestamp;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class DtoComputerBuilder {
-	private Integer id;
+	private int id;
 	private String name;
-	private Timestamp introduced;
-	private Timestamp discontinued;
-	private DtoCompany company;
-	private static Logger logger = LoggerFactory.getLogger(DtoComputerBuilder.class);
+	private String introduced;
+	private String discontinued;
+	private int companyId;
+	private String companyName;
 
 	public DtoComputer build() {
 		DtoComputer computer = new DtoComputer();
 
 		computer.setId(this.id);
-		if (this.name == null) {
-			logger.warn("Can't set name to null. Computer build canceled, return null.");
-			return null;
-		} 
 		computer.setName(this.name);
 		computer.setIntroduced(this.introduced);
-		if (this.introduced == null && this.discontinued != null) {
-			logger.warn("Can't set discontinued with a date when introduced is null. Discontinued has been set to null.");
-			computer.setDiscontinued(null);
-		} else if (this.introduced != null && this.discontinued != null && this.introduced.compareTo(this.discontinued) >= 0) {
-			logger.warn("Can't set discontinued with a date before introduced's one. Discontinued has been set to null.");
-			computer.setDiscontinued(null);
-		} else {
-			computer.setDiscontinued(this.discontinued);
-		}
-		computer.setCompany(this.company);
+		computer.setDiscontinued(null);
+		computer.setDiscontinued(this.discontinued);
+		computer.setCompanyId(this.companyId);
+		computer.setCompanyName(this.companyName);
 		return computer;
 	}
 	
-	public DtoComputerBuilder setId(Integer id) {
+	public DtoComputerBuilder setId(int id) {
 		this.id = id;
 		return this;
 	}
@@ -46,37 +31,44 @@ public class DtoComputerBuilder {
 		return this;
 	}
 
-	public DtoComputerBuilder setIntroduced(Timestamp introduced) {
+	public DtoComputerBuilder setIntroduced(String introduced) {
 		this.introduced = introduced;
 		return this;
 	}
 
-	public DtoComputerBuilder setDiscontinued(Timestamp discontinued) {
+	public DtoComputerBuilder setDiscontinued(String discontinued) {
 		this.discontinued = discontinued;
 		return this;
 	}
 
-	public DtoComputerBuilder setCompany(DtoCompany company) {
-		this.company = company;
+	public DtoComputerBuilder setCompanyName(String companyName) {
+		this.companyName = companyName;
+		return this;
+	}
+	
+	public DtoComputerBuilder setCompanyId(int companyId) {
+		this.companyId = companyId;
 		return this;
 	}
 
-	public Integer getId() {
+	public int getId() {
 		return this.id;
 	}
 	public String getName() {
 		return this.name;
 	}
-	public Timestamp getIntroduced() {
+	public String getIntroduced() {
 		return this.introduced;
 	}
-	public Timestamp getDiscontinued() {
+	public String getDiscontinued() {
 		return this.discontinued;
 	}
-	public DtoCompany getCompany() {
-		return this.company;
+	public String getCompanyName() {
+		return this.companyName;
 	}
-
+	public int getCompanyId() {
+		return this.companyId;
+	}
 
 	
 }

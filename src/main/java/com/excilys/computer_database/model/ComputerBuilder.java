@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computer_database.exception.ExceptionModel;
+
 public class ComputerBuilder {
 	private Integer id;
 	private String name;
@@ -13,9 +15,11 @@ public class ComputerBuilder {
 	private Company company;
 	private static Logger logger = LoggerFactory.getLogger(ComputerBuilder.class);
 
-	public Computer build() {
+	public Computer build() throws ExceptionModel{
 		Computer computer = new Computer();
-
+		if (this.id == null) {
+			throw new ExceptionModel("Id can't be null");
+		}
 		computer.setId(this.id);
 		if (this.name == null) {
 			logger.warn("Can't set name to null. Computer build canceled, return null.");
@@ -27,7 +31,7 @@ public class ComputerBuilder {
 			logger.warn("Can't set discontinued with a date when introduced is null. Discontinued has been set to null.");
 			computer.setDiscontinued(null);
 		} else if (this.introduced != null && this.discontinued != null && this.introduced.compareTo(this.discontinued) >= 0) {
-			logger.warn("Can't set discontinued with a date before introduced's one. Discontinued has been set to null.");
+			logger.warn(this.name + "Can't set discontinued with a date before introduced's one. Discontinued has been set to null.");
 			computer.setDiscontinued(null);
 		} else {
 			computer.setDiscontinued(this.discontinued);

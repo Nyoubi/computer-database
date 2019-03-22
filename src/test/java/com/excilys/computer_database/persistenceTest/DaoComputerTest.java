@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.excilys.computer_database.exception.ExceptionDao;
+import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
@@ -34,13 +35,18 @@ public class DaoComputerTest {
 				.setIntroduced(Timestamp.valueOf("2000-12-12 10:10:10"))
 				.setDiscontinued(Timestamp.valueOf("2000-12-12 11:10:10"))
 				.setCompany(null);
+		
+		try {
 		computer = computerBuilder.build();
 		computer2 = computerBuilder.build();
+		} catch (ExceptionModel e) {
+			fail();
+		}
 	}
 	
 	@Test
 	public void testConnection() {
-		try (Connection conn = Dao.openConnection()){
+		try (Connection conn = DaoComputer.openConnection()){
 			assertNotNull(conn);
 		} catch (SQLException e) {
 			fail("Exception catched when trying to connect.");
@@ -53,7 +59,11 @@ public class DaoComputerTest {
 		assertNotNull(test);
 		assertEquals(test,Integer.valueOf(2));
 		computer2.setId(test);
-		computer = daoComputer.findComputerById(test).get();
+		try {
+			computer = daoComputer.findComputerById(test).get();
+		} catch (ExceptionModel e1) {
+			fail();
+		}
 		assertNotNull(computer);
 		assertEquals(computer,computer2);
 		
@@ -79,7 +89,11 @@ public class DaoComputerTest {
 		} catch (ExceptionDao e) {
 			fail();
 		}
-		computer = daoComputer.findComputerById(created).get();
+		try {
+			computer = daoComputer.findComputerById(created).get();
+		} catch (ExceptionModel e1) {
+			fail();
+		}
 		
 		assertNotEquals(computer2,computer);
 		
@@ -103,13 +117,21 @@ public class DaoComputerTest {
 		} catch (ExceptionDao e) {
 			fail();
 		}
-		assertEquals(daoComputer.findComputerById(created), Optional.empty());
+		try {
+			assertEquals(daoComputer.findComputerById(created), Optional.empty());
+		} catch (ExceptionModel e) {
+			fail();
+		}
 		daoComputer.resetAutoIncrement(created);		
 	}
 	
 	@Test
 	public void testFindComputerById() {
-		computer = daoComputer.findComputerById(1).get();
+		try {
+			computer = daoComputer.findComputerById(1).get();
+		} catch (ExceptionModel e1) {
+			fail();
+		}
 		
 		assertNotNull(computer);
 		computer2.setId(1);

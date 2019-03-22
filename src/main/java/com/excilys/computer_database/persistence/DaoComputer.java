@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.computer_database.exception.ExceptionDao;
+import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Computer;
 
@@ -20,13 +21,15 @@ public class DaoComputer extends Dao{
 
 	private final String SELECT_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName FROM computer c "
 			+ "LEFT JOIN company cn ON c.company_id=cn.id ";
+	private final String SELECT_SOME = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName FROM computer c "
+			+ "LEFT JOIN company cn ON c.company_id=cn.id LIMIT ?,?";
 	private final String SELECT_ID = SELECT_ALL + "WHERE c.id=? ";
 	private final String UPDATE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 	private final String DELETE_ID = "DELETE FROM computer WHERE id=?";
 	private final String CREATE = "INSERT INTO computer (name, introduced, discontinued,company_id) VALUES (?,?,?,?)";
 	private final String ALTER_AUTO_INCREMENTE = "ALTER TABLE computer AUTO_INCREMENT = ?";
-	private static Logger logger = LoggerFactory.getLogger(DaoComputer.class);
-
+	private final String COUNT = "SELECT COUNT(id) FROM computer";
+	private static Logger logger = LoggerFactory.getLogger(DaoComputer.class); 
 	
 	private static volatile DaoComputer instance = null;
 	
@@ -49,7 +52,7 @@ public class DaoComputer extends Dao{
 		return instance;
 	}
 
-	public Optional<Computer> findComputerById(Integer id) {
+	public Optional<Computer> findComputerById(Integer id) throws ExceptionModel{
 
 		Optional<Computer> result = Optional.empty();
 		try (Connection conn = openConnection();
@@ -67,7 +70,7 @@ public class DaoComputer extends Dao{
 		return result;
 	}
 
-	public ArrayList<Computer> listAllComputer() {
+	public ArrayList<Computer> listAllComputer() throws ExceptionModel{
 		ArrayList<Computer> computerList = new ArrayList<>();
 
 		try (Connection conn = openConnection();
@@ -79,6 +82,25 @@ public class DaoComputer extends Dao{
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.error("Error when listing all computers.");
+		}
+		return computerList;
+	}
+	
+	public ArrayList<Computer> listSomeComputers(Integer index, Integer size) throws ExceptionModel{
+		ArrayList<Computer> computerList = new ArrayList<>();
+
+		try (Connection conn = openConnection();
+				PreparedStatement statement = conn.prepareStatement(SELECT_SOME);){
+			statement.setInt(1, index);
+			statement.setInt(2, size);
+			try (ResultSet resultSet = statement.executeQuery();) {
+				while (resultSet.next()) {
+					computerList.add(ComputerMapper.resultSetToComputer(resultSet));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.error("Error when listing some computers with index and size of the set.");
 		}
 		return computerList;
 	}
@@ -147,6 +169,20 @@ public class DaoComputer extends Dao{
 			e.printStackTrace();
 			logger.error("Error when deleting the computer id " + id + ".");
 		}
+	}
+	
+	public Optional<Integer> getNbComputer() throws ExceptionDao{
+		Optional<Integer> result = Optional.empty();
+		try (Connection conn = openConnection();
+				Statement statement = conn.createStatement();
+				ResultSet resultSet = statement.executeQuery(COUNT)){
+			if (resultSet.next()) {
+				result = Optional.of(resultSet.getInt(1));
+			}
+		} catch (SQLException e) {
+			throw new ExceptionDao("Error when getting computer count int the database.");
+		}
+		return result;
 	}
 
 	public void resetAutoIncrement(Integer value) {

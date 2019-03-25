@@ -35,11 +35,18 @@ public abstract class CompanyMapper {
 		return dtoCompany;
 	}
 
-	public static Company dtoCompanyToCompany(DtoCompany dtoCompany){
+	public static Optional<Company> dtoCompanyToCompany(DtoCompany dtoCompany){
+		
+		if(dtoCompany == null) {
+			return Optional.empty();
+		} else {
+		
 		CompanyBuilder companyBuilder = new CompanyBuilder();
 
 		Company company = companyBuilder.setId(dtoCompany.getId())
-				.setName(dtoCompany.getName()).build();
-		return company;
+										.setName(dtoCompany.getName())
+										.build();
+		return Optional.of(company);
+		}
 	}
 }

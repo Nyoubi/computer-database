@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.exception.ExceptionDao;
+import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.persistence.DaoCompany;
@@ -47,7 +48,7 @@ public class CompanyService {
 		return result;
 	}
 	
-	public Optional<DtoCompany> findCompanyById(Integer id){
+	public Optional<DtoCompany> findCompanyById(Integer id) throws ExceptionModel, ExceptionDao{
 		Optional<Company> company = daoCompany.findCompanyById(id);
 		Optional<DtoCompany> dtoCompany = Optional.empty();
 		if (company.isPresent()) {

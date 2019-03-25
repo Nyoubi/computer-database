@@ -63,7 +63,7 @@ public class ComputerService {
 
 	public Optional<DtoComputer> createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId)  throws ExceptionDao, ExceptionModel{
 		CompanyService companyService = CompanyService.getInstance();
-		Optional<Company> company = Optional.of(CompanyMapper.dtoCompanyToCompany(Util.checkOptional(companyService.findCompanyById(companyId))));
+		Optional<Company> company = CompanyMapper.dtoCompanyToCompany(Util.checkOptional(companyService.findCompanyById(companyId)));
 		Optional<Integer> createdId = daoComputer.createComputer(new ComputerBuilder().setName(name)
 				.setIntroduced(introduced)
 				.setDiscontinued(discontinued)
@@ -72,11 +72,16 @@ public class ComputerService {
 		Optional<DtoComputer> computer = showDetails(createdId.get());
 		return computer;
 	}
+	
+	public void createComputer(DtoComputer dtoComputer) throws ExceptionDao, ExceptionModel {
+		Computer computer = ComputerMapper.dtoComputerTocomputer(dtoComputer);
+		daoComputer.createComputer(computer);
+	}
 
 
 	public Optional<DtoComputer> updateComputer(Integer id, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
 		CompanyService companyService = CompanyService.getInstance();
-		Optional<Company> company = Optional.of(CompanyMapper.dtoCompanyToCompany(Util.checkOptional(companyService.findCompanyById(companyId))));
+		Optional<Company> company = CompanyMapper.dtoCompanyToCompany(Util.checkOptional(companyService.findCompanyById(companyId)));
 		daoComputer.updateComputer(new ComputerBuilder().setId(companyId)
 				.setName(name)
 				.setIntroduced(introduced)

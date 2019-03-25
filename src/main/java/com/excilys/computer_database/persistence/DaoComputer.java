@@ -21,8 +21,6 @@ public class DaoComputer extends Dao{
 
 	private final String SELECT_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName FROM computer c "
 			+ "LEFT JOIN company cn ON c.company_id=cn.id ";
-	private final String SELECT_SOME = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName FROM computer c "
-			+ "LEFT JOIN company cn ON c.company_id=cn.id LIMIT ?,?";
 	private final String SELECT_ID = SELECT_ALL + "WHERE c.id=? ";
 	private final String UPDATE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 	private final String DELETE_ID = "DELETE FROM computer WHERE id=?";
@@ -46,6 +44,18 @@ public class DaoComputer extends Dao{
 			synchronized(DaoComputer.class) {
 				if (instance == null) {
 					instance = new DaoComputer(driver,dbUrl,user,pass);
+				}
+			}
+		}
+		return instance;
+	}
+	
+	public static DaoComputer getInstance()
+	{   
+		if (instance == null) {
+			synchronized(DaoComputer.class) {
+				if (instance == null) {
+					instance = new DaoComputer("com.mysql.cj.jdbc.Driver","jdbc:mysql://localhost:3306/computer-database-db","admincdb","qwerty1234");
 				}
 			}
 		}
@@ -83,28 +93,10 @@ public class DaoComputer extends Dao{
 			e.printStackTrace();
 			logger.error("Error when listing all computers.");
 		}
+		
 		return computerList;
 	}
 	
-	public ArrayList<Computer> listSomeComputers(Integer index, Integer size) throws ExceptionModel{
-		ArrayList<Computer> computerList = new ArrayList<>();
-
-		try (Connection conn = openConnection();
-				PreparedStatement statement = conn.prepareStatement(SELECT_SOME);){
-			statement.setInt(1, index);
-			statement.setInt(2, size);
-			try (ResultSet resultSet = statement.executeQuery();) {
-				while (resultSet.next()) {
-					computerList.add(ComputerMapper.resultSetToComputer(resultSet));
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			logger.error("Error when listing some computers with index and size of the set.");
-		}
-		return computerList;
-	}
-
 	public Optional<Integer> createComputer(Computer computer) {
 		Optional<Integer> idCreated = Optional.empty();
 		Integer lineAffected = null;
@@ -126,7 +118,7 @@ public class DaoComputer extends Dao{
 	}
 
 	private PreparedStatement fillComputer(Computer computer, PreparedStatement statement) throws SQLException {
-		if (computer.getId()!= null) {
+		if (computer.getId() != null && computer.getId() != 0) {
 			statement.setInt(5,computer.getId());
 		}
 		statement.setString(1, computer.getName());

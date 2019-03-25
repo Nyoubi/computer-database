@@ -11,6 +11,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computer_database.exception.ExceptionDao;
+import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 
@@ -40,8 +42,20 @@ public class DaoCompany  extends Dao{
 		}
 		return instance;
     }
+	
+	public static DaoCompany getInstance()
+	{   
+		if (instance == null) {
+			synchronized(DaoCompany.class) {
+				if (instance == null) {
+					instance = new DaoCompany("com.mysql.cj.jdbc.Driver","jdbc:mysql://localhost:3306/computer-database-db","admincdb","qwerty1234");
+				}
+			}
+		}
+		return instance;
+	}
 
-	public Optional<Company> findCompanyById(Integer id){
+	public Optional<Company> findCompanyById(Integer id) throws ExceptionModel, ExceptionDao{
 		
 		Optional<Company> result = Optional.empty();
 		
@@ -54,8 +68,8 @@ public class DaoCompany  extends Dao{
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			logger.error("Error when searching the company id " + id);
+			throw new ExceptionDao("Sql error when searching the computer.");
 		}
 		return result;
 	}

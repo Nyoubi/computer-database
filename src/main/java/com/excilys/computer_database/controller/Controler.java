@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.dto.DtoComputer;
+import com.excilys.computer_database.dto.DtoComputerBuilder;
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.model.Page;
@@ -54,9 +55,13 @@ public class Controler {
 		return companies;
 	}
 	
-	public Optional<DtoComputer> createComputer(String name, Timestamp introduced, Timestamp discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
-		Optional<DtoComputer> computer =  computerService.createComputer(name,introduced,discontinued,companyId);
-		return computer;
+	public void createComputer(String name, String introduced, String discontinued, int companyId) throws ExceptionDao, ExceptionModel {
+		DtoComputerBuilder dtoComputerBuilder = new DtoComputerBuilder();
+		dtoComputerBuilder.setName(name);
+		dtoComputerBuilder.setIntroduced(introduced);
+		dtoComputerBuilder.setDiscontinued(discontinued);
+		dtoComputerBuilder.setCompanyId(companyId);
+		computerService.createComputer(dtoComputerBuilder.build());
 	}
 	
 	public Optional<DtoComputer> updateComputer(Integer id, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) throws ExceptionDao , ExceptionModel{

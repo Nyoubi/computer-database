@@ -8,10 +8,13 @@ import java.util.Optional;
 import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.dto.DtoComputer;
 import com.excilys.computer_database.dto.DtoComputerBuilder;
+import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
+import com.excilys.computer_database.service.CompanyService;
+import com.excilys.computer_database.util.Util;
 
 public abstract class ComputerMapper {
 
@@ -30,7 +33,7 @@ public abstract class ComputerMapper {
 		return computer;
 	}
 
-	public static DtoComputer computerToDtoComputer(Computer computer){
+	public static DtoComputer computerToDtoComputer(Computer computer) throws ExceptionModel{
 		DtoComputerBuilder dtoComputerBuilder = new DtoComputerBuilder();
 
 		Optional<DtoCompany> dtoCompany = CompanyMapper.companyToDtoCompany(computer.getCompany());
@@ -38,7 +41,7 @@ public abstract class ComputerMapper {
 			dtoComputerBuilder.setId(computer.getId());
 		}
 		dtoComputerBuilder.setId(computer.getId())
-				.setName(computer.getName().toString());
+						  .setName(computer.getName());
 		if (computer.getIntroduced() != null) {
 			dtoComputerBuilder.setIntroduced(computer.getIntroduced().toString());
 		} else {
@@ -47,13 +50,49 @@ public abstract class ComputerMapper {
 		if (computer.getDiscontinued() != null) {
 			dtoComputerBuilder.setDiscontinued(computer.getDiscontinued().toString());
 		} else {
-			dtoComputerBuilder.setIntroduced("");
+			dtoComputerBuilder.setDiscontinued("");
 		}
 
 		if (dtoCompany.isPresent()) {
 			dtoComputerBuilder.setCompanyName(dtoCompany.get().getName().toString())
 							  .setCompanyId(dtoCompany.get().getId());
 		}
+		
 		return dtoComputerBuilder.build();
 	}
+	
+	public static Computer dtoComputerTocomputer(DtoComputer dtoComputer) throws ExceptionDao, ExceptionModel {
+
+		ComputerBuilder computerBuilder = new ComputerBuilder();
+
+		computerBuilder.setName(dtoComputer.getName());
+		
+		computerBuilder.setId(dtoComputer.getId());
+	
+		Optional<Timestamp> tmp = Util.stringToTimestamp(dtoComputer.getIntroduced());
+
+		if (tmp.isPresent()) {
+			computerBuilder.setIntroduced(tmp.get());
+		}
+		tmp = Util.stringToTimestamp(dtoComputer.getDiscontinued());
+		
+		if (tmp.isPresent()) {
+			computerBuilder.setDiscontinued(tmp.get());
+		}
+		
+		CompanyService companyService = CompanyService.getInstance();
+		DtoCompany dtoCompany = Util.checkOptional(companyService.findCompanyById(dtoComputer.getCompanyId()));
+		Optional<Company> company = CompanyMapper.dtoCompanyToCompany(dtoCompany);
+
+		if (company.isPresent()) {
+			computerBuilder.setCompany(company.get());
+
+		} else {
+			computerBuilder.setCompany(null);
+		}		
+				
+		return computerBuilder.build();
+
+	}
 }
+ 

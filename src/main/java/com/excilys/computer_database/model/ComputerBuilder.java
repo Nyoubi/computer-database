@@ -24,18 +24,19 @@ public class ComputerBuilder {
 		if (this.name == null) {
 			logger.warn("Can't set name to null. Computer build canceled, return null.");
 			return null;
-		} 
+		}
 		computer.setName(this.name);
 		computer.setIntroduced(this.introduced);
 		if (this.introduced == null && this.discontinued != null) {
 			logger.warn("Can't set discontinued with a date when introduced is null. Discontinued has been set to null.");
 			computer.setDiscontinued(null);
 		} else if (this.introduced != null && this.discontinued != null && this.introduced.compareTo(this.discontinued) >= 0) {
-			logger.warn(this.name + "Can't set discontinued with a date before introduced's one. Discontinued has been set to null.");
+			logger.warn("Can't set discontinued with a date before introduced's one. Discontinued has been set to null.");
 			computer.setDiscontinued(null);
 		} else {
 			computer.setDiscontinued(this.discontinued);
 		}
+
 		computer.setCompany(this.company);
 		return computer;
 	}

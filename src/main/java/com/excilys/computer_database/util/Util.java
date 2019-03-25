@@ -27,7 +27,7 @@ public abstract class Util {
 	
 	public static Optional<Timestamp> stringToTimestamp(String stringDate){
 		try {
-			if(stringDate.equals("null")) {
+			if(stringDate == null || stringDate.equals("null") || stringDate.equals("")) {
 				return Optional.empty();
 			} else {
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

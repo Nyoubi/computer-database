@@ -24,8 +24,8 @@ public class UtilTest {
 	@Test
 	public void testStringToTimestamp() {
 		assertFalse(Util.stringToTimestamp("null").isPresent());
-		assertEquals(Util.stringToTimestamp("2000-01-01 13:12:12").get(),Timestamp.valueOf("2000-01-01 13:12:12"));
-		assertNotEquals(Util.stringToTimestamp("2000-01-01 12:12:12").get(),Timestamp.valueOf("2010-01-01 12:12:12"));
+		assertEquals(Util.stringToTimestamp("2000-01-01").get(),Timestamp.valueOf("2000-01-01 00:00:00"));
+		assertNotEquals(Util.stringToTimestamp("2000-01-01").get(),Timestamp.valueOf("2010-01-01 00:00:00"));
 		assertFalse(Util.stringToTimestamp("Not a timestamp or bad format").isPresent());
 	}
 	

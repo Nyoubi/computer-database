@@ -9,10 +9,10 @@ import org.slf4j.LoggerFactory;
 
 public abstract class Dao{
     
-	protected static String driver;
-	protected static String dbUrl;
-	protected static String user;
-	protected static String pass;
+	protected static String driver = "com.mysql.cj.jdbc.Driver"; // Connect to test db by default
+	protected static String dbUrl = "jdbc:mysql://localhost:3306/computer-database-test";
+	protected static String user = "admintest";
+	protected static String pass = "test1234";
 	
 	private static Logger logger = LoggerFactory.getLogger(Dao.class);
 	

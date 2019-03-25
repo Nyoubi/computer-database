@@ -7,7 +7,6 @@ import static org.junit.Assert.fail;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +19,7 @@ import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
 import com.excilys.computer_database.persistence.Dao;
 import com.excilys.computer_database.persistence.DaoComputer;
+import com.excilys.computer_database.util.Util;
 
 public class DaoComputerTest {
 	
@@ -32,13 +32,16 @@ public class DaoComputerTest {
 		daoComputer = DaoComputer.getInstance("com.mysql.cj.jdbc.Driver","jdbc:mysql://localhost:3306/computer-database-test",
 											  "admintest","test1234");
 		computerBuilder = new ComputerBuilder().setName("Computer 1")
-				.setIntroduced(Timestamp.valueOf("2000-12-12 10:10:10"))
-				.setDiscontinued(Timestamp.valueOf("2000-12-12 11:10:10"))
-				.setCompany(null);
+				.setId(0)
+				.setIntroduced(Util.stringToTimestamp(("2000-12-12")).get())
+				.setDiscontinued(Util.stringToTimestamp(("2000-12-13")).get())
+				.setCompany(new Company(1, "Company 1"));
 		
 		try {
 		computer = computerBuilder.build();
 		computer2 = computerBuilder.build();
+		computer.setId(null);
+		computer2.setId(null);
 		} catch (ExceptionModel e) {
 			fail();
 		}
@@ -46,7 +49,7 @@ public class DaoComputerTest {
 	
 	@Test
 	public void testConnection() {
-		try (Connection conn = DaoComputer.openConnection()){
+		try (Connection conn = Dao.openConnection()){
 			assertNotNull(conn);
 		} catch (SQLException e) {
 			fail("Exception catched when trying to connect.");
@@ -136,18 +139,11 @@ public class DaoComputerTest {
 		assertNotNull(computer);
 		computer2.setId(1);
 		computer2.setName("Computer 1");
-		computer2.setIntroduced(Timestamp.valueOf("2000-12-12 10:10:10"));
-		computer2.setDiscontinued(Timestamp.valueOf("2000-12-12 11:10:10"));
+		computer2.setIntroduced(Util.stringToTimestamp(("2000-12-12")).get());
+		computer2.setDiscontinued(Util.stringToTimestamp(("2000-12-13")).get());
 		computer2.setCompany(new Company(1,"Company 1"));
 		
-		assertEquals(computer, computer2);
-		
-		try {
-			daoComputer.deleteComputerById(1);
-		} catch (ExceptionDao e) {
-			fail();
-		}
-		daoComputer.resetAutoIncrement(1);		
+		assertEquals(computer, computer2);	
 	}
 	
 }

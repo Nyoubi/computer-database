@@ -17,6 +17,6 @@ public class DaoTest extends TestCase {
 			assertNotNull(conn);
 		} catch (SQLException e) {
 			fail("Exception catched when trying to connect.");
-		}
+		} 
 	}
 }

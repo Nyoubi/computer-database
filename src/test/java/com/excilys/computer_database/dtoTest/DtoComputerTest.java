@@ -78,12 +78,5 @@ public class DtoComputerTest extends TestCase {
 		equalsTestDiscontinued();
 		equalsTestCompany();
 	}
-	
-	@Test
-	public void testToString() {
-		computer1 = new DtoComputer(1,"Test","2000-01-01 00:00:00","2000-01-01 02:00:00",1,"Name");
-		assertEquals(computer1.toString(),"Id: 1, Name: Test, Introduced: 2000-01-01 00:00:00.0, Discontinued: 2000-01-01 02:00:00.0, Company: Name: Name)");
-	}
-	
-	
+
 }

@@ -52,7 +52,12 @@ public class ComputerMapperTest {
 		assertEquals(computer.getDiscontinued(),Timestamp.valueOf("2011-10-11 11:11:11"));
 		assertEquals(computer.getCompany(),new Company(1,"Company name"));
 		
-		DtoComputer dtoComputer = ComputerMapper.computerToDtoComputer(computer);
+		DtoComputer dtoComputer = new DtoComputer();
+		try {
+			dtoComputer = ComputerMapper.computerToDtoComputer(computer);
+		} catch (ExceptionModel e) {
+			fail();
+		}
 		
 		assertEquals((int)dtoComputer.getId(), 1);
 		assertEquals(dtoComputer.getName(),"Computer name");

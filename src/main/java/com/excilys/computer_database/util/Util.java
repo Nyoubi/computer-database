@@ -30,12 +30,12 @@ public abstract class Util {
 			if(stringDate == null || stringDate.equals("null") || stringDate.equals("")) {
 				return Optional.empty();
 			} else {
-				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 				Date date = dateFormat.parse(stringDate);
 				return Optional.of(new Timestamp(date.getTime()));
 			}
 	    } catch (ParseException e) {
-	    	logger.error("Error when parsing " + stringDate + ". Date must be in format yyyy-MM-dd hh:mm:ss or null");
+	    	logger.error("Error when parsing " + stringDate + ". Date must be in format yyyy-MM-dd or null");
 	    }
 		return Optional.empty();
 	  }

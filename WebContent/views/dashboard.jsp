@@ -24,7 +24,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${numberComputer} Computers found</h1>
+			<h1 id="homeTitle">${numberComputer}Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -36,8 +36,9 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href=<c:url value ="/addComputer"/>>Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
+					<a class="btn btn-success" id="addComputer"
+						href=<c:url value ="/addComputer"/>>Add Computer</a> <a
+						class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
@@ -114,10 +115,11 @@
 				<button type="button" class="btn btn-default">50</button>
 				<button type="button" class="btn btn-default">100</button>
 			</div>
+		</div>	
 	</footer>
-	<script src="../js/jquery.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/dashboard.js"></script>
+	<script src="<c:url value="/js/jquery.min.js"/>"></script>
+	<script src="<c:url value="/js/bootstrap.min.js"/>"></script>
+	<script src="<c:url value="/js/dashboard.js"/>"></script>
 
 </body>
 </html>

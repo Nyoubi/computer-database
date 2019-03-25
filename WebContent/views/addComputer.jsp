@@ -16,32 +16,40 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand"  href=<c:url value ="/dashboard"/>> Application -
-				Computer Database </a>
+			<a class="navbar-brand" href=<c:url value ="/dashboard"/>>
+				Application - Computer Database </a>
 		</div>
 	</header>
+
+	<div class="container">
+		<div id="introducedError" class="alert alert-danger" role="alert">
+			<strong>Introduced date must respect the format yyyy-mm-dd</strong>
+		</div>
+		<div id="discontinuedError" class="alert alert-danger" role="alert">
+			<strong>Discontinued date must respect the format yyyy-mm-dd</strong>
+		</div>
+	</div>
 
 	<section id="main">
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
-					<form action="addComputer" method="POST">
+					<form name="addForm" action="addComputer" method="POST">
 						<fieldset>
 							<div class="form-group">
-								<label for="name">Computer name</label> <input
-									type="text" class="form-control" id="name"  name="name"
-									placeholder="Computer name">
+								<label for="name">Computer name</label> <input type="text"
+									class="form-control" id="name" name="name"
+									placeholder="Computer name" required>
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date (yyyy-mm-dd
-									hh:mm:ss)</label> <input type="date" class="form-control"
+								<label for="introduced">Introduced date (yyyy-mm-dd or empty)</label> <input type="text" class="form-control"
 									id="introduced" name="introduced" placeholder="Introduced date">
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date (yyyy-mm-dd
-									hh:mm:ss)</label> <input type="date" class="form-control"
-									id="discontinued" name="discontinued" placeholder="Discontinued date">
+								<label for="discontinued">Discontinued date (yyyy-mm-dd or empty)</label> <input type="text" class="form-control"
+									id="discontinued" name="discontinued"
+									placeholder="Discontinued date">
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> <select
@@ -55,13 +63,20 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Add" class="btn btn-primary">
-							or <a href=<c:url value ="/dashboard"/> class="btn btn-default">Cancel</a>
+							<input type="submit" value="Add" class="btn btn-primary"
+								id="btnAdd"> or <a href=<c:url value ="/dashboard"/>
+								class="btn btn-default">Cancel</a>
 						</div>
 					</form>
 				</div>
 			</div>
 		</div>
 	</section>
+	<script src="<c:url value="/js/jquery.min.js"/>"></script>
+	<script src="<c:url value="/js/bootstrap.min.js"/>"></script>
+	<script src="<c:url value="/js/dashboard.js"/>"></script>
+	<script src="<c:url value="/js/validate.js"/>"></script>
+	
 </body>
+
 </html>

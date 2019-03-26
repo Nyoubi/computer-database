@@ -1,16 +1,22 @@
 package com.excilys.computer_database.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Page<T> {
 	private List<T> content;
 	private Integer index;
 	private Integer size;
-	
+	private List<Integer> sizeList =new ArrayList<Integer>();
 	public Page(List<T> content,Integer index,Integer size) {
 		this.content = content;
 		this.index = Math.max(index,1);
 		this.size = Math.max(size,1);
+		
+		sizeList.add(10);
+		sizeList.add(20);
+		sizeList.add(50);
+		sizeList.add(100);
 	}
 	
 	public Integer nextPage(){
@@ -41,8 +47,17 @@ public class Page<T> {
 		return size;
 	}
 
-	public void setSize(Integer size) {
-		this.size = Math.max(size,1);
+	public Integer setSize(Integer size) {
+		if (sizeList.indexOf(size) != -1) {
+			this.size = Math.max(size,10);	
+		} else {
+			this.size = sizeList.get(0);
+		}
+		return this.size;
+	}
+	
+	public List<Integer> getSizeList () {
+		return this.sizeList;
 	}
 	
 	public Integer getContentSize() {

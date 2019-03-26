@@ -77,7 +77,7 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="editComputer.html" onclick="">${computer.getName()}</a></td>
+							<td id="name"><a href="editComputer.html" onclick="">${computer.getName()}</a></td>
 							<td>${computer.getIntroduced()}</td>
 							<td>${computer.getDiscontinued()}</td>
 							<td>${computer.getCompanyName()}</td>
@@ -111,11 +111,18 @@
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<button type="button" class="btn btn-default">10</button>
-				<button type="button" class="btn btn-default">50</button>
-				<button type="button" class="btn btn-default">100</button>
+				<c:forEach items="${computerPage.getSizeList()}" var="item">
+					<c:choose>
+						<c:when test="${item == size}">
+						<a class="active btn btn-default" href="dashboard?size=${computerPage.setSize(item)}">${item}</a>
+						</c:when>
+						<c:when test="${item != size}">
+							<a class="btn btn-default" href="dashboard?size=${computerPage.setSize(item)}">${item}</a>
+						</c:when>
+					</c:choose>
+				</c:forEach>
 			</div>
-		</div>	
+		</div>
 	</footer>
 	<script src="<c:url value="/js/jquery.min.js"/>"></script>
 	<script src="<c:url value="/js/bootstrap.min.js"/>"></script>

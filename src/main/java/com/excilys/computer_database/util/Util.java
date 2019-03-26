@@ -32,7 +32,9 @@ public abstract class Util {
 			} else {
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 				Date date = dateFormat.parse(stringDate);
-				return Optional.of(new Timestamp(date.getTime()));
+				if(dateFormat.format(date).equals(stringDate)) {
+					return Optional.of(new Timestamp(date.getTime()));
+				}
 			}
 	    } catch (ParseException e) {
 	    	logger.error("Error when parsing " + stringDate + ". Date must be in format yyyy-MM-dd or null");

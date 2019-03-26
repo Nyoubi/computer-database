@@ -44,12 +44,11 @@
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date (yyyy-mm-dd or empty)</label> <input type="text" class="form-control"
-									id="introduced" name="introduced" placeholder="Introduced date">
+									id="introduced" name="introduced" placeholder="Introduced date" >
 							</div>
-							<div class="form-group">
+							<div class="form-group" data-toggle="tooltip" title="You need to fill introduced first">
 								<label for="discontinued">Discontinued date (yyyy-mm-dd or empty)</label> <input type="text" class="form-control"
-									id="discontinued" name="discontinued"
-									placeholder="Discontinued date">
+									id="discontinued" name=discontinued placeholder="Discontinued date">
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> <select

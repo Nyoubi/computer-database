@@ -24,7 +24,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${numberComputer}Computers found</h1>
+			<h1 id="homeTitle">${numberComputer} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -91,7 +91,8 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="dashboard?index=${computerPage.previousPage()}"
+				<li><a id="previous"
+					href="dashboard?index=${computerPage.previousPage()}"
 					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
 				<c:forEach begin="${computerPage.getStart()}"
@@ -105,8 +106,9 @@
 						</c:when>
 					</c:choose>
 				</c:forEach>
-				<li><a href="dashboard?index=${computerPage.nextPage()}"
-					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				<li><a id="next"
+					href="dashboard?index=${computerPage.nextPage()}" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 
@@ -114,10 +116,12 @@
 				<c:forEach items="${computerPage.getSizeList()}" var="item">
 					<c:choose>
 						<c:when test="${item == size}">
-						<a class="active btn btn-default" href="dashboard?size=${computerPage.setSize(item)}">${item}</a>
+							<a id="currentSize" class="active btn btn-default"
+								href="dashboard?size=${computerPage.setSize(item)}">${item}</a>
 						</c:when>
 						<c:when test="${item != size}">
-							<a class="btn btn-default" href="dashboard?size=${computerPage.setSize(item)}">${item}</a>
+							<a class="btn btn-default"
+								href="dashboard?size=${computerPage.setSize(item)}">${item}</a>
 						</c:when>
 					</c:choose>
 				</c:forEach>

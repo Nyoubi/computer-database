@@ -13,26 +13,28 @@ public class ComputerBuilder {
 	private Timestamp introduced;
 	private Timestamp discontinued;
 	private Company company;
+	
 	private static Logger logger = LoggerFactory.getLogger(ComputerBuilder.class);
 
 	public Computer build() throws ExceptionModel{
 		Computer computer = new Computer();
 		if (this.id == null) {
-			throw new ExceptionModel("Id can't be null");
+			logger.error("Id can't be empty");
+			throw new ExceptionModel("Id can't be null.");
 		}
 		computer.setId(this.id);
 		if (this.name == null) {
-			logger.warn("Can't set name to null. Computer build canceled, return null.");
-			return null;
+			logger.error("Name can't be empty");
+			throw new ExceptionModel("Can't set name to null.");
 		}
 		computer.setName(this.name);
 		computer.setIntroduced(this.introduced);
 		if (this.introduced == null && this.discontinued != null) {
-			logger.warn("Can't set discontinued with a date when introduced is null. Discontinued has been set to null.");
-			computer.setDiscontinued(null);
+			logger.error("Can't set discontinued when introduced isn't set");
+			throw new ExceptionModel("Introduced need to be fill first.");
 		} else if (this.introduced != null && this.discontinued != null && this.introduced.compareTo(this.discontinued) >= 0) {
-			logger.warn("Can't set discontinued with a date before introduced's one. Discontinued has been set to null.");
-			computer.setDiscontinued(null);
+			logger.error("Discontinued date can't be filled before introduced's one");
+			throw new ExceptionModel("Discontinued date can't be filled before introduced's one.");
 		} else {
 			computer.setDiscontinued(this.discontinued);
 		}

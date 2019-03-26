@@ -1,26 +1,32 @@
 $(document).ready(function() {
 
-	var dateFormat = /(^$|[0-9]{4}[-][0-9]{2}[-][0-9]{2}$)/;
+	var dateFormat = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
 
 	$("#introducedError").hide();
 	$("#discontinuedError").hide();
-	
+	$("#discontinued").attr("disabled",true);
+
 	var introduced = true, discontinued = true;
 	
 	$("#introduced").change(function() {
-		if ($("#introduced").val() == null || !($("#introduced").val().match(dateFormat))) {
+		if (!($("#introduced").val().match(dateFormat))) {
 			$("#introducedError").show();
 			document.getElementById("btnAdd").disabled = true;
 			introduced = false;
-			return false;
+			$("#discontinued").attr("disabled",true);
 		} else {
 			$("#introducedError").hide();
 			introduced = true;
+			if ($("#introduced").val() == "") {
+				$("#discontinued").val("");
+				$("#discontinued").attr("disabled",true);
+			} else {
+				$("#discontinued").attr("disabled",false);
+			}
 			if (discontinued) {
 				document.getElementById("btnAdd").disabled = false;
 			}
 		}
-		return true;
 	});
 
 	$("#discontinued").change(function() {
@@ -28,7 +34,7 @@ $(document).ready(function() {
 			$("#discontinuedError").show();
 			document.getElementById("btnAdd").disabled = true;
 			discontinued = false;
-			return false;
+
 		} else {
 			$("#discontinuedError").hide();
 			discontinued = true;
@@ -36,7 +42,6 @@ $(document).ready(function() {
 				document.getElementById("btnAdd").disabled = false;
 			}
 		}
-		return true;
 	});
 
 });

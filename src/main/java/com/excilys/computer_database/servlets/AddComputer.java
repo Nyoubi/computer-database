@@ -40,7 +40,6 @@ public class AddComputer extends HttpServlet{
 		introduced = request.getParameter("introduced");
 		discontinued = request.getParameter("discontinued");
 		companyId = request.getParameter("companyId");
-
 		try {
 			this.controler.createComputer(name, introduced, discontinued, Integer.valueOf(companyId));
 		} catch (NumberFormatException e) {
@@ -48,7 +47,6 @@ public class AddComputer extends HttpServlet{
 		} catch (ExceptionDao | ExceptionModel e) {
 			logger.error(e.getMessage());
 		}
-
 		response.sendRedirect("dashboard");
 	}
 

@@ -30,15 +30,15 @@ public class DashBoard extends HttpServlet{
 	
 	private Controler controler;
 	private static Logger logger = LoggerFactory.getLogger(DaoCompany.class);
+	private static HttpSession session;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		controler = Controler.getInstance();
-
+		session = request.getSession();
 		getIndex(request);
 		getSize(request);
-		
-		Integer index = (Integer) request.getAttribute("index");
-		Integer size = (Integer) request.getAttribute("size");
+		Integer index = (Integer) session.getAttribute("index");
+		Integer size = (Integer) session.getAttribute("size");
 		Optional<Page<DtoComputer>> showComputers = Optional.empty();
 		Optional<Integer> computerCount = Optional.empty();
 
@@ -73,7 +73,7 @@ public class DashBoard extends HttpServlet{
 	
 	private void getIndex(HttpServletRequest request) {
 		
-		Integer index = (Integer) request.getAttribute("index");
+		Integer index = (Integer) session.getAttribute("index");
 		
 		String indexParam = request.getParameter("index");
 		
@@ -82,20 +82,20 @@ public class DashBoard extends HttpServlet{
 		} else if (index == null){
 			index = 1;
 		}
-		request.setAttribute("index", index);
+		session.setAttribute("index", index);
 	}
 
 	private void getSize(HttpServletRequest request) {
-		Integer size = (Integer) request.getAttribute("size");
+		Integer size = (Integer) session.getAttribute("size");
 
 		String sizeParam = request.getParameter("size");
 		
 		if(sizeParam != null &&  !sizeParam.equals("") && !(sizeParam.equals(""+size))) {
 			size = Integer.parseInt(sizeParam);
-			request.setAttribute("index", 0);
+			session.setAttribute("index", 1);
 		} else if (size == null){
 			size = 10;
 		}
-		request.setAttribute("size", size);
+		session.setAttribute("size", size);
 	}
 }

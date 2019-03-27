@@ -97,7 +97,7 @@ public class DaoComputer extends Dao{
 		return computerList;
 	}
 	
-	public Optional<Integer> createComputer(Computer computer) {
+	public Optional<Integer> createComputer(Computer computer) throws ExceptionDao {
 		Optional<Integer> idCreated = Optional.empty();
 		Integer lineAffected = null;
 		try (Connection conn = openConnection();
@@ -111,8 +111,7 @@ public class DaoComputer extends Dao{
 				idCreated = Optional.of(resultSet.getInt(1));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			logger.error("Error when creating the computer.");
+			throw new ExceptionDao ("Erro when creating the computer.");
 		}
 		return idCreated;
 	}

@@ -9,23 +9,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.computer_database.controller.Controler;
 import com.excilys.computer_database.dto.DtoComputer;
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.model.Page;
+import com.excilys.computer_database.service.ComputerService;
 
 @WebServlet(name = "DashBoard", urlPatterns = { "/dashboard" })
 public class DashBoard extends HttpServlet{
 
 	private static final long serialVersionUID = 4605140799487702645L;
 	
-	private Controler controler;
+	private ComputerService computerService;
 	private static final String URL = "dashboard";
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		controler = Controler.getInstance();
+		computerService = ComputerService.getInstance();
 		
 		getIndex(request);getSize(request);
 		
@@ -36,8 +36,8 @@ public class DashBoard extends HttpServlet{
 		Optional<Integer> computerCount = Optional.empty();
 
 		try {
-			computerCount = controler.getNbComputer();
-			showComputers = controler.getPageListDtoComputer(URL, index, size);
+			computerCount = computerService.getNbComputer();
+			showComputers = computerService.pageDtoComputer(URL, index, size);
 		} catch (ExceptionDao | ExceptionModel e) {
 			response.sendRedirect("/500.html");
 		}

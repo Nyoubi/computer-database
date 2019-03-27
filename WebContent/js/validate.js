@@ -33,6 +33,11 @@ $(function() {
 				$("#discontinued").attr('readonly', false)
 			}
 			
+			if (stringToDate($(this).val()) <= stringToDate($("#discontinued").val())) {
+				$("#discontinuedError").hide();
+				validate($("#discontinued"));
+			}
+			
 		} else {
 			$("#introducedError").show();
 			invalidate($(this))
@@ -40,8 +45,9 @@ $(function() {
 	});
 	
 	$("#discontinued").on("blur" , function(){
-		if (!$(this).attr("readonly") && dateFormat.test($(this).val()) || ($(this).val() == "" )) {
-			
+		if (!$(this).attr("readonly") 
+				&& (dateFormat.test($(this).val()) || ($(this).val() == "" ))
+				&& stringToDate($(this).val()).getTime() >= stringToDate($("#introduced").val()).getTime()) {
 			$("#discontinuedError").hide();
 			validate($(this));
 			
@@ -52,23 +58,13 @@ $(function() {
 	});
 	
 	$("#companyId").on("blur", function() {
-		if (!$("#companyId option").contains( $("#companyId").val()) ){
+		if($("#companyId option").toArray().map(option => option.value).indexOf( $("#companyId").val()) == -1){
 			invalidate($(this));
 			$("#companyIdError").hide();
-
 		} else {
 			validate($(this));
 			$("#companyIdError").hide();
 		}
-	})
-	
-	$('form[action=addComputer"]').first().on("submit", function(){
-		ctx = $(this)
-		$(this).find("fieldset div").forEach( childInput => {
-			if ( $(this).hasClass('has-error') || !$(this).hasClass('has-success') ){
-				ctx.preventDefault()
-			}
-		})
 	})
 	
 	function invalidate(obj){
@@ -82,5 +78,10 @@ $(function() {
 		obj.parent().addClass('has-success')
 		$("form input[type='submit']").first().removeClass('disabled')
 	}
+	
+	function stringToDate(stringDate) {
+		  const [year, month, day] = stringDate.split("-")
+		  return new Date(year, month - 1, day)
+		}
 
 });

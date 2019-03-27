@@ -1,9 +1,6 @@
 package com.excilys.computer_database.util;
 
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -26,19 +23,9 @@ public abstract class Util {
 	}
 	
 	public static Optional<Timestamp> stringToTimestamp(String stringDate){
-		try {
-			if(stringDate == null || stringDate.equals("null") || stringDate.equals("")) {
-				return Optional.empty();
-			} else {
-				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-				Date date = dateFormat.parse(stringDate);
-				if(dateFormat.format(date).equals(stringDate)) {
-					return Optional.of(new Timestamp(date.getTime()));
-				}
-			}
-	    } catch (ParseException e) {
-	    	logger.error("Error when parsing " + stringDate + ". Date must be in format yyyy-MM-dd or null");
-	    }
+		if(stringDate != null && !("".equals(stringDate))) {
+			return Optional.of(Timestamp.valueOf(stringDate + " 00:00:00"));
+		}
 		return Optional.empty();
 	  }
 	

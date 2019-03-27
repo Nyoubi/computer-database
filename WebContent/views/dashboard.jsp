@@ -24,7 +24,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${numberComputer}Computersfound</h1>
+			<h1><c:out value="${numberComputer} Computers found"/></h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -101,7 +101,7 @@
 					<c:choose>
 						<c:when test="${loop.index == index}">
 							<li class="active"><a
-								href="${computerPage.indexAt(loop.index)}">${loop.index}</a></li>
+								>${loop.index}</a></li>
 						</c:when>
 						<c:when test="${loop.index != index}">
 							<li><a href="${computerPage.indexAt(loop.index)}">${loop.index}</a></li>

@@ -12,6 +12,7 @@ import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.model.Page;
 import com.excilys.computer_database.service.CompanyService;
 import com.excilys.computer_database.service.ComputerService;
+import com.excilys.computer_database.util.Util;
 
 public class Controler {
 	private static volatile Controler instance = null;
@@ -40,8 +41,8 @@ public class Controler {
 		return computers;
 	}
 	
-	public Optional<Page<DtoComputer>> getPageListDtoComputer(Integer index, Integer size) throws ExceptionDao, ExceptionModel{
-		Optional<Page<DtoComputer>> pageListDtoComputer = computerService.pageDtoComputer(index, size);
+	public Optional<Page<DtoComputer>> getPageListDtoComputer(String url, Integer index, Integer size) throws ExceptionDao, ExceptionModel{
+		Optional<Page<DtoComputer>> pageListDtoComputer = computerService.pageDtoComputer(url, index, size);
 		return pageListDtoComputer;
 	}
 	
@@ -56,6 +57,7 @@ public class Controler {
 	}
 	
 	public void createComputer(String name, String introduced, String discontinued, int companyId) throws ExceptionDao, ExceptionModel {
+		checkData(name, introduced, discontinued, companyId);
 		DtoComputerBuilder dtoComputerBuilder = new DtoComputerBuilder();
 		dtoComputerBuilder.setName(name);
 		dtoComputerBuilder.setIntroduced(introduced);
@@ -76,4 +78,20 @@ public class Controler {
 	public Optional<Integer> getNbComputer() throws ExceptionDao{
 		return computerService.getNbComputer();
 	}
+	
+	public void checkData(String name, String introduced, String discontinued, int companyId) throws ExceptionModel {
+	    if (name == null || name == "") {
+	      throw new ExceptionModel("Failed to create computer/update : Invalid name");
+	    }
+	    Optional<Timestamp> OptIntroduced = Util.stringToTimestamp(introduced);
+	    Optional<Timestamp> OptDiscontinued = Util.stringToTimestamp(discontinued);
+
+	    if (!OptIntroduced.isPresent() && OptDiscontinued.isPresent()) {
+		      throw new ExceptionModel("Failed to create computer/update : Discontinued but not introduced");
+		}
+	    if (OptIntroduced.isPresent() && OptDiscontinued.isPresent()
+	    		&& OptIntroduced.get().after(OptDiscontinued.get())) {
+		      throw new ExceptionModel("Failed to create computer/update : Introduced can't be after discontinued date");
+		}
+	  }
 }

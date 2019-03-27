@@ -13,7 +13,7 @@ public abstract class Util {
 
 	private static Logger logger = LoggerFactory.getLogger(Util.class);
 	public static Optional<Integer> parseInt(String input) {
-		if (input.equals("null"))
+		if (input == null || input.equals(""))
 		{
 			return Optional.empty();
 		}

@@ -1,47 +1,86 @@
-$(document).ready(function() {
+$(function() {
 
-	var dateFormat = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/;
-
+	let dateFormat = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/
 	$("#introducedError").hide();
+	$("#nameError").hide();
 	$("#discontinuedError").hide();
-	$("#discontinued").attr("disabled",true);
-
-	var introduced = true, discontinued = true;
+	$("#companyIdError").hide();
 	
-	$("#introduced").change(function() {
-		if (!($("#introduced").val().match(dateFormat))) {
-			$("#introducedError").show();
-			document.getElementById("btnAdd").disabled = true;
-			introduced = false;
-			$("#discontinued").attr("disabled",true);
+	$("#discontinued").attr('readonly', true)
+	validate($("#introduced"))
+	validate($("#discontinued"))
+	validate($("#companyId"))
+	
+	$("#name").on("blur" , function(){
+		if (!($(this).val() == "" )) {
+			$("#nameError").hide();
+			validate($(this));
 		} else {
+			$("#nameError").show();
+			invalidate($(this));
+		}
+	});
+	
+	$("#introduced").on("blur" , function(){
+		if (dateFormat.test($(this).val()) || $(this).val() == "") {
+			validate($(this));
 			$("#introducedError").hide();
-			introduced = true;
-			if ($("#introduced").val() == "") {
+			
+			if ($(this).val() == "") {
 				$("#discontinued").val("");
-				$("#discontinued").attr("disabled",true);
+				$("#discontinued").attr('readonly', true)
 			} else {
-				$("#discontinued").attr("disabled",false);
+				$("#discontinued").attr('readonly', false)
 			}
-			if (discontinued) {
-				document.getElementById("btnAdd").disabled = false;
-			}
+			
+		} else {
+			$("#introducedError").show();
+			invalidate($(this))
 		}
 	});
-
-	$("#discontinued").change(function() {
-		if ($("#discontinued").val() == null || !($("#discontinued").val().match(dateFormat))) {
+	
+	$("#discontinued").on("blur" , function(){
+		if (!$(this).attr("readonly") && dateFormat.test($(this).val()) || ($(this).val() == "" )) {
+			
+			$("#discontinuedError").hide();
+			validate($(this));
+			
+		} else {
 			$("#discontinuedError").show();
-			document.getElementById("btnAdd").disabled = true;
-			discontinued = false;
+			invalidate($(this));
+		}
+	});
+	
+	$("#companyId").on("blur", function() {
+		if (!$("#companyId option").contains( $("#companyId").val()) ){
+			invalidate($(this));
+			$("#companyIdError").hide();
 
 		} else {
-			$("#discontinuedError").hide();
-			discontinued = true;
-			if (introduced) {
-				document.getElementById("btnAdd").disabled = false;
-			}
+			validate($(this));
+			$("#companyIdError").hide();
 		}
-	});
+	})
+	
+	$('form[action=addComputer"]').first().on("submit", function(){
+		ctx = $(this)
+		$(this).find("fieldset div").forEach( childInput => {
+			if ( $(this).hasClass('has-error') || !$(this).hasClass('has-success') ){
+				ctx.preventDefault()
+			}
+		})
+	})
+	
+	function invalidate(obj){
+		obj.parent().addClass('has-error')
+		obj.parent().removeClass('has-success')
+		$("form input[type='submit']").first().addClass('disabled')
+	}
+	
+	function validate(obj){
+		obj.parent().removeClass('has-error')
+		obj.parent().addClass('has-success')
+		$("form input[type='submit']").first().removeClass('disabled')
+	}
 
 });

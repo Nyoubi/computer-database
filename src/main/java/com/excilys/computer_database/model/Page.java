@@ -1,42 +1,59 @@
 package com.excilys.computer_database.model;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Page<T> {
 	private List<T> content;
 	private Integer index;
 	private Integer size;
-	private List<Integer> sizeList =new ArrayList<Integer>();
-	public Page(List<T> content,Integer index,Integer size) {
+	private String url;
+	
+	private static List<Integer> sizeList = Arrays.asList(new Integer[]{10,20,50,100});
+
+	public Page(String url, List<T> content,Integer index,Integer size) {
+		this.url = url;
 		this.content = content;
 		this.index = Math.max(index,1);
 		this.size = Math.max(size,1);
-		
-		sizeList.add(10);
-		sizeList.add(20);
-		sizeList.add(50);
-		sizeList.add(100);
+	}
+
+	private String formatUrl(int index, int size) {
+		return String.format("%s?%s=%d&%s=%d", url, "index", index, "size", size);
 	}
 	
-	public Integer nextPage(){
+	public String nextPage(){
 		if(index*size < content.size()) {
-			return index + 1;
-		}else{
-			return index;
+			return formatUrl(index+1,size);
 		}
+		return formatUrl(index,size);
 	}
-	public Integer previousPage(){
+	
+	public Integer nextIndex() {
+		if(index*size < content.size()) {
+			return index+1;
+		}
+		return index;
+	}
+	
+	public String previousPage(){
 		if(index * size > size) {
-			return index - 1;
+			return formatUrl(index-1,size);
 		}
 		else {
-			return 1;
+			return formatUrl(1,size);
 		}
 	}
 	
-	public Integer getIndex() {
-		return index;
+	public Integer previousIndex() {
+		if(index*size > size) {
+			return index-1;
+		}
+		return 1;
+	}
+	
+	public String indexAt(Integer index) {
+		return formatUrl(index,size);
 	}
 
 	public void setIndex(Integer index) {
@@ -47,17 +64,16 @@ public class Page<T> {
 		return size;
 	}
 
-	public Integer setSize(Integer size) {
+	public String setSize(Integer size) {
 		if (sizeList.indexOf(size) != -1) {
-			this.size = Math.max(size,10);	
+			return formatUrl(1,size);
 		} else {
-			this.size = sizeList.get(0);
+			return formatUrl(1,sizeList.get(0));
 		}
-		return this.size;
 	}
 	
-	public List<Integer> getSizeList () {
-		return this.sizeList;
+	public static List<Integer> getSizeList () {
+		return sizeList;
 	}
 	
 	public Integer getContentSize() {

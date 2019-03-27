@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computer_database.exception.ExceptionModel;
+
 public class PageBuilder<T> {
 
 	private static Logger log= LoggerFactory.getLogger(PageBuilder.class);
@@ -13,8 +15,8 @@ public class PageBuilder<T> {
 	private List<T> content;
 	private Integer index;
 	private Integer size;
-	
-	public Optional<Page<T>> build(){
+	private String url;
+	public Optional<Page<T>> build() throws ExceptionModel{
 		if(content == null) {
 			log.warn("Can't build a page without data, return empty");
 			return Optional.empty();
@@ -25,7 +27,11 @@ public class PageBuilder<T> {
 		if(size == null) {
 			size = Integer.valueOf(10);
 		}
-		return Optional.of(new Page<T>(content,index,size));
+		if(url == null) {
+			throw new ExceptionModel("An url is needed");
+		}
+		
+		return Optional.of(new Page<T>(url,content,index,size));
 	}
 	
 	public PageBuilder<T> setContent(List<T> list) {
@@ -44,6 +50,11 @@ public class PageBuilder<T> {
 	
 	public PageBuilder<T> setSize(Integer size) {
 		this.size = size;
+		return this;
+	}
+	
+	public PageBuilder<T> setUrl(String url) {
+		this.url = url;
 		return this;
 	}
 }

@@ -92,12 +92,13 @@ public class ComputerService {
 		return computer;
 	}
 
-	public Optional<Page<DtoComputer>> pageDtoComputer(Integer index, Integer size) throws ExceptionDao, ExceptionModel{
+	public Optional<Page<DtoComputer>> pageDtoComputer(String url, Integer index, Integer size) throws ExceptionDao, ExceptionModel{
 		ArrayList<DtoComputer> result = listComputers();
 		Optional<Page<DtoComputer>> page = new PageBuilder<DtoComputer>()
 				.setContent(result)
 				.setIndex(index)
 				.setSize(size)
+				.setUrl(url)
 				.build();
 		return page;		
 	}

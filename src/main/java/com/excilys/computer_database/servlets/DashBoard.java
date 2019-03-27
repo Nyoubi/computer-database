@@ -8,54 +8,46 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.excilys.computer_database.controller.Controler;
 import com.excilys.computer_database.dto.DtoComputer;
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.model.Page;
-import com.excilys.computer_database.persistence.DaoCompany;
 
 @WebServlet(name = "DashBoard", urlPatterns = { "/dashboard" })
 public class DashBoard extends HttpServlet{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 4605140799487702645L;
 	
 	private Controler controler;
-	private static Logger logger = LoggerFactory.getLogger(DaoCompany.class);
-	private static HttpSession session;
+	private static final String URL = "dashboard";
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		controler = Controler.getInstance();
-		session = request.getSession();
-		getIndex(request);
-		getSize(request);
-		Integer index = (Integer) session.getAttribute("index");
-		Integer size = (Integer) session.getAttribute("size");
+		
+		getIndex(request);getSize(request);
+		
+		Integer index = (Integer) request.getAttribute("index");
+		Integer size = (Integer) request.getAttribute("size");
+		
 		Optional<Page<DtoComputer>> showComputers = Optional.empty();
 		Optional<Integer> computerCount = Optional.empty();
 
 		try {
 			computerCount = controler.getNbComputer();
-			showComputers = controler.getPageListDtoComputer(index, size);
-		} catch (ExceptionDao e) {
-			logger.error(e.errorMessage);
-		} catch (ExceptionModel e1) {
-			logger.error(e1.errorMessage);
+			showComputers = controler.getPageListDtoComputer(URL, index, size);
+		} catch (ExceptionDao | ExceptionModel e) {
+			response.sendRedirect("/500.html");
 		}
+		
 		if (!showComputers.isPresent()) {
 			response.sendRedirect("/500.html");
 		}
+		
 		request.setAttribute("computerData", showComputers.get().getPageContent());
 		request.setAttribute("computerPage", showComputers.get());
-		
 		if (computerCount.isPresent()) {
 			request.setAttribute("numberComputer", computerCount.get());
 		} else {
@@ -73,29 +65,26 @@ public class DashBoard extends HttpServlet{
 	
 	private void getIndex(HttpServletRequest request) {
 		
-		Integer index = (Integer) session.getAttribute("index");
+		Integer index = 1;
 		
 		String indexParam = request.getParameter("index");
 		
 		if(indexParam!=null && !indexParam.equals("")) {
 			index = Integer.parseInt(indexParam);
-		} else if (index == null){
-			index = 1;
 		}
-		session.setAttribute("index", index);
+		
+		request.setAttribute("index", index);
 	}
 
 	private void getSize(HttpServletRequest request) {
-		Integer size = (Integer) session.getAttribute("size");
+		Integer size = (Integer) request.getAttribute("size");
 
 		String sizeParam = request.getParameter("size");
-		
-		if(sizeParam != null &&  !sizeParam.equals("") && !(sizeParam.equals(""+size))) {
+
+		if(sizeParam != null && !sizeParam.equals("") && Page.getSizeList().indexOf(Integer.parseInt(sizeParam)) != -1) {
 			size = Integer.parseInt(sizeParam);
-			session.setAttribute("index", 1);
-		} else if (size == null){
-			size = 10;
 		}
-		session.setAttribute("size", size);
+		
+		request.setAttribute("size", size);
 	}
 }

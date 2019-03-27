@@ -22,11 +22,17 @@
 	</header>
 
 	<div class="container">
-		<div id="introducedError" class="alert alert-danger" role="alert">
+		<div id="nameError" class="alert alert-danger" role="alert" style="display: none">
+			<strong>Name must be filled</strong>
+		</div>
+		<div id="introducedError" class="alert alert-danger" role="alert" style="display: none">
 			<strong>Introduced date must respect the format yyyy-mm-dd</strong>
 		</div>
-		<div id="discontinuedError" class="alert alert-danger" role="alert">
+		<div id="discontinuedError" class="alert alert-danger" role="alert" style="display: none">
 			<strong>Discontinued date must respect the format yyyy-mm-dd</strong>
+		</div>
+		<div id="companyIdError" class="alert alert-danger" role="alert" style="display: none">
+			<strong>This company is not an option</strong>
 		</div>
 	</div>
 
@@ -43,12 +49,16 @@
 									placeholder="Computer name" required>
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date (yyyy-mm-dd or empty)</label> <input type="text" class="form-control"
-									id="introduced" name="introduced" placeholder="Introduced date" >
+								<label for="introduced">Introduced date (Can be empty)</label> <input
+									type="date" class="form-control" id="introduced"
+									name="introduced" placeholder="Introduced date">
 							</div>
-							<div class="form-group" data-toggle="tooltip" title="You need to fill introduced first">
-								<label for="discontinued">Discontinued date (yyyy-mm-dd or empty)</label> <input type="text" class="form-control"
-									id="discontinued" name=discontinued placeholder="Discontinued date">
+							<div class="form-group" data-toggle="tooltip"
+								title="You need to fill introduced first">
+								<label for="discontinued">Discontinued date (Can be
+									empty)</label> <input type="date" class="form-control"
+									id="discontinued" name=discontinued
+									placeholder="Discontinued date">
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> <select
@@ -73,7 +83,6 @@
 	</section>
 	<script src="<c:url value="/js/jquery.min.js"/>"></script>
 	<script src="<c:url value="/js/bootstrap.min.js"/>"></script>
-	<script src="<c:url value="/js/dashboard.js"/>"></script>
 	<script src="<c:url value="/js/validate.js"/>"></script>
 	
 </body>

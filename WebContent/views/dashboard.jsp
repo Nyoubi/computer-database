@@ -24,7 +24,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${numberComputer} Computers found</h1>
+			<h1 id="homeTitle">${numberComputer}Computersfound</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -91,25 +91,29 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a id="previous"
-					href="dashboard?index=${computerPage.previousPage()}"
-					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-				</a></li>
+					<c:if test="${index != computerPage.previousIndex()}">
+						<li><a id="previous" href="${computerPage.previousPage()}"
+							aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+						</a></li>
+					</c:if>
 				<c:forEach begin="${computerPage.getStart()}"
 					end="${computerPage.getStart()+4}" varStatus="loop">
 					<c:choose>
 						<c:when test="${loop.index == index}">
-							<li class="active"><a href="dashboard?index=${loop.index}">${loop.index}</a></li>
+							<li class="active"><a
+								href="${computerPage.indexAt(loop.index)}">${loop.index}</a></li>
 						</c:when>
 						<c:when test="${loop.index != index}">
-							<li><a href="dashboard?index=${loop.index}">${loop.index}</a></li>
+							<li><a href="${computerPage.indexAt(loop.index)}">${loop.index}</a></li>
 						</c:when>
 					</c:choose>
 				</c:forEach>
-				<li><a id="next"
-					href="dashboard?index=${computerPage.nextPage()}" aria-label="Next">
-						<span aria-hidden="true">&raquo;</span>
-				</a></li>
+					<c:if test="${index != computerPage.nextIndex()}">
+						<li><a id="next" href="${computerPage.nextPage()}"
+							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+						</a></li>
+					</c:if>
+
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
@@ -117,11 +121,10 @@
 					<c:choose>
 						<c:when test="${item == size}">
 							<a id="currentSize" class="active btn btn-default"
-								href="dashboard?size=${computerPage.setSize(item)}">${item}</a>
+								href="${computerPage.setSize(item)}">${item}</a>
 						</c:when>
 						<c:when test="${item != size}">
-							<a class="btn btn-default"
-								href="dashboard?size=${computerPage.setSize(item)}">${item}</a>
+							<a class="btn btn-default" href="${computerPage.setSize(item)}">${item}</a>
 						</c:when>
 					</c:choose>
 				</c:forEach>

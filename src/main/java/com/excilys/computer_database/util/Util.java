@@ -10,21 +10,29 @@ public abstract class Util {
 
 	private static Logger logger = LoggerFactory.getLogger(Util.class);
 	public static Optional<Integer> parseInt(String input) {
-		if (input == null || input.equals(""))
+		if (input != null || "".equals(input))
 		{
-			return Optional.empty();
+			try {
+				return Optional.of(Integer.valueOf(input));
+			} catch (NumberFormatException e){
+				logger.error("Error when parsing " + input + " to an Integer");
+			}
 		}
-		try {
-			return Optional.of(Integer.valueOf(input));
-		} catch (NumberFormatException e){
-			logger.error("Error when parsing " + input + " to an Integer");
-		}
+		
 		return Optional.empty();
 	}
 	
 	public static Optional<Timestamp> stringToTimestamp(String stringDate){
 		if(stringDate != null && !("".equals(stringDate))) {
 			return Optional.of(Timestamp.valueOf(stringDate + " 00:00:00"));
+		}
+		return Optional.empty();
+	  }
+	
+	public static Optional<String> timestampToString(Timestamp timestamp){
+		if(timestamp != null) {
+			String stringDate = timestamp.toString();
+			return Optional.of(stringDate.replace(" 00:00:00.0", ""));
 		}
 		return Optional.empty();
 	  }
@@ -36,4 +44,7 @@ public abstract class Util {
 			return null;
 		}
 	}
+	
+	
+	
 }

@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.dto.DtoComputer;
 import com.excilys.computer_database.exception.ExceptionDao;
+import com.excilys.computer_database.exception.ExceptionInvalidInput;
 import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.mapper.ComputerMapper;
@@ -54,15 +55,25 @@ public class ComputerService {
 		return result;
 	}
 
-	public Optional<DtoComputer> showDetails(Integer id)  throws ExceptionDao, ExceptionModel {
-		return Optional.of(ComputerMapper.computerToDtoComputer(Util.checkOptional(daoComputer.findComputerById(id))));
-	}
+	public Optional<DtoComputer> showDetails(String id)  throws ExceptionDao, ExceptionModel, ExceptionInvalidInput {
+		Optional<Integer> ident = Util.parseInt(id);
+		if (ident.isPresent()) {
+			Optional<Computer> computer = daoComputer.findComputerById(ident.get());
+			if (computer.isPresent()) {
+				return Optional.of(ComputerMapper.computerToDtoComputer(computer.get()));
+			} else {
+				throw new ExceptionDao("The computer " + id + " doesn't exist in the database.");
+			}
+		} else {
+			throw new ExceptionInvalidInput("This id can't be converted to an integer.");
+		}
+		}
 
 	public void deleteComputer(Integer id) throws ExceptionDao {
 		daoComputer.deleteComputerById(id);
 	}
 
-	public void createComputer(String name, String introduced, String discontinued, int companyId) throws ExceptionDao, ExceptionModel {
+	public void createComputer(String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
 		checkDataComputer(name, introduced, discontinued, companyId);
 		CompanyService companyService = CompanyService.getInstance();
 		Optional<DtoCompany> dtoCompany = companyService.findCompanyById(companyId);
@@ -84,7 +95,8 @@ public class ComputerService {
 	}
 
 
-	/*public Optional<DtoComputer> updateComputer(Integer id, String name, Timestamp introduced, Timestamp discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
+	/*public void updateComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
+		checkDataComputer(name, introduced, discontinued, companyId);
 		CompanyService companyService = CompanyService.getInstance();
 		Optional<Company> company = CompanyMapper.dtoCompanyToCompany(Util.checkOptional(companyService.findCompanyById(companyId)));
 		daoComputer.updateComputer(new ComputerBuilder().setId(companyId)
@@ -112,20 +124,39 @@ public class ComputerService {
 		return daoComputer.getNbComputer();
 	}
 	
-	public void checkDataComputer(String name, String introduced, String discontinued, int companyId) throws ExceptionModel {
+	public void checkDataCreateComputer(String name, String introduced, String discontinued, Integer companyId) throws ExceptionModel {
 	    if (name == null || name == "") {
-	      throw new ExceptionModel("Failed to create computer/update : Invalid name");
+	      throw new ExceptionModel("Failed to create computer : Invalid name");
 	    }
 	    
 	    Optional<Timestamp> OptIntroduced = Util.stringToTimestamp(introduced);
 	    Optional<Timestamp> OptDiscontinued = Util.stringToTimestamp(discontinued);
 
 	    if (!OptIntroduced.isPresent() && OptDiscontinued.isPresent()) {
-		      throw new ExceptionModel("Failed to create computer/update : Discontinued but not introduced");
+		      throw new ExceptionModel("Failed to create computer : Discontinued but not introduced");
 		}
 	    if (OptIntroduced.isPresent() && OptDiscontinued.isPresent()
 	    		&& OptIntroduced.get().after(OptDiscontinued.get())) {
-		      throw new ExceptionModel("Failed to create computer/update : Introduced can't be after discontinued date");
+		      throw new ExceptionModel("Failed to create computer : Introduced can't be after discontinued date");
 		}
+	  }
+	
+	public void checkDataIpdateComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionModel {
+	    if (name == null || name == "") {
+	      throw new ExceptionModel("Failed to create update : Invalid new name");
+	    }
+	    
+	    Optional<Timestamp> OptIntroduced = Util.stringToTimestamp(introduced);
+	    Optional<Timestamp> OptDiscontinued = Util.stringToTimestamp(discontinued);
+
+	    if (!OptIntroduced.isPresent() && OptDiscontinued.isPresent()) {
+		      throw new ExceptionModel("Failed to update computer : Discontinued but not introduced");
+		}
+	    if (OptIntroduced.isPresent() && OptDiscontinued.isPresent()
+	    		&& OptIntroduced.get().after(OptDiscontinued.get())) {
+		      throw new ExceptionModel("Failed to update computer : Introduced can't be after discontinued date");
+		}
+	    
+	    
 	  }
 }

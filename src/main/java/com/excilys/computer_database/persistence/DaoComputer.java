@@ -74,7 +74,6 @@ public class DaoComputer extends Dao{
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			logger.error("Error when searching the computer id " + id + ".");
 		}
 		return result;

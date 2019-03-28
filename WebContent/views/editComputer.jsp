@@ -22,9 +22,9 @@
 	</header>
 
 	<div class="container">
-		<div id="nameError" class="alert alert-danger" role="alert"
+	<div id="nameError" class="alert alert-danger" role="alert"
 			style="display: none">
-			<strong>Name must be filled</strong>
+			<strong>Name can't be empty</strong>
 		</div>
 		<div id="introducedError" class="alert alert-danger" role="alert"
 			style="display: none">
@@ -44,41 +44,42 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<h1>Add Computer</h1>
-					<form name="addForm" id="addForm" action="addComputer" method="POST">
+					<h1>Edit Computer ${computer.getName()}</h1>
+					<form name="editForm" id="editForm" action="EditComputer" method="POST">
+					<input type="hidden" value="${computer.getId()}" id="id"/>
 						<fieldset>
 							<div class="form-group">
 								<label for="name">Computer name</label> <input type="text"
 									class="form-control" id="name" name="name"
-									placeholder="Computer name" required>
+									placeholder="${computer.getName()}" value="${computer.getName()}"required>
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date <br /> 
 									<small class="text-muted">(Can be empty)</small>
 								</label> 
 								<input type="date" class="form-control" id="introduced"
-									name="introduced" placeholder="Introduced date">
+									name="introduced" value="${computer.getIntroduced()}">
 							</div>
 							<div class="form-group" data-toggle="tooltip"
 								title="You need to fill introduced first">
 								<label for="discontinued">Discontinued date <br /> 
 									<small class="text-muted">(Can be empty)</small>
 								</label> <input type="date" class="form-control" id="discontinued"
-									name=discontinued placeholder="Discontinued date">
+									name="discontinued" value="${computer.getDiscontinued()}">
 							</div>
 							<div class="form-group">
 								<label for="companyId">Company</label> <select
 									class="form-control" id="companyId" name="companyId">
-									<option value="0">--</option>
 									<c:forEach var="company" items="${listCompanies}">
-										<option value="${company.id}">${company.name}</option>
+										<option value="${company.id}"
+											<c:if test="${company.id == computer.companyId}">selected</c:if>>${company.name}</option>
 									</c:forEach>
 								</select>
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Add" class="btn btn-primary"
-								id="btnAdd"> or <a href=<c:url value ="/dashboard"/>
+							<input type="submit" value="Edit" class="btn btn-primary"
+								id="btnEdit"> or <a href=<c:url value ="/dashboard"/>
 								class="btn btn-default">Cancel</a>
 						</div>
 					</form>

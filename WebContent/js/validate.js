@@ -6,14 +6,13 @@ $(function() {
 	$("#discontinuedError").hide();
 	$("#companyIdError").hide();
 	
-	$("#discontinued").attr('readonly', true)
 	validate($("#introduced"))
 	validate($("#discontinued"))
 	validate($("#companyId"))
 	
 	$("#name").on("blur" , function(){
 		if (!($(this).val() == "" )) {
-			$("#nameError").hide();
+			$("#nameError").show();
 			validate($(this));
 		} else {
 			$("#nameError").show();
@@ -28,9 +27,6 @@ $(function() {
 			
 			if ($(this).val() == "") {
 				$("#discontinued").val("");
-				$("#discontinued").attr('readonly', true)
-			} else {
-				$("#discontinued").attr('readonly', false)
 			}
 			
 			if (stringToDate($(this).val()) <= stringToDate($("#discontinued").val())) {
@@ -45,13 +41,13 @@ $(function() {
 	});
 	
 	$("#discontinued").on("blur" , function(){
-		if (!$(this).attr("readonly") 
-				&& (dateFormat.test($(this).val()) || ($(this).val() == "" ))
-				&& stringToDate($(this).val()).getTime() >= stringToDate($("#introduced").val()).getTime()) {
+		if ((dateFormat.test($(this).val()) && stringToDate($(this).val()).getTime() >= stringToDate($("#introduced").val()).getTime())
+				|| $(this).val() == "") {
 			$("#discontinuedError").hide();
 			validate($(this));
 			
 		} else {
+			console.log(stringToDate($(this).val()).getTime() >= stringToDate($("#introduced").val()).getTime());
 			$("#discontinuedError").show();
 			invalidate($(this));
 		}

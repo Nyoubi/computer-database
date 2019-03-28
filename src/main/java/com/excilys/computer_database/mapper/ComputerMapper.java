@@ -36,28 +36,18 @@ public abstract class ComputerMapper {
 	public static DtoComputer computerToDtoComputer(Computer computer) throws ExceptionModel{
 		DtoComputerBuilder dtoComputerBuilder = new DtoComputerBuilder();
 
-		Optional<DtoCompany> dtoCompany = CompanyMapper.companyToDtoCompany(computer.getCompany());
-		if (computer.getId() == null) {
-			dtoComputerBuilder.setId(computer.getId());
-		}
 		dtoComputerBuilder.setId(computer.getId())
 						  .setName(computer.getName());
-		if (computer.getIntroduced() != null) {
-			dtoComputerBuilder.setIntroduced(computer.getIntroduced().toString());
-		} else {
-			dtoComputerBuilder.setIntroduced("");
-		}
-		if (computer.getDiscontinued() != null) {
-			dtoComputerBuilder.setDiscontinued(computer.getDiscontinued().toString());
-		} else {
-			dtoComputerBuilder.setDiscontinued("");
-		}
+		dtoComputerBuilder.setIntroduced(Util.checkOptional(Util.timestampToString(computer.getIntroduced())));
+		
+		dtoComputerBuilder.setIntroduced(Util.checkOptional(Util.timestampToString(computer.getDiscontinued())));
+
+		Optional<DtoCompany> dtoCompany = CompanyMapper.companyToDtoCompany(computer.getCompany());
 
 		if (dtoCompany.isPresent()) {
 			dtoComputerBuilder.setCompanyName(dtoCompany.get().getName().toString())
 							  .setCompanyId(dtoCompany.get().getId());
 		}
-		
 		return dtoComputerBuilder.build();
 	}
 	

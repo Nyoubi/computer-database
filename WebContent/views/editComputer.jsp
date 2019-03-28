@@ -45,8 +45,8 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Edit Computer ${computer.getName()}</h1>
-					<form name="editForm" id="editForm" action="EditComputer" method="POST">
-					<input type="hidden" value="${computer.getId()}" id="id"/>
+					<form name="editForm" id="editForm" action="editComputer" method="POST">
+						<input type="hidden" value="${computer.getId()}" id="idComputer" name="idComputer"/>
 						<fieldset>
 							<div class="form-group">
 								<label for="name">Computer name</label> <input type="text"
@@ -70,6 +70,7 @@
 							<div class="form-group">
 								<label for="companyId">Company</label> <select
 									class="form-control" id="companyId" name="companyId">
+									<option value="0">--</option>
 									<c:forEach var="company" items="${listCompanies}">
 										<option value="${company.id}"
 											<c:if test="${company.id == computer.companyId}">selected</c:if>>${company.name}</option>

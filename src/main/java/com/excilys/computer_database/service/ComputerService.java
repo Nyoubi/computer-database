@@ -74,40 +74,50 @@ public class ComputerService {
 	}
 
 	public void createComputer(String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
-		checkDataComputer(name, introduced, discontinued, companyId);
+		checkDataCreateComputer(name, introduced, discontinued, companyId);
 		CompanyService companyService = CompanyService.getInstance();
 		Optional<DtoCompany> dtoCompany = companyService.findCompanyById(companyId);
-		if (!dtoCompany.isPresent()) {
-			throw new ExceptionDao("The company " + companyId + " does not exist.");
+		Optional<Company> company = Optional.empty();
+		if (dtoCompany.isPresent()) {
+			company = CompanyMapper.dtoCompanyToCompany(dtoCompany.get());
+			if (!company.isPresent()) {
+				throw new ExceptionModel("Mapper : Can't convert the dto company to company");
+			}
 		}
-		Optional<Company> company = CompanyMapper.dtoCompanyToCompany(dtoCompany.get());
-		if (!company.isPresent()) {
-			throw new ExceptionModel("Mapper : Can't convert the dto company to company");
-		}
-		
+		Optional<Timestamp> timeIntro = Util.stringToTimestamp(introduced);
+		Optional<Timestamp> timeDiscon = Util.stringToTimestamp(discontinued);
 		ComputerBuilder computerBuilder = new ComputerBuilder().setName(name)
-															   .setIntroduced(Util.stringToTimestamp(introduced).get())
-															   .setDiscontinued(Util.stringToTimestamp(discontinued).get())
-															   .setCompany(company.get())
+															   .setIntroduced(timeIntro.isPresent() ? timeIntro.get() : null)
+															   .setDiscontinued(timeDiscon.isPresent() ? timeDiscon.get() : null)
+															   .setCompany(company.isPresent() ? company.get() : null)
 															   .setId(null);
 		Computer computer = computerBuilder.build();
 		daoComputer.createComputer(computer);
 	}
 
 
-	/*public void updateComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
-		checkDataComputer(name, introduced, discontinued, companyId);
+	public void updateComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
+		checkDataUpdateComputer(id, name, introduced, discontinued, companyId);
 		CompanyService companyService = CompanyService.getInstance();
-		Optional<Company> company = CompanyMapper.dtoCompanyToCompany(Util.checkOptional(companyService.findCompanyById(companyId)));
-		daoComputer.updateComputer(new ComputerBuilder().setId(companyId)
-				.setName(name)
-				.setIntroduced(introduced)
-				.setDiscontinued(discontinued)
-				.setCompany(Util.checkOptional(company))
-				.build());
-		Optional<DtoComputer> computer = showDetails(id);
-		return computer;
-	}*/
+		Optional<DtoCompany> dtoCompany = companyService.findCompanyById(companyId);
+		Optional<Company> company = Optional.empty();
+		if (dtoCompany.isPresent()) {
+			company = CompanyMapper.dtoCompanyToCompany(dtoCompany.get());
+			if (!company.isPresent()) {
+				throw new ExceptionModel("Mapper : Can't convert the dto company to company");
+			}
+		}
+		
+		Optional<Timestamp> timeIntro = Util.stringToTimestamp(introduced);
+		Optional<Timestamp> timeDiscon = Util.stringToTimestamp(discontinued);
+		ComputerBuilder computerBuilder = new ComputerBuilder().setName(name)
+															   .setIntroduced(timeIntro.isPresent() ? timeIntro.get() : null)
+															   .setDiscontinued(timeDiscon.isPresent() ? timeDiscon.get() : null)
+															   .setCompany(company.isPresent() ? company.get() : null)
+															   .setId(id);
+		Computer computer = computerBuilder.build();
+		daoComputer.updateComputer(computer);
+	}
 	
 	public Optional<Page<DtoComputer>> pageDtoComputer(String url, Integer index, Integer size) throws ExceptionDao, ExceptionModel{
 		ArrayList<DtoComputer> result = listComputers();
@@ -141,7 +151,7 @@ public class ComputerService {
 		}
 	  }
 	
-	public void checkDataIpdateComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionModel {
+	public void checkDataUpdateComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionModel {
 	    if (name == null || name == "") {
 	      throw new ExceptionModel("Failed to create update : Invalid new name");
 	    }
@@ -157,6 +167,8 @@ public class ComputerService {
 		      throw new ExceptionModel("Failed to update computer : Introduced can't be after discontinued date");
 		}
 	    
-	    
+	    if (id == null) {
+	    	throw new ExceptionModel("Failed to update computer : Incorrect id");
+	    }
 	  }
 }

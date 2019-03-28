@@ -45,7 +45,7 @@ public class DashBoard extends HttpServlet{
 		if (!showComputers.isPresent()) {
 			response.sendRedirect("/500.html");
 		}
-		
+
 		request.setAttribute("computerData", showComputers.get().getPageContent());
 		request.setAttribute("computerPage", showComputers.get());
 		if (computerCount.isPresent()) {

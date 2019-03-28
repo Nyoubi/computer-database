@@ -11,8 +11,8 @@ $(function() {
 	validate($("#companyId"))
 	
 	$("#name").on("blur" , function(){
-		if (!($(this).val() == "" )) {
-			$("#nameError").show();
+		if (!($(this).val() == "")) {
+			$("#nameError").hide();
 			validate($(this));
 		} else {
 			$("#nameError").show();

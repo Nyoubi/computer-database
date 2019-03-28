@@ -19,7 +19,7 @@ import com.excilys.computer_database.service.CompanyService;
 import com.excilys.computer_database.service.ComputerService;
 
 @WebServlet(name = "EditComputer", urlPatterns = { "/editComputer" })
-public class EditServlet extends HttpServlet{
+public class EditComputer extends HttpServlet{
 
 	private static final long serialVersionUID = -3250717198410062056L;
 	
@@ -31,7 +31,7 @@ public class EditServlet extends HttpServlet{
 		String id, name, introduced, discontinued, companyId;
 		computerService = ComputerService.getInstance();
 
-		id = request.getParameter("id");
+		id = request.getParameter("idComputer");
 		name = request.getParameter("name");
 		introduced = request.getParameter("introduced");
 		discontinued = request.getParameter("discontinued");
@@ -41,6 +41,7 @@ public class EditServlet extends HttpServlet{
 			this.computerService.updateComputer(Integer.valueOf(id), name, introduced, discontinued, Integer.valueOf(companyId));
 			response.sendRedirect("dashboard");
 		} catch (ExceptionDao | ExceptionModel e) {
+			System.out.println(e.getMessage());
 			response.sendRedirect("/500.html");
 		}
 	}
@@ -58,7 +59,7 @@ public class EditServlet extends HttpServlet{
 			listCompanies = companyService.listCompanies();
 			request.setAttribute("listCompanies", listCompanies);
 			computer = computerService.showDetails(request.getParameter("id"));
-			System.out.println(computer.get().getIntroduced());
+
 			if (computer.isPresent()) {
 				request.setAttribute("computer", computer.get());
 			} else {

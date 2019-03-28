@@ -40,7 +40,7 @@ public abstract class ComputerMapper {
 						  .setName(computer.getName());
 		dtoComputerBuilder.setIntroduced(Util.checkOptional(Util.timestampToString(computer.getIntroduced())));
 		
-		dtoComputerBuilder.setIntroduced(Util.checkOptional(Util.timestampToString(computer.getDiscontinued())));
+		dtoComputerBuilder.setDiscontinued(Util.checkOptional(Util.timestampToString(computer.getDiscontinued())));
 
 		Optional<DtoCompany> dtoCompany = CompanyMapper.companyToDtoCompany(computer.getCompany());
 

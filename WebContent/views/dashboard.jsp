@@ -49,7 +49,7 @@
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
-			<table class="table table-striped table-bordered">
+			<table class="table table-striped table-bordered" style="text-align: center">
 				<thead>
 					<tr>
 						<!-- Variable declarations for passing labels as parameters -->
@@ -62,12 +62,12 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
+						<th style="text-align: center">Computer name</th>
+						<th style="text-align: center">Introduced date</th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th style="text-align: center">Discontinued date</th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th style="text-align: center">Company</th>
 
 					</tr>
 				</thead>

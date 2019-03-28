@@ -17,6 +17,8 @@ public class PageBuilder<T> {
 	private Integer size;
 	private String url;
 	private String search;
+	private String order;
+	
 	public Optional<Page<T>> build() throws ExceptionModel{
 		if(content == null) {
 			log.warn("Can't build a page without data, return empty");
@@ -33,6 +35,9 @@ public class PageBuilder<T> {
 		}
 		if(search == null) {
 			search = "";
+		}
+		if(order == null) {
+			order = "";
 		}
 		
 		return Optional.of(new Page<T>(url,content,index,size,search));
@@ -64,6 +69,10 @@ public class PageBuilder<T> {
 	
 	public PageBuilder<T> setSearch(String search) {
 		this.search = search;
+		return this;
+	}
+	public PageBuilder<T> setOrder(String order) {
+		this.order = order;
 		return this;
 	}
 }

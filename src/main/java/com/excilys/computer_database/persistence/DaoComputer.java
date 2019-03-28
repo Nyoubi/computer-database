@@ -22,7 +22,7 @@ public class DaoComputer extends Dao{
 	private final String SELECT_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName FROM computer c "
 			+ "LEFT JOIN company cn ON c.company_id=cn.id ";
 	private final String SELECT_NAME = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName FROM computer c "
-			+ "LEFT JOIN company cn ON c.company_id=cn.id WHERE c.name LIKE ? ";
+			+ "LEFT JOIN company cn ON c.company_id=cn.id WHERE c.name LIKE ? OR cn.name = ? ";
 	private final String SELECT_ID = SELECT_ALL + "WHERE c.id=? ";
 	private final String UPDATE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 	private final String DELETE_ID = "DELETE FROM computer WHERE id=?";
@@ -103,6 +103,7 @@ public class DaoComputer extends Dao{
 		try (Connection conn = openConnection();
 				PreparedStatement statement = conn.prepareStatement(SELECT_NAME);) {
 				statement.setString(1, "%" + search + "%");
+				statement.setString(2, "%" + search + "%");
 				try (ResultSet resultSet = statement.executeQuery();) {
 					while (resultSet.next()) {
 						computerList.add(ComputerMapper.resultSetToComputer(resultSet));

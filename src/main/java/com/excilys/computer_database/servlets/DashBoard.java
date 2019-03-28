@@ -28,16 +28,17 @@ public class DashBoard extends HttpServlet{
 		
 		computerService = ComputerService.getInstance();
 		
-		getIndex(request);getSize(request);getSearch(request);
+		getIndex(request);getSize(request);getSearch(request);getOrder(request);
 		
 		Integer index = (Integer) request.getAttribute("index");
 		Integer size = (Integer) request.getAttribute("size");
 		String search = (String) request.getAttribute("search");
+		String order = (String) request.getAttribute("search");
 		
 		Optional<Page<DtoComputer>> showComputers = Optional.empty();
 
 		try {
-			showComputers = computerService.pageDtoComputer(URL, index, size, search);
+			showComputers = computerService.pageDtoComputer(URL, index, size, search, order);
 		} catch (ExceptionDao | ExceptionModel e) {
 			System.out.println(e.getMessage());
 		}
@@ -71,13 +72,11 @@ public class DashBoard extends HttpServlet{
 				}
 			}
 		}
-		
 	}
 	
 	private void getIndex(HttpServletRequest request) {
 		
 		Integer index = 1;
-		
 		String indexParam = request.getParameter("index");
 		
 		if(indexParam!=null && !indexParam.equals("")) {
@@ -109,5 +108,17 @@ public class DashBoard extends HttpServlet{
 		}
 		
 		request.setAttribute("search", search);
+	}
+	
+	private void getOrder(HttpServletRequest request) {
+		String order = (String) request.getAttribute("order");
+
+		String orderParam = request.getParameter("order");
+
+		if(orderParam != null && !orderParam.equals("")) {
+			order = orderParam;
+		}
+		
+		request.setAttribute("order", order);
 	}
 }

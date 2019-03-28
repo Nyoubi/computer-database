@@ -134,7 +134,7 @@ public class ComputerService {
 		daoComputer.updateComputer(computer);
 	}
 	
-	public Optional<Page<DtoComputer>> pageDtoComputer(String url, Integer index, Integer size, String search) throws ExceptionDao, ExceptionModel{
+	public Optional<Page<DtoComputer>> pageDtoComputer(String url, Integer index, Integer size, String search, String order) throws ExceptionDao, ExceptionModel{
 		ArrayList<DtoComputer> result = new ArrayList<>();
 		if (search == null || search.equals("")) {
 			result = listComputers();

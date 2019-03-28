@@ -9,7 +9,9 @@ public class Page<T> {
 	private Integer size;
 	private String url;
 	private String search;
+	private String order;
 	private static List<Integer> sizeList = Arrays.asList(new Integer[]{10,20,50,100});
+	private static List<String> orderList = Arrays.asList(new String[]{"nameAsc","nameDesc","introAsk","introDesk","disconAsc","disconDesk","companyAsk","companyDesk"});
 
 	public Page(String url, List<T> content,Integer index,Integer size, String search) {
 		this.url = url;
@@ -19,15 +21,15 @@ public class Page<T> {
 		this.search=search;
 	}
 
-	private String formatUrl(int index, int size, String search) {
-		return String.format("%s?%s=%d&%s=%d&%s=%s", url, "index", index, "size", size, "search", search);
+	private String formatUrl(int index, int size, String search, String order) {
+		return String.format("%s?%s=%d&%s=%d&%s=%s&%s=%s", url, "index", index, "size", size, "search", search, "order", order);
 	}
 	
 	public String nextPage(){
 		if(index*size < content.size()) {
-			return formatUrl(index+1,size,search);
+			return formatUrl(index+1,size,search,order);
 		}
-		return formatUrl(index,size,search);
+		return formatUrl(index,size,search,order);
 	}
 	
 	public Integer nextIndex() {
@@ -39,10 +41,10 @@ public class Page<T> {
 	
 	public String previousPage(){
 		if(index * size > size) {
-			return formatUrl(index-1,size,search);
+			return formatUrl(index-1,size,search,order);
 		}
 		else {
-			return formatUrl(1,size,search);
+			return formatUrl(1,size,search,order);
 		}
 	}
 	
@@ -54,7 +56,7 @@ public class Page<T> {
 	}
 	
 	public String indexAt(Integer index) {
-		return formatUrl(index,size,search);
+		return formatUrl(index,size,search,order);
 	}
 
 	public void setIndex(Integer index) {
@@ -67,9 +69,9 @@ public class Page<T> {
 
 	public String setSize(Integer size) {
 		if (sizeList.indexOf(size) != -1) {
-			return formatUrl(1,size,search);
+			return formatUrl(1,size,search,order);
 		} else {
-			return formatUrl(1,sizeList.get(0),search);
+			return formatUrl(1,sizeList.get(0),search,order);
 		}
 	}
 	
@@ -78,6 +80,14 @@ public class Page<T> {
 			this.search = search;
 		} else {
 			this.search = "";
+		}
+	}
+	
+	public String setOrder(String order) {
+		if (orderList.indexOf(order) != -1) {
+			return formatUrl(1,size,search,order);
+		} else {
+			return formatUrl(1,sizeList.get(0),search,"");
 		}
 	}
 	

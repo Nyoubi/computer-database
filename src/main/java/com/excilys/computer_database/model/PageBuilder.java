@@ -16,6 +16,7 @@ public class PageBuilder<T> {
 	private Integer index;
 	private Integer size;
 	private String url;
+	private String search;
 	public Optional<Page<T>> build() throws ExceptionModel{
 		if(content == null) {
 			log.warn("Can't build a page without data, return empty");
@@ -30,8 +31,11 @@ public class PageBuilder<T> {
 		if(url == null) {
 			throw new ExceptionModel("An url is needed");
 		}
+		if(search == null) {
+			search = "";
+		}
 		
-		return Optional.of(new Page<T>(url,content,index,size));
+		return Optional.of(new Page<T>(url,content,index,size,search));
 	}
 	
 	public PageBuilder<T> setContent(List<T> list) {
@@ -55,6 +59,11 @@ public class PageBuilder<T> {
 	
 	public PageBuilder<T> setUrl(String url) {
 		this.url = url;
+		return this;
+	}
+	
+	public PageBuilder<T> setSearch(String search) {
+		this.search = search;
 		return this;
 	}
 }

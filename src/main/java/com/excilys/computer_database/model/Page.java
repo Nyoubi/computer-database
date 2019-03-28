@@ -8,25 +8,26 @@ public class Page<T> {
 	private Integer index;
 	private Integer size;
 	private String url;
-	
+	private String search;
 	private static List<Integer> sizeList = Arrays.asList(new Integer[]{10,20,50,100});
 
-	public Page(String url, List<T> content,Integer index,Integer size) {
+	public Page(String url, List<T> content,Integer index,Integer size, String search) {
 		this.url = url;
 		this.content = content;
 		this.index = Math.max(index,1);
 		this.size = Math.max(size,1);
+		this.search=search;
 	}
 
-	private String formatUrl(int index, int size) {
-		return String.format("%s?%s=%d&%s=%d", url, "index", index, "size", size);
+	private String formatUrl(int index, int size, String search) {
+		return String.format("%s?%s=%d&%s=%d&%s=%s", url, "index", index, "size", size, "search", search);
 	}
 	
 	public String nextPage(){
 		if(index*size < content.size()) {
-			return formatUrl(index+1,size);
+			return formatUrl(index+1,size,search);
 		}
-		return formatUrl(index,size);
+		return formatUrl(index,size,search);
 	}
 	
 	public Integer nextIndex() {
@@ -38,10 +39,10 @@ public class Page<T> {
 	
 	public String previousPage(){
 		if(index * size > size) {
-			return formatUrl(index-1,size);
+			return formatUrl(index-1,size,search);
 		}
 		else {
-			return formatUrl(1,size);
+			return formatUrl(1,size,search);
 		}
 	}
 	
@@ -53,7 +54,7 @@ public class Page<T> {
 	}
 	
 	public String indexAt(Integer index) {
-		return formatUrl(index,size);
+		return formatUrl(index,size,search);
 	}
 
 	public void setIndex(Integer index) {
@@ -66,9 +67,17 @@ public class Page<T> {
 
 	public String setSize(Integer size) {
 		if (sizeList.indexOf(size) != -1) {
-			return formatUrl(1,size);
+			return formatUrl(1,size,search);
 		} else {
-			return formatUrl(1,sizeList.get(0));
+			return formatUrl(1,sizeList.get(0),search);
+		}
+	}
+	
+	public void setSearch(String search) {
+		if (search != null && !search.equals("")) {
+			this.search = search;
+		} else {
+			this.search = "";
 		}
 	}
 	
@@ -98,4 +107,10 @@ public class Page<T> {
 		}
 		return index - 2;
 	}
+	
+	public Integer getEnd () {
+		return Math.min(Math.round(content.size() / size),4);
+	}
+	
+	
 }

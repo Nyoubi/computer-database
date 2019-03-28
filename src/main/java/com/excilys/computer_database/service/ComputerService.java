@@ -55,6 +55,15 @@ public class ComputerService {
 		return result;
 	}
 
+	public ArrayList<DtoComputer> listComputers(String search)  throws ExceptionDao, ExceptionModel{
+		ArrayList<DtoComputer> result = new ArrayList<>();
+		
+		for (Computer computer : daoComputer.listAllComputer(search)) {
+			result.add(ComputerMapper.computerToDtoComputer(computer));
+		}
+		return result;
+	}
+	
 	public Optional<DtoComputer> showDetails(String id)  throws ExceptionDao, ExceptionModel, ExceptionInvalidInput {
 		Optional<Integer> ident = Util.parseInt(id);
 		if (ident.isPresent()) {
@@ -69,8 +78,14 @@ public class ComputerService {
 		}
 		}
 
-	public void deleteComputer(Integer id) throws ExceptionDao {
-		daoComputer.deleteComputerById(id);
+	public void deleteComputer(String id) throws ExceptionDao, ExceptionInvalidInput {
+		
+		Optional<Integer> ident = Util.parseInt(id);
+		if (Util.checkOptional(ident) != null) {
+			daoComputer.deleteComputerById(ident.get());
+		} else {
+			throw new ExceptionInvalidInput("This id : " + id + " is invalid.");
+		}
 	}
 
 	public void createComputer(String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
@@ -119,19 +134,21 @@ public class ComputerService {
 		daoComputer.updateComputer(computer);
 	}
 	
-	public Optional<Page<DtoComputer>> pageDtoComputer(String url, Integer index, Integer size) throws ExceptionDao, ExceptionModel{
-		ArrayList<DtoComputer> result = listComputers();
+	public Optional<Page<DtoComputer>> pageDtoComputer(String url, Integer index, Integer size, String search) throws ExceptionDao, ExceptionModel{
+		ArrayList<DtoComputer> result = new ArrayList<>();
+		if (search == null || search.equals("")) {
+			result = listComputers();
+		} else {
+			result = listComputers(search);
+		}
 		Optional<Page<DtoComputer>> page = new PageBuilder<DtoComputer>()
 				.setContent(result)
 				.setIndex(index)
 				.setSize(size)
 				.setUrl(url)
+				.setSearch(search)
 				.build();
 		return page;		
-	}
-	
-	public Optional<Integer> getNbComputer() throws ExceptionDao{
-		return daoComputer.getNbComputer();
 	}
 	
 	public void checkDataCreateComputer(String name, String introduced, String discontinued, Integer companyId) throws ExceptionModel {

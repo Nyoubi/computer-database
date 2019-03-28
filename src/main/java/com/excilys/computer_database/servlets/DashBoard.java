@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.computer_database.dto.DtoComputer;
 import com.excilys.computer_database.exception.ExceptionDao;
+import com.excilys.computer_database.exception.ExceptionInvalidInput;
 import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.model.Page;
 import com.excilys.computer_database.service.ComputerService;
@@ -27,32 +28,27 @@ public class DashBoard extends HttpServlet{
 		
 		computerService = ComputerService.getInstance();
 		
-		getIndex(request);getSize(request);
+		getIndex(request);getSize(request);getSearch(request);
 		
 		Integer index = (Integer) request.getAttribute("index");
 		Integer size = (Integer) request.getAttribute("size");
+		String search = (String) request.getAttribute("search");
 		
 		Optional<Page<DtoComputer>> showComputers = Optional.empty();
-		Optional<Integer> computerCount = Optional.empty();
 
 		try {
-			computerCount = computerService.getNbComputer();
-			showComputers = computerService.pageDtoComputer(URL, index, size);
+			showComputers = computerService.pageDtoComputer(URL, index, size, search);
 		} catch (ExceptionDao | ExceptionModel e) {
-			response.sendRedirect("/500.html");
+			System.out.println(e.getMessage());
 		}
 		
 		if (!showComputers.isPresent()) {
-			response.sendRedirect("/500.html");
+			System.out.println("Can't build a page with those parameters");
 		}
 
 		request.setAttribute("computerData", showComputers.get().getPageContent());
 		request.setAttribute("computerPage", showComputers.get());
-		if (computerCount.isPresent()) {
-			request.setAttribute("numberComputer", computerCount.get());
-		} else {
-			request.setAttribute("numberComputer", 0);
-		}
+		request.setAttribute("numberComputer", showComputers.get().getContentSize());
 		
 		this.getServletContext()
 		.getRequestDispatcher("/views/dashboard.jsp")
@@ -61,6 +57,21 @@ public class DashBoard extends HttpServlet{
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
+		
+		computerService = ComputerService.getInstance();
+		
+		String checked = request.getParameter("selection");
+		if (checked != null && !checked.equals("")) {
+			String[] computers = checked.split(",");
+			for (String id : computers) {
+				try {
+					computerService.deleteComputer(id);
+				} catch (ExceptionDao | ExceptionInvalidInput e) {
+					System.out.println(e.getMessage() +" id : " + id);
+				}
+			}
+		}
+		
 	}
 	
 	private void getIndex(HttpServletRequest request) {
@@ -86,5 +97,17 @@ public class DashBoard extends HttpServlet{
 		}
 		
 		request.setAttribute("size", size);
+	}
+	
+	private void getSearch(HttpServletRequest request) {
+		String search = (String) request.getAttribute("search");
+
+		String searchParam = request.getParameter("search");
+
+		if(searchParam != null && !searchParam.equals("")) {
+			search = searchParam;
+		}
+		
+		request.setAttribute("search", search);
 	}
 }

@@ -21,12 +21,13 @@ public class DaoComputer extends Dao{
 
 	private final String SELECT_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName FROM computer c "
 			+ "LEFT JOIN company cn ON c.company_id=cn.id ";
+	private final String SELECT_NAME = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName FROM computer c "
+			+ "LEFT JOIN company cn ON c.company_id=cn.id WHERE c.name LIKE ? ";
 	private final String SELECT_ID = SELECT_ALL + "WHERE c.id=? ";
 	private final String UPDATE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 	private final String DELETE_ID = "DELETE FROM computer WHERE id=?";
 	private final String CREATE = "INSERT INTO computer (name, introduced, discontinued,company_id) VALUES (?,?,?,?)";
 	private final String ALTER_AUTO_INCREMENTE = "ALTER TABLE computer AUTO_INCREMENT = ?";
-	private final String COUNT = "SELECT COUNT(id) FROM computer";
 	private static Logger logger = LoggerFactory.getLogger(DaoComputer.class); 
 	
 	private static volatile DaoComputer instance = null;
@@ -96,6 +97,25 @@ public class DaoComputer extends Dao{
 		return computerList;
 	}
 	
+	public ArrayList<Computer> listAllComputer(String search) throws ExceptionModel{
+		ArrayList<Computer> computerList = new ArrayList<>();
+
+		try (Connection conn = openConnection();
+				PreparedStatement statement = conn.prepareStatement(SELECT_NAME);) {
+				statement.setString(1, "%" + search + "%");
+				try (ResultSet resultSet = statement.executeQuery();) {
+					while (resultSet.next()) {
+						computerList.add(ComputerMapper.resultSetToComputer(resultSet));
+					}
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			logger.error("Error when listing computers with name.");
+		}
+		
+		return computerList;
+	}
+	
 	public Optional<Integer> createComputer(Computer computer) throws ExceptionDao {
 		Optional<Integer> idCreated = Optional.empty();
 		Integer lineAffected = null;
@@ -159,20 +179,6 @@ public class DaoComputer extends Dao{
 			e.printStackTrace();
 			logger.error("Error when deleting the computer id " + id + ".");
 		}
-	}
-	
-	public Optional<Integer> getNbComputer() throws ExceptionDao{
-		Optional<Integer> result = Optional.empty();
-		try (Connection conn = openConnection();
-				Statement statement = conn.createStatement();
-				ResultSet resultSet = statement.executeQuery(COUNT)){
-			if (resultSet.next()) {
-				result = Optional.of(resultSet.getInt(1));
-			}
-		} catch (SQLException e) {
-			throw new ExceptionDao("Error when getting computer count int the database.");
-		}
-		return result;
 	}
 
 	public void resetAutoIncrement(Integer value) {

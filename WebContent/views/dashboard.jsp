@@ -27,7 +27,7 @@
 			<h1><c:out value="${numberComputer} Computers found"/></h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="#" method="GET" class="form-inline">
+					<form id="searchForm" action="" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
 							class="form-control" placeholder="Search name" /> <input
@@ -44,7 +44,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" action="dashboard" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -62,12 +62,24 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th style="text-align: center">Computer name</th>
-						<th style="text-align: center">Introduced date</th>
+						<th style="text-align: center">Computer name 
+							<a href=""><i class="fa fa-arrow-up"></i></a>
+						 	<a href=""><i class="fa fa-arrow-down"></i></a>
+						</th>
+						<th style="text-align: center">Introduced date 
+							<a href=""><i class="fa fa-arrow-up"></i></a>
+						 	<a href=""><i class="fa fa-arrow-down"></i></a>
+						</th>
 						<!-- Table header for Discontinued Date -->
-						<th style="text-align: center">Discontinued date</th>
+						<th style="text-align: center">Discontinued date 
+							<a href=""><i class="fa fa-arrow-up"></i></a>
+						 	<a href=""><i class="fa fa-arrow-down"></i></a>
+						</th>
 						<!-- Table header for Company -->
-						<th style="text-align: center">Company</th>
+						<th style="text-align: center">Company 
+							<a href=""><i class="fa fa-arrow-up"></i></a>
+						 	<a href=""><i class="fa fa-arrow-down"></i></a>
+						</th>
 
 					</tr>
 				</thead>
@@ -76,7 +88,7 @@
 					<c:forEach items="${computerData}" var="computer">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="0"></td>
+								class="cb" value="${computer.getId()}"></td>
 							<td id="name"><a href="editComputer?id=${computer.getId()}" onclick="">${computer.getName()}</a></td>
 							<td>${computer.getIntroduced()}</td>
 							<td>${computer.getDiscontinued()}</td>
@@ -97,7 +109,7 @@
 						</a></li>
 					</c:if>
 				<c:forEach begin="${computerPage.getStart()}"
-					end="${computerPage.getStart()+4}" varStatus="loop">
+					end="${computerPage.getStart()+computerPage.getEnd()}" varStatus="loop">
 					<c:choose>
 						<c:when test="${loop.index == index}">
 							<li class="active"><a

@@ -33,7 +33,7 @@ public class DashBoard extends HttpServlet{
 		Integer size = (Integer) request.getAttribute("size");
 		String search = (String) request.getAttribute("search");
 		String order = (String) request.getAttribute("order");
-
+				
 		Optional<Page<DtoComputer>> showComputers = Optional.empty();
 		try {
 			showComputers = computerService.pageDtoComputer(URL, index, size, search, order);

@@ -21,8 +21,8 @@ public class DaoComputer extends Dao{
 
 	private final String SELECT_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName FROM computer c "
 			+ "LEFT JOIN company cn ON c.company_id=cn.id ";
-	private final String SELECT_NAME = SELECT_ALL + "WHERE c.name LIKE ? OR cn.name = ? ";
-	private final String ORDER_BY = SELECT_ALL + "ORDER BY ";
+	private final String SELECT_NAME = SELECT_ALL + "WHERE c.name LIKE ? OR cn.name LIKE ? ";
+	private final String ORDER_BY = "ORDER BY ";
 	private final String SELECT_NAME_ORDER = SELECT_NAME + ORDER_BY;
 	private final String SELECT_ID = SELECT_ALL + "WHERE c.id=? ";
 	private final String UPDATE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
@@ -128,7 +128,6 @@ public class DaoComputer extends Dao{
 	 */
 	public ArrayList<Computer> listAllComputerByNameOrdered(String search, String order) throws ExceptionModel, ExceptionDao{
 		ArrayList<Computer> computerList = new ArrayList<>();
-
 		try (Connection conn = openConnection();
 				PreparedStatement statement = conn.prepareStatement(SELECT_NAME_ORDER + order);) {
 			statement.setString(1, "%" + search + "%");
@@ -150,10 +149,9 @@ public class DaoComputer extends Dao{
 	 */
 	public ArrayList<Computer> listAllComputerByOrder(String order) throws ExceptionModel, ExceptionDao{
 		ArrayList<Computer> computerList = new ArrayList<>();
-		System.out.println(ORDER_BY);
 		try (Connection conn = openConnection();
 				Statement statement = conn.createStatement();
-				ResultSet resultSet = statement.executeQuery(ORDER_BY + order);) {
+				ResultSet resultSet = statement.executeQuery(SELECT_ALL + ORDER_BY + order);) {
 			while (resultSet.next()) {
 				computerList.add(ComputerMapper.resultSetToComputer(resultSet));
 			}

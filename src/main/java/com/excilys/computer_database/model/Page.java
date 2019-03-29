@@ -13,13 +13,13 @@ public class Page<T> {
 	
 	private static List<Integer> sizeList = Arrays.asList(new Integer[]{10,20,50,100});
 	
-	public enum order {
-        NAME_ASK("nameAsc","c.name"), NAME_DESC("nameDesc","c.name DESC"), INTRO_ASK("introAsc","c.introduced"), INTRO_DESC("introDesc","c.introduced DESK"), DISCON_ASK("disconAsc","c.discontinued"), DISCON_DESC("disconDesc","c.discontinued  DESK"), COMPANY_ASK("companyAsc","cName"), COMPANY_DESC("companydesc","cName  DESK");
+	public enum orderEnum {
+        NAME_ASK("nameAsc","c.name"), NAME_DESC("nameDesc","c.name DESC"), INTRO_ASK("introAsc","c.introduced"), INTRO_DESC("introDesc","c.introduced DESC"), DISCON_ASK("disconAsc","c.discontinued"), DISCON_DESC("disconDesc","c.discontinued  DESC"), COMPANY_ASK("companyAsc","cName"), COMPANY_DESC("companyDesc","cName DESC");
 		
 		private String tag;
 		private String value;
-		
-		order (String tag, String value) {
+
+		orderEnum (String tag, String value) {
 			this.tag = tag;
 			this.value=value;
 	}
@@ -105,7 +105,7 @@ public class Page<T> {
 	}
 	
 	public String getOrder(String order) {
-		return formatUrl(1,size,search,order);
+		return formatUrl(index,size,search,order);
 	}
 	
 	public void setOrder(String order) {

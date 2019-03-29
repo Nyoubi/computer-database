@@ -15,7 +15,7 @@ import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
 import com.excilys.computer_database.model.Page;
-import com.excilys.computer_database.model.Page.order;
+import com.excilys.computer_database.model.Page.orderEnum;
 import com.excilys.computer_database.model.PageBuilder;
 import com.excilys.computer_database.persistence.DaoComputer;
 import com.excilys.computer_database.util.Util;
@@ -160,26 +160,23 @@ public class ComputerService {
 		PageBuilder<DtoComputer> pageBuilder = new PageBuilder<DtoComputer>()
 				.setSize(size)
 				.setUrl(url)
-				.setSearch(search);
+				.setSearch(search)
+				.setOrder(order);
 		
 		if (search == null || search.equals("")) {
 			if ("".equals(orderBy)) {
 				result = listAllComputer();
 			} else {
-				pageBuilder.setOrder(orderBy);
 				result = listAllComputerByOrder(orderBy);
-				for (DtoComputer res : result) {
-					System.out.println(res);
-				}
-				
 			}
 		} else {
 			if ("".equals(orderBy)) {
 				result = listAllComputerByName(search);
-			} else {
-				pageBuilder.setOrder(orderBy);
 
+			} else {
+				System.out.println(orderBy);
 				result = listAllComputerByNameOrdered(search,orderBy);
+				System.out.println("test4");
 			}
 		}
 		
@@ -232,7 +229,7 @@ public class ComputerService {
 			return orderBy;
 		}
 
-	    for (order o : Page.order.values()) {
+	    for (orderEnum o : Page.orderEnum.values()) {
 	        if (o.getTag().equals(order)) {
 	            orderBy = o.getValue();
 	        }

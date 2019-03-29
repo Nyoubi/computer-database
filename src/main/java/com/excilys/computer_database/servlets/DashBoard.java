@@ -20,47 +20,45 @@ import com.excilys.computer_database.service.ComputerService;
 public class DashBoard extends HttpServlet{
 
 	private static final long serialVersionUID = 4605140799487702645L;
-	
+
 	private ComputerService computerService;
 	private static final String URL = "dashboard";
-	
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		computerService = ComputerService.getInstance();
-		
+
 		getIndex(request);getSize(request);getSearch(request);getOrder(request);
-		
 		Integer index = (Integer) request.getAttribute("index");
 		Integer size = (Integer) request.getAttribute("size");
 		String search = (String) request.getAttribute("search");
-		String order = (String) request.getAttribute("search");
-		
-		Optional<Page<DtoComputer>> showComputers = Optional.empty();
+		String order = (String) request.getAttribute("order");
 
+		Optional<Page<DtoComputer>> showComputers = Optional.empty();
 		try {
 			showComputers = computerService.pageDtoComputer(URL, index, size, search, order);
 		} catch (ExceptionDao | ExceptionModel e) {
-			System.out.println(e.getMessage());
+			errorRedirect(request,response,e.getMessage());
 		}
-		
+
 		if (!showComputers.isPresent()) {
-			System.out.println("Can't build a page with those parameters");
+			errorRedirect(request,response,"Can't build a page with those parameters");
 		}
 
 		request.setAttribute("computerData", showComputers.get().getPageContent());
 		request.setAttribute("computerPage", showComputers.get());
 		request.setAttribute("numberComputer", showComputers.get().getContentSize());
-		
+
 		this.getServletContext()
 		.getRequestDispatcher("/views/dashboard.jsp")
 		.forward(request, response);
 	}
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
-		
+
 		computerService = ComputerService.getInstance();
-		
+
 		String checked = request.getParameter("selection");
 		if (checked != null && !checked.equals("")) {
 			String[] computers = checked.split(",");
@@ -68,21 +66,21 @@ public class DashBoard extends HttpServlet{
 				try {
 					computerService.deleteComputer(id);
 				} catch (ExceptionDao | ExceptionInvalidInput e) {
-					System.out.println(e.getMessage() +" id : " + id);
+					errorRedirect(request,response,e.getMessage());
 				}
 			}
 		}
 	}
-	
+
 	private void getIndex(HttpServletRequest request) {
-		
+
 		Integer index = 1;
 		String indexParam = request.getParameter("index");
-		
+
 		if(indexParam!=null && !indexParam.equals("")) {
 			index = Integer.parseInt(indexParam);
 		}
-		
+
 		request.setAttribute("index", index);
 	}
 
@@ -94,10 +92,10 @@ public class DashBoard extends HttpServlet{
 		if(sizeParam != null && !sizeParam.equals("") && Page.getSizeList().indexOf(Integer.parseInt(sizeParam)) != -1) {
 			size = Integer.parseInt(sizeParam);
 		}
-		
+
 		request.setAttribute("size", size);
 	}
-	
+
 	private void getSearch(HttpServletRequest request) {
 		String search = (String) request.getAttribute("search");
 
@@ -106,10 +104,10 @@ public class DashBoard extends HttpServlet{
 		if(searchParam != null && !searchParam.equals("")) {
 			search = searchParam;
 		}
-		
+
 		request.setAttribute("search", search);
 	}
-	
+
 	private void getOrder(HttpServletRequest request) {
 		String order = (String) request.getAttribute("order");
 
@@ -118,7 +116,14 @@ public class DashBoard extends HttpServlet{
 		if(orderParam != null && !orderParam.equals("")) {
 			order = orderParam;
 		}
-		
+
 		request.setAttribute("order", order);
+	}
+
+	public void errorRedirect(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
+		request.setAttribute("Exception", message);
+		this.getServletContext()
+		.getRequestDispatcher("/views/500.jsp")
+		.forward(request, response);
 	}
 }

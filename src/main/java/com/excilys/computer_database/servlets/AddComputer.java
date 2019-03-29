@@ -36,7 +36,7 @@ public class AddComputer extends HttpServlet{
 			this.computerService.createComputer(name, introduced, discontinued, Integer.valueOf(companyId));
 			response.sendRedirect("dashboard");
 		} catch (ExceptionDao | ExceptionModel e) {
-			response.sendRedirect("/500.html");
+			errorRedirect(request,response,e.getMessage());
 		}
 	}
 
@@ -53,8 +53,15 @@ public class AddComputer extends HttpServlet{
 			.getRequestDispatcher("/views/addComputer.jsp")
 			.forward(request, response);
 		} catch (ExceptionDao e) {
-			System.out.println(e.errorMessage);
-			response.sendRedirect("/500.html");
+			errorRedirect(request,response,e.getMessage());
+
 		}		
+	}
+	
+	public void errorRedirect(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
+		request.setAttribute("Exception", message);
+		this.getServletContext()
+		.getRequestDispatcher("/views/500.jsp")
+		.forward(request, response);
 	}
 }

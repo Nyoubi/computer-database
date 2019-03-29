@@ -40,7 +40,7 @@ public class PageBuilder<T> {
 			order = "";
 		}
 		
-		return Optional.of(new Page<T>(url,content,index,size,search));
+		return Optional.of(new Page<T>(url,content,index,size,search,order));
 	}
 	
 	public PageBuilder<T> setContent(List<T> list) {

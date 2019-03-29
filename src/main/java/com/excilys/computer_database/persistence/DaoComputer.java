@@ -21,17 +21,18 @@ public class DaoComputer extends Dao{
 
 	private final String SELECT_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName FROM computer c "
 			+ "LEFT JOIN company cn ON c.company_id=cn.id ";
-	private final String SELECT_NAME = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName FROM computer c "
-			+ "LEFT JOIN company cn ON c.company_id=cn.id WHERE c.name LIKE ? OR cn.name = ? ";
+	private final String SELECT_NAME = SELECT_ALL + "WHERE c.name LIKE ? OR cn.name = ? ";
+	private final String ORDER_BY = SELECT_ALL + "ORDER BY ";
+	private final String SELECT_NAME_ORDER = SELECT_NAME + ORDER_BY;
 	private final String SELECT_ID = SELECT_ALL + "WHERE c.id=? ";
 	private final String UPDATE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 	private final String DELETE_ID = "DELETE FROM computer WHERE id=?";
 	private final String CREATE = "INSERT INTO computer (name, introduced, discontinued,company_id) VALUES (?,?,?,?)";
 	private final String ALTER_AUTO_INCREMENTE = "ALTER TABLE computer AUTO_INCREMENT = ?";
 	private static Logger logger = LoggerFactory.getLogger(DaoComputer.class); 
-	
+
 	private static volatile DaoComputer instance = null;
-	
+
 	private DaoComputer(String driver, String dbUrl, String user, String pass) {
 		Dao.driver = driver;  
 		Dao.dbUrl = dbUrl;
@@ -50,7 +51,7 @@ public class DaoComputer extends Dao{
 		}
 		return instance;
 	}
-	
+
 	public static DaoComputer getInstance()
 	{   
 		if (instance == null) {
@@ -63,7 +64,7 @@ public class DaoComputer extends Dao{
 		return instance;
 	}
 
-	public Optional<Computer> findComputerById(Integer id) throws ExceptionModel{
+	public Optional<Computer> findComputerById(Integer id) throws ExceptionModel, ExceptionDao{
 
 		Optional<Computer> result = Optional.empty();
 		try (Connection conn = openConnection();
@@ -75,12 +76,16 @@ public class DaoComputer extends Dao{
 				}
 			}
 		} catch (SQLException e) {
-			logger.error("Error when searching the computer id " + id + ".");
+			throw new ExceptionDao("Error when searching the computer id " + id + ".");
 		}
 		return result;
 	}
 
-	public ArrayList<Computer> listAllComputer() throws ExceptionModel{
+
+	/*
+	 * List all computers with default order
+	 */
+	public ArrayList<Computer> listAllComputer() throws ExceptionModel, ExceptionDao{
 		ArrayList<Computer> computerList = new ArrayList<>();
 
 		try (Connection conn = openConnection();
@@ -90,33 +95,74 @@ public class DaoComputer extends Dao{
 				computerList.add(ComputerMapper.resultSetToComputer(resultSet));
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			logger.error("Error when listing all computers.");
+			throw new ExceptionDao("Error when listing all computers.");
 		}
-		
+
 		return computerList;
 	}
-	
-	public ArrayList<Computer> listAllComputer(String search) throws ExceptionModel{
+
+	/*
+	 * List all computers with name search
+	 */
+	public ArrayList<Computer> listAllComputerByName(String search) throws ExceptionModel, ExceptionDao{
 		ArrayList<Computer> computerList = new ArrayList<>();
 
 		try (Connection conn = openConnection();
 				PreparedStatement statement = conn.prepareStatement(SELECT_NAME);) {
-				statement.setString(1, "%" + search + "%");
-				statement.setString(2, "%" + search + "%");
-				try (ResultSet resultSet = statement.executeQuery();) {
-					while (resultSet.next()) {
-						computerList.add(ComputerMapper.resultSetToComputer(resultSet));
-					}
+			statement.setString(1, "%" + search + "%");
+			statement.setString(2, "%" + search + "%");
+			try (ResultSet resultSet = statement.executeQuery();) {
+				while (resultSet.next()) {
+					computerList.add(ComputerMapper.resultSetToComputer(resultSet));
 				}
+			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			logger.error("Error when listing computers with name.");
+			throw new ExceptionDao("Error when listing computers with name.");
 		}
-		
+
 		return computerList;
 	}
-	
+
+	/*
+	 * List all computers with name search and in a wanted order
+	 */
+	public ArrayList<Computer> listAllComputerByNameOrdered(String search, String order) throws ExceptionModel, ExceptionDao{
+		ArrayList<Computer> computerList = new ArrayList<>();
+
+		try (Connection conn = openConnection();
+				PreparedStatement statement = conn.prepareStatement(SELECT_NAME_ORDER + order);) {
+			statement.setString(1, "%" + search + "%");
+			statement.setString(2, "%" + search + "%");
+			try (ResultSet resultSet = statement.executeQuery();) {
+				while (resultSet.next()) {
+					computerList.add(ComputerMapper.resultSetToComputer(resultSet));
+				}
+			}
+		} catch (SQLException e) {
+			throw new ExceptionDao("Error when listing and ordering computers with name.");
+		}
+
+		return computerList;
+	}
+
+	/*
+	 * List all computers with order by
+	 */
+	public ArrayList<Computer> listAllComputerByOrder(String order) throws ExceptionModel, ExceptionDao{
+		ArrayList<Computer> computerList = new ArrayList<>();
+		System.out.println(ORDER_BY);
+		try (Connection conn = openConnection();
+				Statement statement = conn.createStatement();
+				ResultSet resultSet = statement.executeQuery(ORDER_BY + order);) {
+			while (resultSet.next()) {
+				computerList.add(ComputerMapper.resultSetToComputer(resultSet));
+			}
+		} catch (SQLException e) {
+			throw new ExceptionDao("Error when listing and ordering computers.");
+		}
+		return computerList;
+	}
+
 	public Optional<Integer> createComputer(Computer computer) throws ExceptionDao {
 		Optional<Integer> idCreated = Optional.empty();
 		Integer lineAffected = null;

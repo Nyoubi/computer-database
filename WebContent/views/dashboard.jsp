@@ -17,7 +17,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.html"> Application -
+			<a class="navbar-brand" href="dashboard"> Application -
 				Computer Database </a>
 		</div>
 	</header>
@@ -62,23 +62,23 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th style="text-align: center">Computer name 
-							<a href=""><i class="fa fa-arrow-up"></i></a>
-						 	<a href=""><i class="fa fa-arrow-down"></i></a>
+						<th style="text-align: center">Computer name
+						 	<a title="Order by name ascendant" href="${computerPage.getOrder('nameAsc')}"><i class="fa fa-arrow-up"></i></a>
+							<a title="Order by name descendant" href="${computerPage.getOrder('nameDesc')}"><i class="fa fa-arrow-down"></i></a>
 						</th>
-						<th style="text-align: center">Introduced date 
-							<a href=""><i class="fa fa-arrow-up"></i></a>
-						 	<a href=""><i class="fa fa-arrow-down"></i></a>
+						<th style="text-align: center">Introduced date
+						 	<a title="Order by introducted date ascendant" href="${computerPage.getOrder('introAsc')}"><i class="fa fa-arrow-up"></i></a>
+							<a title="Order by introducted date descendant" href="${computerPage.getOrder('introDesc')}"><i class="fa fa-arrow-down"></i></a>
 						</th>
 						<!-- Table header for Discontinued Date -->
-						<th style="text-align: center">Discontinued date 
-							<a href=""><i class="fa fa-arrow-up"></i></a>
-						 	<a href=""><i class="fa fa-arrow-down"></i></a>
+						<th style="text-align: center">Discontinued date
+							<a title="Order by discontinued ascendant" href="${computerPage.getOrder('disconAsc')}"><i class="fa fa-arrow-up"></i></a>
+							<a title="Order by discontinued descendant" href="${computerPage.getOrder('disconDesc')}"><i class="fa fa-arrow-down"></i></a>
 						</th>
 						<!-- Table header for Company -->
-						<th style="text-align: center">Company 
-							<a href=""><i class="fa fa-arrow-up"></i></a>
-						 	<a href=""><i class="fa fa-arrow-down"></i></a>
+						<th style="text-align: center">Company
+							<a title="Order by company name ascendant" href="${computerPage.getOrder('companyAsc')}"><i class="fa fa-arrow-up"></i></a>
+							<a title="Order by company name descendant" href="${computerPage.getOrder('companyDesk')}"><i class="fa fa-arrow-down"></i></a>
 						</th>
 
 					</tr>

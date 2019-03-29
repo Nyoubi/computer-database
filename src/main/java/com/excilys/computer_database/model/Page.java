@@ -10,15 +10,36 @@ public class Page<T> {
 	private String url;
 	private String search;
 	private String order;
+	
 	private static List<Integer> sizeList = Arrays.asList(new Integer[]{10,20,50,100});
-	private static List<String> orderList = Arrays.asList(new String[]{"nameAsc","nameDesc","introAsk","introDesk","disconAsc","disconDesk","companyAsk","companyDesk"});
+	
+	public enum order {
+        NAME_ASK("nameAsc","c.name"), NAME_DESC("nameDesc","c.name DESC"), INTRO_ASK("introAsc","c.introduced"), INTRO_DESC("introDesc","c.introduced DESK"), DISCON_ASK("disconAsc","c.discontinued"), DISCON_DESC("disconDesc","c.discontinued  DESK"), COMPANY_ASK("companyAsc","cName"), COMPANY_DESC("companydesc","cName  DESK");
+		
+		private String tag;
+		private String value;
+		
+		order (String tag, String value) {
+			this.tag = tag;
+			this.value=value;
+	}
+		
+		public String getTag() {
+			return this.tag;
+		}
+		
+		public String getValue() {
+			return this.value;
+		}
+	}
 
-	public Page(String url, List<T> content,Integer index,Integer size, String search) {
+	public Page(String url, List<T> content,Integer index,Integer size, String search, String order) {
 		this.url = url;
 		this.content = content;
 		this.index = Math.max(index,1);
 		this.size = Math.max(size,1);
-		this.search=search;
+		this.search = search;
+		this.order = order;
 	}
 
 	private String formatUrl(int index, int size, String search, String order) {
@@ -83,12 +104,12 @@ public class Page<T> {
 		}
 	}
 	
-	public String setOrder(String order) {
-		if (orderList.indexOf(order) != -1) {
-			return formatUrl(1,size,search,order);
-		} else {
-			return formatUrl(1,sizeList.get(0),search,"");
-		}
+	public String getOrder(String order) {
+		return formatUrl(1,size,search,order);
+	}
+	
+	public void setOrder(String order) {
+		this.order = order;
 	}
 	
 	public static List<Integer> getSizeList () {

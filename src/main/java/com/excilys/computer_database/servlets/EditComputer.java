@@ -41,8 +41,7 @@ public class EditComputer extends HttpServlet{
 			this.computerService.updateComputer(Integer.valueOf(id), name, introduced, discontinued, Integer.valueOf(companyId));
 			response.sendRedirect("dashboard");
 		} catch (ExceptionDao | ExceptionModel e) {
-			System.out.println(e.getMessage());
-			response.sendRedirect("/500.html");
+			errorRedirect(request,response,e.getMessage());
 		}
 	}
 
@@ -63,14 +62,21 @@ public class EditComputer extends HttpServlet{
 			if (computer.isPresent()) {
 				request.setAttribute("computer", computer.get());
 			} else {
-				response.sendRedirect("/500.html");
+				response.sendRedirect("dashboard");
 			}
 		} catch (ExceptionDao | ExceptionModel | ExceptionInvalidInput e) {
-			response.sendRedirect("/500.html");
+			errorRedirect(request,response,e.getMessage());
 		}
 		this.getServletContext()
 		.getRequestDispatcher("/views/editComputer.jsp")
 		.forward(request, response);
 		
+	}
+		
+	public void errorRedirect(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
+		request.setAttribute("Exception", message);
+		this.getServletContext()
+		.getRequestDispatcher("/views/500.jsp")
+		.forward(request, response);
 	}
 }

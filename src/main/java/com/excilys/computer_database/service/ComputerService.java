@@ -2,10 +2,13 @@ package com.excilys.computer_database.service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.dto.DtoComputer;
+import com.excilys.computer_database.dto.DtoComputerBuilder;
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionInvalidInput;
 import com.excilys.computer_database.exception.ExceptionModel;
@@ -23,64 +26,33 @@ import com.excilys.computer_database.util.Util;
 
 public class ComputerService {
 	private DaoComputer daoComputer;
-	private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
-	private static final String DB_NAME = "computer-database-db";
-	private static final String DB_URL = "jdbc:mysql://localhost:3306/"+ DB_NAME;
-	private static final String USER = "admincdb";
-	private static final String PASS = "qwerty1234";
-
+	public String dataSource;
 	private static volatile ComputerService instance = null;
 
-	public static ComputerService getInstance()
+	public static ComputerService getInstance(String dataSource)
 	{   
 		if (instance == null) {
 			synchronized(ComputerService.class) {
 				if (instance == null) {
-					instance = new ComputerService();
+					instance = new ComputerService(dataSource);
 				}
 			}
 		}
 		return instance;
 	}
 
-	private ComputerService () {
-		this.daoComputer = DaoComputer.getInstance(JDBC_DRIVER, DB_URL, USER, PASS);
+	private ComputerService (String dataSource) {
+		this.daoComputer = DaoComputer.getInstance(dataSource);
+		this.dataSource = dataSource;
 	}
 
-	public ArrayList<DtoComputer> listAllComputer()  throws ExceptionDao, ExceptionModel{
-		ArrayList<DtoComputer> result = new ArrayList<>();
-
-		for (Computer computer : daoComputer.listAllComputer()) {
-			result.add(ComputerMapper.computerToDtoComputer(computer));
-		}
-		return result;
+	public List<DtoComputer> listAllComputer(String order)  throws ExceptionDao, ExceptionModel{
+		return daoComputer.listAllComputer(order).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
 	}
 
-	public ArrayList<DtoComputer> listAllComputerByName(String search)  throws ExceptionDao, ExceptionModel{
-		ArrayList<DtoComputer> result = new ArrayList<>();
+	public List<DtoComputer> listAllComputer(String search, String order)  throws ExceptionDao, ExceptionModel{
+		return daoComputer.listAllComputer(search,order).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
 
-		for (Computer computer : daoComputer.listAllComputerByName(search)) {
-			result.add(ComputerMapper.computerToDtoComputer(computer));
-		}
-		return result;
-	}
-
-	public ArrayList<DtoComputer> listAllComputerByNameOrdered(String search, String order)  throws ExceptionDao, ExceptionModel{
-		ArrayList<DtoComputer> result = new ArrayList<>();
-
-		for (Computer computer : daoComputer.listAllComputerByNameOrdered(search,order)) {
-			result.add(ComputerMapper.computerToDtoComputer(computer));
-		}
-		return result;
-	}
-
-	public ArrayList<DtoComputer> listAllComputerByOrder(String order)  throws ExceptionDao, ExceptionModel{
-		ArrayList<DtoComputer> result = new ArrayList<>();
-
-		for (Computer computer : daoComputer.listAllComputerByOrder(order)) {
-			result.add(ComputerMapper.computerToDtoComputer(computer));
-		}
-		return result;
 	}
 
 	public Optional<DtoComputer> showDetails(String id)  throws ExceptionDao, ExceptionModel, ExceptionInvalidInput {
@@ -109,7 +81,7 @@ public class ComputerService {
 
 	public void createComputer(String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
 		checkDataCreateComputer(name, introduced, discontinued, companyId);
-		CompanyService companyService = CompanyService.getInstance();
+		CompanyService companyService = CompanyService.getInstance(this.dataSource);
 		Optional<DtoCompany> dtoCompany = companyService.findCompanyById(companyId);
 		Optional<Company> company = Optional.empty();
 		if (dtoCompany.isPresent()) {
@@ -132,29 +104,18 @@ public class ComputerService {
 
 	public void updateComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
 		checkDataUpdateComputer(id, name, introduced, discontinued, companyId);
-		CompanyService companyService = CompanyService.getInstance();
-		Optional<DtoCompany> dtoCompany = companyService.findCompanyById(companyId);
-		Optional<Company> company = Optional.empty();
-		if (dtoCompany.isPresent()) {
-			company = CompanyMapper.dtoCompanyToCompany(dtoCompany.get());
-			if (!company.isPresent()) {
-				throw new ExceptionModel("Mapper : Can't convert the dto company to company");
-			}
-		}
-
-		Optional<Timestamp> timeIntro = Util.stringToTimestamp(introduced);
-		Optional<Timestamp> timeDiscon = Util.stringToTimestamp(discontinued);
-		ComputerBuilder computerBuilder = new ComputerBuilder().setName(name)
-				.setIntroduced(timeIntro.isPresent() ? timeIntro.get() : null)
-				.setDiscontinued(timeDiscon.isPresent() ? timeDiscon.get() : null)
-				.setCompany(company.isPresent() ? company.get() : null)
-				.setId(id);
-		Computer computer = computerBuilder.build();
+		
+		DtoComputerBuilder dtoComputerBuilder = new DtoComputerBuilder().setId(id)
+																	    .setName(name)
+																	    .setIntroduced(introduced)
+																	    .setDiscontinued(discontinued)
+																	    .setCompanyId(companyId);
+		Computer computer = ComputerMapper.dtoComputerTocomputer(dtoComputerBuilder.build(),dataSource);
 		daoComputer.updateComputer(computer);
 	}
 
 	public Optional<Page<DtoComputer>> pageDtoComputer(String url, Integer index, Integer size, String search, String order) throws ExceptionDao, ExceptionModel{
-		ArrayList<DtoComputer> result = new ArrayList<>();
+		List<DtoComputer> result = new ArrayList<>();
 		
 		String orderBy = getOrder(order);
 		PageBuilder<DtoComputer> pageBuilder = new PageBuilder<DtoComputer>()
@@ -165,18 +126,16 @@ public class ComputerService {
 		
 		if (search == null || search.equals("")) {
 			if ("".equals(orderBy)) {
-				result = listAllComputer();
+				result = listAllComputer("");
 			} else {
-				result = listAllComputerByOrder(orderBy);
+				result = listAllComputer(orderBy);
 			}
 		} else {
 			if ("".equals(orderBy)) {
-				result = listAllComputerByName(search);
+				result = listAllComputer(search,"");
 
 			} else {
-				System.out.println(orderBy);
-				result = listAllComputerByNameOrdered(search,orderBy);
-				System.out.println("test4");
+				result = listAllComputer(search,orderBy);
 			}
 		}
 		
@@ -224,7 +183,7 @@ public class ComputerService {
 
 	private String getOrder(String order) {
 		String orderBy = "";
-		
+		 
 		if (order == null) {
 			return orderBy;
 		}

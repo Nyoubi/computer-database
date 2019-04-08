@@ -48,54 +48,42 @@ public class dashboardTest {
 
 	@AfterAll
 	public static void quitDriver() {
-		ChromeDriverService.stop();
 		webDriver.quit();
+		ChromeDriverService.stop();
 	}
 	
 	@Test
 	public void testListComputer() {
-		webDriver.get(DASHBOARD);
+		webDriver.get(DASHBOARD  + "?size=10");
 		WebElement results = webDriver.findElement(By.id(TAB_COMPUTER_ID));
 		List<WebElement> list = results.findElements(By.tagName("tr"));
 		assertNotEquals(0,list.size());
+		System.out.println(webDriver.findElement(By.id("currentSize")).getText());
 		assertEquals(webDriver.findElement(By.id("currentSize")).getText(),Integer.toString(list.size()));
 	}
 	
 	@Test
 	public void nextTest() {
 		webDriver.get(DASHBOARD);
-		WebElement nextButton = webDriver.findElement(By.id(NEXT_BUTTON));
-		WebElement previousButton = webDriver.findElement(By.id(PREVIOUS_BUTTON));
 		WebElement results = webDriver.findElement(By.id(TAB_COMPUTER_ID));
 		List<WebElement> list = results.findElements(By.tagName("tr"));
+		WebElement nextButton = webDriver.findElement(By.id(NEXT_BUTTON));
 		nextButton.click();
 		results = webDriver.findElement(By.id(TAB_COMPUTER_ID));
 		List<WebElement> list2 = results.findElements(By.tagName("tr"));
 		assertNotEquals(list,list2);
-		previousButton.click();
 	}
 	
 	@Test
 	public void previousTest() {
-		webDriver.get(DASHBOARD);
-		WebElement nextButton = webDriver.findElement(By.id(NEXT_BUTTON));
+		webDriver.get(DASHBOARD + "?index=2");
 		WebElement previousButton = webDriver.findElement(By.id(PREVIOUS_BUTTON));
-		
-		//Previous when first page
+
 		WebElement results = webDriver.findElement(By.id(TAB_COMPUTER_ID));
 		List<WebElement> list = results.findElements(By.tagName("tr"));
 		previousButton.click();
 		results = webDriver.findElement(By.id(TAB_COMPUTER_ID));
 		List<WebElement> list2 = results.findElements(By.tagName("tr"));
-		assertEquals(list,list2);
-		
-		//Previous when not first page
-		nextButton.click();
-		results = webDriver.findElement(By.id(TAB_COMPUTER_ID));
-		list = results.findElements(By.tagName("tr"));
-		previousButton.click();
-		results = webDriver.findElement(By.id(TAB_COMPUTER_ID));
-		list2 = results.findElements(By.tagName("tr"));
 		assertNotEquals(list,list2);
 	}
 	

@@ -5,19 +5,17 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.excilys.computer_database.app.App;
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
-import com.excilys.computer_database.persistence.Dao;
 import com.excilys.computer_database.persistence.DaoComputer;
 import com.excilys.computer_database.util.Util;
 
@@ -29,8 +27,7 @@ public class DaoComputerTest {
 	ComputerBuilder computerBuilder;
 	@BeforeEach
 	public void setUp() {
-		daoComputer = DaoComputer.getInstance("com.mysql.cj.jdbc.Driver","jdbc:mysql://localhost:3306/computer-database-test",
-											  "admintest","test1234");
+		daoComputer = DaoComputer.getInstance(App.dataSourceTest);
 		computerBuilder = new ComputerBuilder().setName("Computer 1")
 				.setId(0)
 				.setIntroduced(Util.stringToTimestamp(("2000-12-12")).get())
@@ -46,25 +43,21 @@ public class DaoComputerTest {
 			fail();
 		}
 	}
-	
-	@Test
-	public void testConnection() {
-		try (Connection conn = Dao.openConnection()){
-			assertNotNull(conn);
-		} catch (SQLException e) {
-			fail("Exception catched when trying to connect.");
-		}
-	}
 
 	@Test
 	public void testCreateComputer() {
-		Integer test = daoComputer.createComputer(computer).get();
+		Integer test = null;
+		try {
+			test = daoComputer.createComputer(computer).get();
+		} catch (ExceptionDao e2) {
+			fail();
+		}
 		assertNotNull(test);
 		assertEquals(test,Integer.valueOf(2));
 		computer2.setId(test);
 		try {
 			computer = daoComputer.findComputerById(test).get();
-		} catch (ExceptionModel e1) {
+		} catch (ExceptionModel | ExceptionDao e1) {
 			fail();
 		}
 		assertNotNull(computer);
@@ -81,7 +74,12 @@ public class DaoComputerTest {
 	
 	@Test
 	public void testUpdateComputer() {
-		Integer created = daoComputer.createComputer(computer).get();
+		Integer created = null;
+		try {
+			created = daoComputer.createComputer(computer).get();
+		} catch (ExceptionDao e2) {
+			fail();
+		}
 
 		computer.setId(created);
 		computer2.setId(created);
@@ -94,7 +92,7 @@ public class DaoComputerTest {
 		}
 		try {
 			computer = daoComputer.findComputerById(created).get();
-		} catch (ExceptionModel e1) {
+		} catch (ExceptionModel | ExceptionDao e1) {
 			fail();
 		}
 		
@@ -114,7 +112,12 @@ public class DaoComputerTest {
 	
 	@Test
 	public void testDeleteComputer() {
-		Integer created = daoComputer.createComputer(computer).get();
+		Integer created = null;
+		try {
+			created = daoComputer.createComputer(computer).get();
+		} catch (ExceptionDao e1) {
+			fail();
+		}
 		try {
 			daoComputer.deleteComputerById(created);
 		} catch (ExceptionDao e) {
@@ -122,7 +125,7 @@ public class DaoComputerTest {
 		}
 		try {
 			assertEquals(daoComputer.findComputerById(created), Optional.empty());
-		} catch (ExceptionModel e) {
+		} catch (ExceptionModel | ExceptionDao e) {
 			fail();
 		}
 		daoComputer.resetAutoIncrement(created);		
@@ -132,7 +135,7 @@ public class DaoComputerTest {
 	public void testFindComputerById() {
 		try {
 			computer = daoComputer.findComputerById(1).get();
-		} catch (ExceptionModel e1) {
+		} catch (ExceptionModel | ExceptionDao e1) {
 			fail();
 		}
 		

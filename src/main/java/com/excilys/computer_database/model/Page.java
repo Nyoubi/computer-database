@@ -14,7 +14,7 @@ public class Page<T> {
 	private static List<Integer> sizeList = Arrays.asList(new Integer[]{10,20,50,100});
 	
 	public enum orderEnum {
-        NAME_ASK("nameAsc","c.name"), NAME_DESC("nameDesc","c.name DESC"), INTRO_ASK("introAsc","c.introduced"), INTRO_DESC("introDesc","c.introduced DESC"), DISCON_ASK("disconAsc","c.discontinued"), DISCON_DESC("disconDesc","c.discontinued  DESC"), COMPANY_ASK("companyAsc","cName"), COMPANY_DESC("companyDesc","cName DESC");
+        NAME_ASK("nameAsc","ORDER BY c.name"), NAME_DESC("nameDesc","ORDER BY c.name DESC"), INTRO_ASK("introAsc","ORDER BY c.introduced"), INTRO_DESC("introDesc","ORDER BY c.introduced DESC"), DISCON_ASK("disconAsc","ORDER BY c.discontinued"), DISCON_DESC("disconDesc","ORDER BY c.discontinued  DESC"), COMPANY_ASK("companyAsc","ORDER BY cName"), COMPANY_DESC("companyDesc","ORDER BY cName DESC");
 		
 		private String tag;
 		private String value;

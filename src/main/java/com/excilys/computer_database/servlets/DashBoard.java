@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.computer_database.app.App;
 import com.excilys.computer_database.dto.DtoComputer;
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionInvalidInput;
@@ -22,11 +23,12 @@ public class DashBoard extends HttpServlet{
 	private static final long serialVersionUID = 4605140799487702645L;
 
 	private ComputerService computerService;
+
 	private static final String URL = "dashboard";
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		computerService = ComputerService.getInstance();
+		computerService = ComputerService.getInstance(App.dataSource);
 
 		getIndex(request);getSize(request);getSearch(request);getOrder(request);
 		Integer index = (Integer) request.getAttribute("index");
@@ -57,7 +59,7 @@ public class DashBoard extends HttpServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 
-		computerService = ComputerService.getInstance();
+		computerService = ComputerService.getInstance(App.dataSource);
 
 		String checked = request.getParameter("selection");
 		if (checked != null && !checked.equals("")) {

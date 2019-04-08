@@ -33,7 +33,7 @@ public abstract class ComputerMapper {
 		return computer;
 	}
 
-	public static DtoComputer computerToDtoComputer(Computer computer) throws ExceptionModel{
+	public static DtoComputer computerToDtoComputer(Computer computer){
 		DtoComputerBuilder dtoComputerBuilder = new DtoComputerBuilder();
 
 		dtoComputerBuilder.setId(computer.getId())
@@ -50,8 +50,8 @@ public abstract class ComputerMapper {
 		}
 		return dtoComputerBuilder.build();
 	}
-	
-	public static Computer dtoComputerTocomputer(DtoComputer dtoComputer) throws ExceptionDao, ExceptionModel {
+
+	public static Computer dtoComputerTocomputer(DtoComputer dtoComputer, String dataSource) throws ExceptionDao, ExceptionModel {
 
 		ComputerBuilder computerBuilder = new ComputerBuilder();
 
@@ -70,7 +70,7 @@ public abstract class ComputerMapper {
 			computerBuilder.setDiscontinued(tmp.get());
 		}
 		
-		CompanyService companyService = CompanyService.getInstance();
+		CompanyService companyService = CompanyService.getInstance(dataSource);
 		DtoCompany dtoCompany = Util.checkOptional(companyService.findCompanyById(dtoComputer.getCompanyId()));
 		Optional<Company> company = CompanyMapper.dtoCompanyToCompany(dtoCompany);
 
@@ -84,5 +84,6 @@ public abstract class ComputerMapper {
 		return computerBuilder.build();
 
 	}
+	
 }
  

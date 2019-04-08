@@ -16,50 +16,39 @@ import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 
-public class DaoCompany  extends Dao{
+public class DaoCompany {
 	
 	private final static String SELECT_ALL = "SELECT id as cId, name as cName FROM company ";
 	private final static String SELECT_ID = SELECT_ALL + "WHERE id=? ";
+	private final static String DELETE_ID = "DELETE FROM company WHERE id = ? ";
+	private final static String DELETE_COMPUTER_ID = "DELETE FROM computer WHERE company_id = ? ";
+
 	private static Logger logger = LoggerFactory.getLogger(DaoCompany.class);
 	
     private static volatile DaoCompany instance = null;
-	
-	private DaoCompany(String driver, String dbUrl, String user, String pass) {
-		Dao.driver = driver;  
-		Dao.dbUrl = dbUrl;
-		Dao.user = user;
-		Dao.pass = pass;
+	private String dataSource = null;
+
+	private DaoCompany(String dataSource) {
+		this.dataSource = dataSource;
 	}
     
-	public static DaoCompany getInstance(String driver, String dbUrl, String user, String pass)
+	public static DaoCompany getInstance(String dataSource)
     {   
 		if (instance == null) {
 			synchronized(DaoCompany.class) {
 				if (instance == null) {
-					instance = new DaoCompany(driver,dbUrl,user,pass);
+					instance = new DaoCompany(dataSource);
 				}
 			}
 		}
 		return instance;
     }
-	
-	public static DaoCompany getInstance()
-	{   
-		if (instance == null) {
-			synchronized(DaoCompany.class) {
-				if (instance == null) {
-					instance = new DaoCompany("com.mysql.cj.jdbc.Driver","jdbc:mysql://localhost:3306/computer-database-db","admincdb","qwerty1234");
-				}
-			}
-		}
-		return instance;
-	}
 
 	public Optional<Company> findCompanyById(Integer id) throws ExceptionModel, ExceptionDao{
 		
 		Optional<Company> result = Optional.empty();
 		
-		try (Connection conn = openConnection();
+		try (Connection conn = ConnectionPool.getInstance(dataSource).getDataSource().getConnection();
 		    PreparedStatement statement = conn.prepareStatement(SELECT_ID);){
 			statement.setInt(1, id);
 			try (ResultSet resultSet = statement.executeQuery();) {
@@ -78,7 +67,7 @@ public class DaoCompany  extends Dao{
 		
 		ArrayList<Company> companyList = new ArrayList<>();
 		
-		try (Connection conn = openConnection();
+		try (Connection conn = ConnectionPool.getInstance(dataSource).getDataSource().getConnection();
 			 Statement statement = conn.createStatement();){
 			
 			try (ResultSet resultSet = statement.executeQuery(SELECT_ALL);) {
@@ -94,5 +83,34 @@ public class DaoCompany  extends Dao{
 			logger.error("Error when listing all companies.");
 		}
 		return companyList;
+	}
+	
+	public void deleteCompanyById(Integer id) {
+		Connection conn = null;
+		try {
+			conn = ConnectionPool.getInstance(dataSource).getDataSource().getConnection();
+
+			try  {
+				conn.setAutoCommit(false);
+				PreparedStatement stmt = conn.prepareStatement(DELETE_COMPUTER_ID);
+				stmt.setInt(1, id);
+				stmt.executeUpdate();
+				stmt = conn.prepareStatement(DELETE_ID);
+				stmt.setInt(1, id);
+				stmt.executeUpdate();
+				conn.commit();
+			} catch (SQLException e) {
+				if(conn != null) {
+					conn.rollback();
+				}
+				logger.error("Error when deleting company " + id);
+			} finally {
+				if (conn != null && ! conn.isClosed()) {
+					conn.close();
+				}
+			} 
+		}catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 	}
 }

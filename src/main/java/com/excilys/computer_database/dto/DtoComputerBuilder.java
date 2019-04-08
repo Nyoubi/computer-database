@@ -1,7 +1,5 @@
 package com.excilys.computer_database.dto;
 
-import com.excilys.computer_database.exception.ExceptionModel;
-
 public class DtoComputerBuilder {
 	private int id;
 	private String name;
@@ -10,7 +8,7 @@ public class DtoComputerBuilder {
 	private int companyId;
 	private String companyName;
 
-	public DtoComputer build() throws ExceptionModel {
+	public DtoComputer build() {
 		DtoComputer computer = new DtoComputer();
 
 		computer.setId(this.id);

@@ -16,7 +16,8 @@ public abstract class CompanyMapper {
 
 		Integer id = resultSet.getInt("cId");
 		String name = resultSet.getString("cName");
-		if (id == 0 && name == null)  {
+		
+		if (id == 0 || id == null)  {
 			company = null;
 		}
 		else {
@@ -40,9 +41,7 @@ public abstract class CompanyMapper {
 		if(dtoCompany == null) {
 			return Optional.empty();
 		} else {
-		
 		CompanyBuilder companyBuilder = new CompanyBuilder();
-
 		Company company = companyBuilder.setId(dtoCompany.getId())
 										.setName(dtoCompany.getName())
 										.build();

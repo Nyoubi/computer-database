@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.computer_database.app.App;
 import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionModel;
@@ -22,10 +23,11 @@ public class AddComputer extends HttpServlet{
 	
 	private ComputerService computerService;
 	private CompanyService companyService;
+	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		String name, introduced, discontinued, companyId;
-		computerService = ComputerService.getInstance();
+		computerService = ComputerService.getInstance(App.dataSource);
 
 		name = request.getParameter("name");
 		introduced = request.getParameter("introduced");
@@ -43,7 +45,7 @@ public class AddComputer extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		companyService = CompanyService.getInstance();
+		companyService = CompanyService.getInstance(App.dataSource);
 		
 		ArrayList<DtoCompany> listCompanies = new ArrayList<>();
 		try {

@@ -23,8 +23,12 @@ public abstract class Util {
 	}
 	
 	public static Optional<Timestamp> stringToTimestamp(String stringDate){
-		if(stringDate != null && !("".equals(stringDate))) {
-			return Optional.of(Timestamp.valueOf(stringDate + " 00:00:00"));
+		try {
+			if(stringDate != null && !("".equals(stringDate))) {
+				return Optional.of(Timestamp.valueOf(stringDate + " 00:00:00"));
+			}
+		} catch (IllegalArgumentException e) {
+			return Optional.empty();
 		}
 		return Optional.empty();
 	  }

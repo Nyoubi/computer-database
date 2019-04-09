@@ -1,16 +1,8 @@
 package com.excilys.computer_database.model;
 
 import java.util.List;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.excilys.computer_database.exception.ExceptionModel;
 
 public class PageBuilder<T> {
-
-	private static Logger log= LoggerFactory.getLogger(PageBuilder.class);
 	
 	private List<T> content;
 	private Integer index;
@@ -19,28 +11,8 @@ public class PageBuilder<T> {
 	private String search;
 	private String order;
 	
-	public Optional<Page<T>> build() throws ExceptionModel{
-		if(content == null) {
-			log.warn("Can't build a page without data, return empty");
-			return Optional.empty();
-		}
-		if(index == null) {
-			index = Integer.valueOf(0);
-		}
-		if(size == null) {
-			size = Integer.valueOf(10);
-		}
-		if(url == null) {
-			throw new ExceptionModel("An url is needed");
-		}
-		if(search == null) {
-			search = "";
-		}
-		if(order == null) {
-			order = "";
-		}
-		
-		return Optional.of(new Page<T>(url,content,index,size,search,order));
+	public Page<T> build(){
+		return new Page<T>(url,content,index,size,search,order);
 	}
 	
 	public PageBuilder<T> setContent(List<T> list) {
@@ -49,11 +21,7 @@ public class PageBuilder<T> {
 	}
 	
 	public PageBuilder<T> setIndex(Integer index) {
-		if(this.content == null || index > this.content.size()) {
-			log.warn("Can't initialize index without content");
-		} else {
-			this.index = index;
-		}
+		this.index = index;
 		return this;
 	}
 	
@@ -74,5 +42,9 @@ public class PageBuilder<T> {
 	public PageBuilder<T> setOrder(String order) {
 		this.order = order;
 		return this;
+	}
+	
+	public Integer getIndex() {
+		return this.index;
 	}
 }

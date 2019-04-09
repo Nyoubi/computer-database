@@ -104,26 +104,19 @@ public class ComputerService {
 
 	public void updateComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
 		checkDataUpdateComputer(id, name, introduced, discontinued, companyId);
-		
+
 		DtoComputerBuilder dtoComputerBuilder = new DtoComputerBuilder().setId(id)
-																	    .setName(name)
-																	    .setIntroduced(introduced)
-																	    .setDiscontinued(discontinued)
-																	    .setCompanyId(companyId);
+				.setName(name)
+				.setIntroduced(introduced)
+				.setDiscontinued(discontinued)
+				.setCompanyId(companyId);
 		Computer computer = ComputerMapper.dtoComputerTocomputer(dtoComputerBuilder.build(),dataSource);
 		daoComputer.updateComputer(computer);
 	}
 
-	public Optional<Page<DtoComputer>> pageDtoComputer(String url, Integer index, Integer size, String search, String order) throws ExceptionDao, ExceptionModel{
+	public Page<DtoComputer> pageDtoComputer(String url, Integer index, Integer size, String search, String order) throws ExceptionDao, ExceptionModel{
 		List<DtoComputer> result = new ArrayList<>();
-		
 		String orderBy = getOrder(order);
-		PageBuilder<DtoComputer> pageBuilder = new PageBuilder<DtoComputer>()
-				.setSize(size)
-				.setUrl(url)
-				.setSearch(search)
-				.setOrder(order);
-		
 		if (search == null || search.equals("")) {
 			if ("".equals(orderBy)) {
 				result = listAllComputer("");
@@ -138,9 +131,26 @@ public class ComputerService {
 				result = listAllComputer(search,orderBy);
 			}
 		}
-		
-		Optional<Page<DtoComputer>> page = pageBuilder.setContent(result).setIndex(index).build();
+		PageBuilder<DtoComputer> builder = checkPage(url,result,index,size,search,order);
+		System.out.println(builder.getIndex());
+		Page<DtoComputer> page = builder.build();
+
 		return page;		
+	}
+
+	private String getOrder(String order) {
+		String orderBy = "";
+
+		if (order == null) {
+			return orderBy;
+		}
+
+		for (orderEnum o : Page.orderEnum.values()) {
+			if (o.getTag().equals(order)) {
+				orderBy = o.getValue();
+			}
+		}		
+		return orderBy;
 	}
 
 	public void checkDataCreateComputer(String name, String introduced, String discontinued, Integer companyId) throws ExceptionModel {
@@ -181,18 +191,32 @@ public class ComputerService {
 		}
 	}
 
-	private String getOrder(String order) {
-		String orderBy = "";
-		 
-		if (order == null) {
-			return orderBy;
+	public PageBuilder<DtoComputer> checkPage(String url, List<DtoComputer> content, Integer index, Integer size, String search, String order) throws ExceptionModel {
+		PageBuilder<DtoComputer> pageBuilder = new PageBuilder<DtoComputer>();
+
+		if(index == null) {
+			index = Integer.valueOf(0);
+		}
+		if(size == null) {
+			size = Integer.valueOf(10);
+		}
+		if(url == null) {
+			throw new ExceptionModel("An url is needed");
+		}
+		if(search == null) {
+			search = "";
+		}
+		if(order == null) {
+			order = "";
 		}
 
-	    for (orderEnum o : Page.orderEnum.values()) {
-	        if (o.getTag().equals(order)) {
-	            orderBy = o.getValue();
-	        }
-	    }		
-		return orderBy;
+		pageBuilder.setSize(size)
+		.setUrl(url)
+		.setSearch(search)
+		.setOrder(order)
+		.setContent(content)
+		.setIndex(index);
+
+		return pageBuilder;
 	}
 }

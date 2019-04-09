@@ -23,8 +23,6 @@ public class dashboardTest {
 	private static WebDriver webDriver;
 
 	private static String DASHBOARD = "http://localhost:8080/computer-database/dashboard";
-	private static final String ADD_COMPUTER = "http://localhost:8080/computer-database/addComputer";
-
 	
 	private static String TAB_COMPUTER_ID = "results";
 	private static final String NEXT_BUTTON = "next";

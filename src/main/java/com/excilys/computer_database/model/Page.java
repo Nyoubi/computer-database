@@ -34,12 +34,14 @@ public class Page<T> {
 	}
 
 	public Page(String url, List<T> content,Integer index,Integer size, String search, String order) {
+		
 		this.url = url;
 		this.content = content;
 		this.index = Math.max(index,1);
 		this.size = Math.max(size,1);
 		this.search = search;
 		this.order = order;
+
 	}
 
 	private String formatUrl(int index, int size, String search, String order) {
@@ -116,10 +118,6 @@ public class Page<T> {
 		return sizeList;
 	}
 	
-	public Integer getContentSize() {
-		return content.size();
-	}
-	
 	public List<T> getContent(){
 		return content;
 	}
@@ -131,7 +129,7 @@ public class Page<T> {
 	}
 	
 	public Integer getStart () {
-		if (index < 3) {
+		if (index <= 3) {
 			return 1;
 		} else if (index >= Math.round(content.size() / size)) {
 			return  (int) (Math.round(content.size() / size) - 3);

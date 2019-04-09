@@ -1,7 +1,6 @@
 package com.excilys.computer_database.servlets;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,20 +35,17 @@ public class DashBoard extends HttpServlet{
 		String search = (String) request.getAttribute("search");
 		String order = (String) request.getAttribute("order");
 				
-		Optional<Page<DtoComputer>> showComputers = Optional.empty();
+		Page<DtoComputer> showComputers = null;
 		try {
 			showComputers = computerService.pageDtoComputer(URL, index, size, search, order);
+
 		} catch (ExceptionDao | ExceptionModel e) {
 			errorRedirect(request,response,e.getMessage());
 		}
 
-		if (!showComputers.isPresent()) {
-			errorRedirect(request,response,"Can't build a page with those parameters");
-		}
-
-		request.setAttribute("computerData", showComputers.get().getPageContent());
-		request.setAttribute("computerPage", showComputers.get());
-		request.setAttribute("numberComputer", showComputers.get().getContentSize());
+		request.setAttribute("computerPage", showComputers);
+		request.setAttribute("computerData", showComputers.getPageContent());
+		request.setAttribute("numberComputer", showComputers.getContent().size());
 
 		this.getServletContext()
 		.getRequestDispatcher("/views/dashboard.jsp")

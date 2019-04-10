@@ -12,6 +12,8 @@ local.properties
 .loadpath
 .recommenders
 log4j.properties
+dataSource.properties
+dataSourceTest.properties
 
 # External tool builders
 .externalToolBuilders/

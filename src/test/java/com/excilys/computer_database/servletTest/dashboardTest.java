@@ -58,7 +58,7 @@ public class dashboardTest {
 		assertNotEquals(0,list.size());
 		System.out.println(webDriver.findElement(By.id("currentSize")).getText());
 		assertEquals(webDriver.findElement(By.id("currentSize")).getText(),Integer.toString(list.size()));
-	}
+	}  
 	
 	@Test
 	public void nextTest() {

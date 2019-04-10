@@ -20,7 +20,7 @@ import com.excilys.computer_database.persistence.DaoComputer;
 import com.excilys.computer_database.util.Util;
 
 public class DaoComputerTest {
-	
+
 	private DaoComputer daoComputer;
 	private Computer computer;
 	private Computer computer2;
@@ -33,12 +33,12 @@ public class DaoComputerTest {
 				.setIntroduced(Util.stringToTimestamp(("2000-12-12")).get())
 				.setDiscontinued(Util.stringToTimestamp(("2000-12-13")).get())
 				.setCompany(new Company(1, "Company 1"));
-		
+
 		try {
-		computer = computerBuilder.build();
-		computer2 = computerBuilder.build();
-		computer.setId(null);
-		computer2.setId(null);
+			computer = computerBuilder.build();
+			computer2 = computerBuilder.build();
+			computer.setId(null);
+			computer2.setId(null);
 		} catch (ExceptionModel e) {
 			fail();
 		}
@@ -62,7 +62,7 @@ public class DaoComputerTest {
 		}
 		assertNotNull(computer);
 		assertEquals(computer,computer2);
-		
+
 		try {
 			daoComputer.deleteComputerById(test);
 		} catch (ExceptionDao e) {
@@ -70,8 +70,8 @@ public class DaoComputerTest {
 		}
 		daoComputer.resetAutoIncrement(test);
 	}
-	
-	
+
+
 	@Test
 	public void testUpdateComputer() {
 		Integer created = null;
@@ -84,7 +84,7 @@ public class DaoComputerTest {
 		computer.setId(created);
 		computer2.setId(created);
 		computer.setName("updated");
-		
+
 		try {
 			daoComputer.updateComputer(computer);
 		} catch (ExceptionDao e) {
@@ -95,13 +95,13 @@ public class DaoComputerTest {
 		} catch (ExceptionModel | ExceptionDao e1) {
 			fail();
 		}
-		
+
 		assertNotEquals(computer2,computer);
-		
+
 		computer2.setName("updated");
-		
+
 		assertEquals(computer,computer2);
-		
+
 		try {
 			daoComputer.deleteComputerById(created);
 		} catch (ExceptionDao e) {
@@ -109,7 +109,7 @@ public class DaoComputerTest {
 		}
 		daoComputer.resetAutoIncrement(created);
 	}
-	
+
 	@Test
 	public void testDeleteComputer() {
 		Integer created = null;
@@ -130,7 +130,7 @@ public class DaoComputerTest {
 		}
 		daoComputer.resetAutoIncrement(created);		
 	}
-	
+
 	@Test
 	public void testFindComputerById() {
 		try {
@@ -138,15 +138,15 @@ public class DaoComputerTest {
 		} catch (ExceptionModel | ExceptionDao e1) {
 			fail();
 		}
-		
+
 		assertNotNull(computer);
 		computer2.setId(1);
 		computer2.setName("Computer 1");
 		computer2.setIntroduced(Util.stringToTimestamp(("2000-12-12")).get());
 		computer2.setDiscontinued(Util.stringToTimestamp(("2000-12-13")).get());
 		computer2.setCompany(new Company(1,"Company 1"));
-		
+
 		assertEquals(computer, computer2);	
 	}
-	
+
 }

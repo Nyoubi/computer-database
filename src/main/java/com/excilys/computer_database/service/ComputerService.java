@@ -8,13 +8,13 @@ import java.util.stream.Collectors;
 
 import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.dto.DtoComputer;
-import com.excilys.computer_database.dto.DtoComputerBuilder;
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionInvalidInput;
 import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.model.CompanyBuilder;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
 import com.excilys.computer_database.model.Page;
@@ -26,24 +26,11 @@ import com.excilys.computer_database.util.Util;
 
 public class ComputerService {
 	private DaoComputer daoComputer;
-	public String dataSource;
-	private static volatile ComputerService instance = null;
-
-	public static ComputerService getInstance(String dataSource)
-	{   
-		if (instance == null) {
-			synchronized(ComputerService.class) {
-				if (instance == null) {
-					instance = new ComputerService(dataSource);
-				}
-			}
-		}
-		return instance;
-	}
-
-	private ComputerService (String dataSource) {
-		this.daoComputer = DaoComputer.getInstance(dataSource);
-		this.dataSource = dataSource;
+	private CompanyService companyService;
+	
+	public ComputerService (DaoComputer daoComputer, CompanyService companyService) {
+		this.daoComputer = daoComputer;
+		this.companyService = companyService;
 	}
 
 	public List<DtoComputer> listAllComputer(String order)  throws ExceptionDao, ExceptionModel{
@@ -80,37 +67,13 @@ public class ComputerService {
 	}
 
 	public void createComputer(String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
-		checkDataCreateComputer(name, introduced, discontinued, companyId);
-		CompanyService companyService = CompanyService.getInstance(this.dataSource);
-		Optional<DtoCompany> dtoCompany = companyService.findCompanyById(companyId);
-		Optional<Company> company = Optional.empty();
-		if (dtoCompany.isPresent()) {
-			company = CompanyMapper.dtoCompanyToCompany(dtoCompany.get());
-			if (!company.isPresent()) {
-				throw new ExceptionModel("Mapper : Can't convert the dto company to company");
-			}
-		}
-		Optional<Timestamp> timeIntro = Util.stringToTimestamp(introduced);
-		Optional<Timestamp> timeDiscon = Util.stringToTimestamp(discontinued);
-		ComputerBuilder computerBuilder = new ComputerBuilder().setName(name)
-				.setIntroduced(timeIntro.isPresent() ? timeIntro.get() : null)
-				.setDiscontinued(timeDiscon.isPresent() ? timeDiscon.get() : null)
-				.setCompany(company.isPresent() ? company.get() : null)
-				.setId(null);
-		Computer computer = computerBuilder.build();
+		Computer computer = checkDataCreateComputer(name, introduced, discontinued, companyId);
 		daoComputer.createComputer(computer);
 	}
 
 
 	public void updateComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
-		checkDataUpdateComputer(id, name, introduced, discontinued, companyId);
-
-		DtoComputerBuilder dtoComputerBuilder = new DtoComputerBuilder().setId(id)
-				.setName(name)
-				.setIntroduced(introduced)
-				.setDiscontinued(discontinued)
-				.setCompanyId(companyId);
-		Computer computer = ComputerMapper.dtoComputerTocomputer(dtoComputerBuilder.build(),dataSource);
+		Computer computer = checkDataUpdateComputer(id, name, introduced, discontinued, companyId);
 		daoComputer.updateComputer(computer);
 	}
 
@@ -153,7 +116,7 @@ public class ComputerService {
 		return orderBy;
 	}
 
-	public void checkDataCreateComputer(String name, String introduced, String discontinued, Integer companyId) throws ExceptionModel {
+	public Computer checkDataCreateComputer(String name, String introduced, String discontinued, Integer companyId) throws ExceptionModel, ExceptionDao {
 		if (name == null || name == "") {
 			throw new ExceptionModel("Failed to create computer : Invalid name");
 		}
@@ -168,9 +131,25 @@ public class ComputerService {
 				&& OptIntroduced.get().after(OptDiscontinued.get())) {
 			throw new ExceptionModel("Failed to create computer : Introduced can't be after discontinued date");
 		}
+		
+		Optional<DtoCompany> dtoCompany = companyService.findCompanyById(companyId);
+		Optional<Company> company = Optional.empty();
+		if (dtoCompany.isPresent()) {
+			company = CompanyMapper.dtoCompanyToCompany(dtoCompany.get());
+			if (!company.isPresent()) {
+				throw new ExceptionModel("Mapper : Can't convert the dto company to company");
+			}
+		}
+		
+		ComputerBuilder computerBuilder = new ComputerBuilder().setName(name)
+				.setIntroduced(OptIntroduced.isPresent() ? OptIntroduced.get() : null)
+				.setDiscontinued(OptDiscontinued.isPresent() ? OptDiscontinued.get() : null)
+				.setCompany(company.isPresent() ? company.get() : null)
+				.setId(null);
+		return computerBuilder.build();
 	}
 
-	public void checkDataUpdateComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionModel {
+	public Computer checkDataUpdateComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionModel, ExceptionDao {
 		if (name == null || name == "") {
 			throw new ExceptionModel("Failed to create update : Invalid new name");
 		}
@@ -189,6 +168,19 @@ public class ComputerService {
 		if (id == null) {
 			throw new ExceptionModel("Failed to update computer : Incorrect id");
 		}
+		
+		Optional<DtoCompany> company = companyService.findCompanyById(companyId);
+		if (!company.isPresent()) {
+			throw new ExceptionModel("Failed to update computer : Company id doesn't exist");
+		}
+		
+		ComputerBuilder ComputerBuilder = new ComputerBuilder().setId(id)
+				.setName(name)
+				.setIntroduced(OptIntroduced.isPresent() ? OptIntroduced.get() : null)
+				.setDiscontinued(OptDiscontinued.isPresent() ? OptDiscontinued.get() : null)
+				.setCompany(new CompanyBuilder().setId(company.get().getId()).setName(company.get().getName()).build());
+		
+		return ComputerBuilder.build();
 	}
 
 	public PageBuilder<DtoComputer> checkPage(String url, List<DtoComputer> content, Integer index, Integer size, String search, String order) throws ExceptionModel {

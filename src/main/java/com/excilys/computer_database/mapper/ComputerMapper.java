@@ -8,16 +8,13 @@ import java.util.Optional;
 import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.dto.DtoComputer;
 import com.excilys.computer_database.dto.DtoComputerBuilder;
-import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
-import com.excilys.computer_database.service.CompanyService;
 import com.excilys.computer_database.util.Util;
 
-public abstract class ComputerMapper {
-
+public class ComputerMapper {
 	public static Computer resultSetToComputer(ResultSet resultSet) throws SQLException, ExceptionModel{
 		ComputerBuilder computerBuilder = new ComputerBuilder();
 		Integer id = resultSet.getInt("id");
@@ -50,40 +47,4 @@ public abstract class ComputerMapper {
 		}
 		return dtoComputerBuilder.build();
 	}
-
-	public static Computer dtoComputerTocomputer(DtoComputer dtoComputer, String dataSource) throws ExceptionDao, ExceptionModel {
-
-		ComputerBuilder computerBuilder = new ComputerBuilder();
-
-		computerBuilder.setName(dtoComputer.getName());
-		
-		computerBuilder.setId(dtoComputer.getId());
-	
-		Optional<Timestamp> tmp = Util.stringToTimestamp(dtoComputer.getIntroduced());
-
-		if (tmp.isPresent()) {
-			computerBuilder.setIntroduced(tmp.get());
-		}
-		tmp = Util.stringToTimestamp(dtoComputer.getDiscontinued());
-		
-		if (tmp.isPresent()) {
-			computerBuilder.setDiscontinued(tmp.get());
-		}
-		
-		CompanyService companyService = CompanyService.getInstance(dataSource);
-		DtoCompany dtoCompany = Util.checkOptional(companyService.findCompanyById(dtoComputer.getCompanyId()));
-		Optional<Company> company = CompanyMapper.dtoCompanyToCompany(dtoCompany);
-
-		if (company.isPresent()) {
-			computerBuilder.setCompany(company.get());
-
-		} else {
-			computerBuilder.setCompany(null);
-		}		
-				
-		return computerBuilder.build();
-
-	}
-	
 }
- 

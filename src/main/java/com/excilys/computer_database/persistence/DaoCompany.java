@@ -11,10 +11,13 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.computer_database.dto.DtoCompany;
+import com.excilys.computer_database.dto.DtoCompanyBuilder;
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionModel;
-import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.model.CompanyBuilder;
+import com.zaxxer.hikari.HikariDataSource;
 
 public class DaoCompany {
 	
@@ -25,35 +28,26 @@ public class DaoCompany {
 
 	private static Logger logger = LoggerFactory.getLogger(DaoCompany.class);
 	
-    private static volatile DaoCompany instance = null;
-	private String dataSource = null;
+	private HikariDataSource dataSource;
 
-	private DaoCompany(String dataSource) {
+	public DaoCompany(HikariDataSource dataSource) {
 		this.dataSource = dataSource;
 	}
-    
-	public static DaoCompany getInstance(String dataSource)
-    {   
-		if (instance == null) {
-			synchronized(DaoCompany.class) {
-				if (instance == null) {
-					instance = new DaoCompany(dataSource);
-				}
-			}
-		}
-		return instance;
-    }
+
+	public HikariDataSource getDataSource() {
+		return this.dataSource;
+	}
 
 	public Optional<Company> findCompanyById(Integer id) throws ExceptionModel, ExceptionDao{
 		
 		Optional<Company> result = Optional.empty();
 		
-		try (Connection conn = ConnectionPool.getInstance(dataSource).getDataSource().getConnection();
+		try (Connection conn = dataSource.getConnection();
 		    PreparedStatement statement = conn.prepareStatement(SELECT_ID);){
 			statement.setInt(1, id);
 			try (ResultSet resultSet = statement.executeQuery();) {
 				if(resultSet.next()) {
-					result= Optional.of(CompanyMapper.resultSetToCompany(resultSet));			
+					result= Optional.of(resultSetToCompany(resultSet));			
 				}
 			}
 		} catch (SQLException e) {
@@ -67,12 +61,12 @@ public class DaoCompany {
 		
 		ArrayList<Company> companyList = new ArrayList<>();
 		
-		try (Connection conn = ConnectionPool.getInstance(dataSource).getDataSource().getConnection();
+		try (Connection conn = dataSource.getConnection();
 			 Statement statement = conn.createStatement();){
 			
 			try (ResultSet resultSet = statement.executeQuery(SELECT_ALL);) {
 				while(resultSet.next()) {
-					Optional<Company> company = Optional.of(CompanyMapper.resultSetToCompany(resultSet));
+					Optional<Company> company = Optional.of(resultSetToCompany(resultSet));
 					if (company.isPresent()) {
 						companyList.add(company.get());	
 					}
@@ -88,7 +82,7 @@ public class DaoCompany {
 	public void deleteCompanyById(Integer id) {
 		Connection conn = null;
 		try {
-			conn = ConnectionPool.getInstance(dataSource).getDataSource().getConnection();
+			conn = dataSource.getConnection();
 
 			try  {
 				conn.setAutoCommit(false);
@@ -111,6 +105,45 @@ public class DaoCompany {
 			} 
 		}catch (SQLException e1) {
 			e1.printStackTrace();
+		}
+	}
+	
+	public Company resultSetToCompany(ResultSet resultSet) throws SQLException{
+		Company company = null;
+		CompanyBuilder companyBuilder = new CompanyBuilder();
+
+		Integer id = resultSet.getInt("cId");
+		String name = resultSet.getString("cName");
+		
+		if (id == 0 || id == null)  {
+			company = null;
+		}
+		else {
+			company = companyBuilder.setId(id).setName(name).build();
+		}
+		return company;
+	}
+
+	public Optional<DtoCompany> companyToDtoCompany(Company company){
+		Optional<DtoCompany> dtoCompany = Optional.empty();
+		if (company != null) {
+			DtoCompanyBuilder dtoCompanyBuilder = new DtoCompanyBuilder();
+			dtoCompany = Optional.of(dtoCompanyBuilder.setId(company.getId())
+					.setName(company.getName()).build());
+		}	
+		return dtoCompany;
+	}
+
+	public Optional<Company> dtoCompanyToCompany(DtoCompany dtoCompany){
+		
+		if(dtoCompany == null) {
+			return Optional.empty();
+		} else {
+		CompanyBuilder companyBuilder = new CompanyBuilder();
+		Company company = companyBuilder.setId(dtoCompany.getId())
+										.setName(dtoCompany.getName())
+										.build();
+		return Optional.of(company);
 		}
 	}
 }

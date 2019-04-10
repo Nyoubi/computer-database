@@ -16,6 +16,7 @@ import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Computer;
+import com.zaxxer.hikari.HikariDataSource;
 
 public class DaoComputer {
 
@@ -29,29 +30,20 @@ public class DaoComputer {
 	private final String ALTER_AUTO_INCREMENTE = "ALTER TABLE computer AUTO_INCREMENT = ?";
 	private static Logger logger = LoggerFactory.getLogger(DaoComputer.class); 
 
-	private static volatile DaoComputer instance = null;
-	private String dataSource = null;
-	
-	private DaoComputer(String dataSource) {
+	private HikariDataSource dataSource;
+
+	public DaoComputer(HikariDataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
-	public static DaoComputer getInstance(String dataSource)
-	{   
-		if (instance == null) {
-			synchronized(DaoComputer.class) {
-				if (instance == null) {
-					instance = new DaoComputer(dataSource);
-				}
-			}
-		}
-		return instance;
+	public HikariDataSource getDataSource() {
+		return this.dataSource;
 	}
-
+	
 	public Optional<Computer> findComputerById(Integer id) throws ExceptionModel, ExceptionDao{
 
 		Optional<Computer> result = Optional.empty();
-		try (Connection conn = ConnectionPool.getInstance(dataSource).getDataSource().getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement statement = conn.prepareStatement(SELECT_ID);){
 			statement.setInt(1, id);
 			try (ResultSet resultSet = statement.executeQuery();) {
@@ -72,7 +64,7 @@ public class DaoComputer {
 	public ArrayList<Computer> listAllComputer(String order) throws ExceptionModel, ExceptionDao{
 		ArrayList<Computer> computerList = new ArrayList<>();
 
-		try (Connection conn = ConnectionPool.getInstance(dataSource).getDataSource().getConnection();
+		try (Connection conn = dataSource.getConnection();
 				Statement statement = conn.createStatement();
 				ResultSet resultSet = statement.executeQuery(SELECT_ALL + order);) {
 			while (resultSet.next()) {
@@ -91,7 +83,7 @@ public class DaoComputer {
 	public ArrayList<Computer> listAllComputer(String search, String order) throws ExceptionModel, ExceptionDao{
 		ArrayList<Computer> computerList = new ArrayList<>();
 
-		try (Connection conn = ConnectionPool.getInstance(dataSource).getDataSource().getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement statement = conn.prepareStatement(SELECT_NAME + order);) {
 			statement.setString(1, "%" + search + "%");
 			statement.setString(2, "%" + search + "%");
@@ -110,7 +102,7 @@ public class DaoComputer {
 	public Optional<Integer> createComputer(Computer computer) throws ExceptionDao {
 		Optional<Integer> idCreated = Optional.empty();
 		Integer lineAffected = null;
-		try (Connection conn = ConnectionPool.getInstance(dataSource).getDataSource().getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement statement = conn.prepareStatement(CREATE,Statement.RETURN_GENERATED_KEYS);){
 			fillComputer(computer, statement);
 			lineAffected = statement.executeUpdate();
@@ -142,7 +134,7 @@ public class DaoComputer {
 
 	public void updateComputer(Computer computer) throws ExceptionDao {
 		Integer lineAffected = 0;
-		try (Connection conn = ConnectionPool.getInstance(dataSource).getDataSource().getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement statement = conn.prepareStatement(UPDATE);){
 
 			fillComputer(computer, statement);
@@ -159,7 +151,7 @@ public class DaoComputer {
 	public void deleteComputerById(Integer id)  throws ExceptionDao {
 		Integer lineAffected = 0;
 
-		try (Connection conn = ConnectionPool.getInstance(dataSource).getDataSource().getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement statement = conn.prepareStatement(DELETE_ID);){
 			statement.setInt(1, id);
 			lineAffected = statement.executeUpdate();
@@ -173,7 +165,7 @@ public class DaoComputer {
 	}
 
 	public void resetAutoIncrement(Integer value) {
-		try (Connection conn = ConnectionPool.getInstance(dataSource).getDataSource().getConnection();
+		try (Connection conn = dataSource.getConnection();
 				PreparedStatement statement = conn.prepareStatement(ALTER_AUTO_INCREMENTE);){
 			statement.setInt(1,value);
 			statement.executeUpdate();

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.computer_database.app.App;
 import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.dto.DtoComputer;
 import com.excilys.computer_database.exception.ExceptionDao;
@@ -24,13 +23,17 @@ public class EditComputer extends HttpServlet{
 
 	private static final long serialVersionUID = -3250717198410062056L;
 	
-	private ComputerService computerService;
 	private CompanyService companyService;
+	private ComputerService computerService;
+
+	public void init() {
+		computerService = ServletData.context.getBean(ComputerService.class);
+		companyService = ServletData.context.getBean(CompanyService.class);
+	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		String id, name, introduced, discontinued, companyId;
-		computerService = ComputerService.getInstance(App.dataSource);
 
 		id = request.getParameter("idComputer");
 		name = request.getParameter("name");
@@ -39,8 +42,8 @@ public class EditComputer extends HttpServlet{
 		companyId = request.getParameter("companyId");
 		
 		try {
-			this.computerService.updateComputer(Integer.valueOf(id), name, introduced, discontinued, Integer.valueOf(companyId));
-			response.sendRedirect("dashboard");
+			computerService.updateComputer(Integer.valueOf(id), name, introduced, discontinued, Integer.valueOf(companyId));
+			response.sendRedirect(ServletData.URL_LIST_COMPUTERS);
 		} catch (ExceptionDao | ExceptionModel e) {
 			errorRedirect(request,response,e.getMessage());
 		}
@@ -50,11 +53,9 @@ public class EditComputer extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		computerService = ComputerService.getInstance(App.dataSource);
-		Optional<DtoComputer> computer = Optional.empty();
-		companyService = CompanyService.getInstance(App.dataSource);
-		
+		Optional<DtoComputer> computer = Optional.empty();		
 		ArrayList<DtoCompany> listCompanies = new ArrayList<>();
+		
 		try {
 			listCompanies = companyService.listCompanies();
 			request.setAttribute("listCompanies", listCompanies);
@@ -63,13 +64,13 @@ public class EditComputer extends HttpServlet{
 			if (computer.isPresent()) {
 				request.setAttribute("computer", computer.get());
 			} else {
-				response.sendRedirect("dashboard");
+				response.sendRedirect(ServletData.URL_LIST_COMPUTERS);
 			}
 		} catch (ExceptionDao | ExceptionModel | ExceptionInvalidInput e) {
 			errorRedirect(request,response,e.getMessage());
 		}
 		this.getServletContext()
-		.getRequestDispatcher("/views/editComputer.jsp")
+		.getRequestDispatcher(ServletData.VIEW_EDIT_COMPUTER)
 		.forward(request, response);
 		
 	}
@@ -77,7 +78,7 @@ public class EditComputer extends HttpServlet{
 	public void errorRedirect(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
 		request.setAttribute("Exception", message);
 		this.getServletContext()
-		.getRequestDispatcher("/views/500.jsp")
+		.getRequestDispatcher(ServletData.VIEW_ERROR_500)
 		.forward(request, response);
 	}
 }

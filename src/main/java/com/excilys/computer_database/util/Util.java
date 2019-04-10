@@ -18,7 +18,6 @@ public abstract class Util {
 				logger.error("Error when parsing " + input + " to an Integer");
 			}
 		}
-		
 		return Optional.empty();
 	}
 	

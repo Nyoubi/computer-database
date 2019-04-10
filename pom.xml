@@ -20,7 +20,7 @@
 		<slf4j>1.7.26</slf4j>
 		<logclassic>1.2.3</logclassic>
 		<logcore>1.2.3</logcore>
-		<jupiterapi>5.4.1</jupiterapi>
+		<jupiterapi>5.5.0-M1</jupiterapi>
 		<junit>4.12</junit>
 		<mockito>2.23.0</mockito>
 		<servletapi>3.1.0</servletapi>

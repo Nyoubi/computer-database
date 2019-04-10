@@ -79,7 +79,7 @@ public class DaoCompany {
 		return companyList;
 	}
 	
-	public void deleteCompanyById(Integer id) {
+	public void deleteCompanyById(Integer id) throws ExceptionDao {
 		Connection conn = null;
 		try {
 			conn = dataSource.getConnection();
@@ -98,13 +98,14 @@ public class DaoCompany {
 					conn.rollback();
 				}
 				logger.error("Error when deleting company " + id);
+				throw new ExceptionDao("Error when deleting the company");
 			} finally {
 				if (conn != null && ! conn.isClosed()) {
 					conn.close();
 				}
 			} 
 		}catch (SQLException e1) {
-			e1.printStackTrace();
+			throw new ExceptionDao("Error when deleting the company");
 		}
 	}
 	

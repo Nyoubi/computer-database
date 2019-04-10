@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.computer_database.app.App;
 import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionModel;
@@ -21,13 +20,17 @@ public class AddComputer extends HttpServlet{
 	
 	private static final long serialVersionUID = 154395876719316343L;
 	
-	private ComputerService computerService;
 	private CompanyService companyService;
+	private ComputerService computerService;
+
+	public void init() {
+		computerService = ServletData.context.getBean(ComputerService.class);
+		companyService = ServletData.context.getBean(CompanyService.class);
+	}
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		String name, introduced, discontinued, companyId;
-		computerService = ComputerService.getInstance(App.dataSource);
 
 		name = request.getParameter("name");
 		introduced = request.getParameter("introduced");
@@ -45,12 +48,13 @@ public class AddComputer extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		companyService = CompanyService.getInstance(App.dataSource);
-		
+
 		ArrayList<DtoCompany> listCompanies = new ArrayList<>();
+		
 		try {
 			listCompanies = companyService.listCompanies();
 			request.setAttribute("listCompanies", listCompanies);
+			
 			this.getServletContext()
 			.getRequestDispatcher("/views/addComputer.jsp")
 			.forward(request, response);

@@ -10,13 +10,14 @@ import com.excilys.computer_database.persistence.DaoComputer;
 import com.excilys.computer_database.persistence.DaoCompany;
 import com.excilys.computer_database.service.CompanyService;
 import com.excilys.computer_database.service.ComputerService;
+import com.excilys.computer_database.controler.ControlerCli;
 
 @Configuration
 public class AppConfig {
-
+	
 	@Bean
 	public HikariConfig HikariConfig() {
-		return new HikariConfig(App.dataSource);
+		return new HikariConfig("/dataSource.properties");
 	}
 
 	@Bean
@@ -42,5 +43,10 @@ public class AppConfig {
 	@Bean
 	public CompanyService CompanyService() {
 		return new CompanyService(DaoCompany());
+	}
+	
+	@Bean
+	public ControlerCli ControlerCli() {
+		return new ControlerCli(CompanyService());
 	}
 }

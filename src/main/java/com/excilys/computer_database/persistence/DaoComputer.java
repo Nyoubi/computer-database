@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ public class DaoComputer {
 
 	public DaoComputer(HikariDataSource dataSource) {
 		this.dataSource = dataSource;
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 	}
 
 	public HikariDataSource getDataSource() {
@@ -52,7 +54,8 @@ public class DaoComputer {
 				}
 			}
 		} catch (SQLException e) {
-			throw new ExceptionDao("Error when searching the computer id " + id + ".");
+			logger.error("Error when looking for the id : " + id);
+			throw new ExceptionDao("Error when searching the computer.");
 		}
 		return result;
 	}
@@ -63,7 +66,6 @@ public class DaoComputer {
 	 */
 	public ArrayList<Computer> listAllComputer(String order) throws ExceptionModel, ExceptionDao{
 		ArrayList<Computer> computerList = new ArrayList<>();
-
 		try (Connection conn = dataSource.getConnection();
 				Statement statement = conn.createStatement();
 				ResultSet resultSet = statement.executeQuery(SELECT_ALL + order);) {
@@ -71,6 +73,7 @@ public class DaoComputer {
 				computerList.add(ComputerMapper.resultSetToComputer(resultSet));
 			}
 		} catch (SQLException e) {
+			logger.error("Error when listing computers");
 			throw new ExceptionDao("Error when listing all computers.");
 		}
 
@@ -93,6 +96,7 @@ public class DaoComputer {
 				}
 			}
 		} catch (SQLException e) {
+			logger.error("Error when listing computers with research " + search);
 			throw new ExceptionDao("Error when listing computers with name.");
 		}
 
@@ -113,7 +117,8 @@ public class DaoComputer {
 				idCreated = Optional.of(resultSet.getInt(1));
 			}
 		} catch (SQLException e) {
-			throw new ExceptionDao ("Erro when creating the computer.");
+			logger.error("Error when creating the computer " + computer);
+			throw new ExceptionDao ("Error when creating the computer.");
 		}
 		return idCreated;
 	}
@@ -143,8 +148,8 @@ public class DaoComputer {
 				throw new ExceptionDao("Update impossible");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			logger.error("Error when updating the computer.");
+			throw new ExceptionDao("Update impossible");
 		}
 	}
 
@@ -156,11 +161,11 @@ public class DaoComputer {
 			statement.setInt(1, id);
 			lineAffected = statement.executeUpdate();
 			if (lineAffected <= 0) {
-				throw new ExceptionDao("Update impossible");
+				throw new ExceptionDao("Delete impossible");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			logger.error("Error when deleting the computer id " + id + ".");
+			throw new ExceptionDao("Delete impossible");
 		}
 	}
 

@@ -36,4 +36,8 @@ public class CompanyService {
 		}
 		return dtoCompany;
 	}
+	
+	public void deleteCompany(Integer id) throws ExceptionDao {
+		daoCompany.deleteCompanyById(id);
+	}
 }

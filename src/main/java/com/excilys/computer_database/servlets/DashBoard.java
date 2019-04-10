@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.computer_database.app.App;
 import com.excilys.computer_database.dto.DtoComputer;
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionInvalidInput;
@@ -23,11 +22,12 @@ public class DashBoard extends HttpServlet{
 
 	private ComputerService computerService;
 
-	private static final String URL = "dashboard";
+	public void init() {
+		computerService = ServletData.context.getBean(ComputerService.class);
+
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		computerService = ComputerService.getInstance(App.dataSource);
 
 		getIndex(request);getSize(request);getSearch(request);getOrder(request);
 		Integer index = (Integer) request.getAttribute("index");
@@ -37,7 +37,7 @@ public class DashBoard extends HttpServlet{
 				
 		Page<DtoComputer> showComputers = null;
 		try {
-			showComputers = computerService.pageDtoComputer(URL, index, size, search, order);
+			showComputers = computerService.pageDtoComputer(ServletData.URL_LIST_COMPUTERS, index, size, search, order);
 
 		} catch (ExceptionDao | ExceptionModel e) {
 			errorRedirect(request,response,e.getMessage());
@@ -48,14 +48,12 @@ public class DashBoard extends HttpServlet{
 		request.setAttribute("numberComputer", showComputers.getContent().size());
 
 		this.getServletContext()
-		.getRequestDispatcher("/views/dashboard.jsp")
+		.getRequestDispatcher(ServletData.VIEW_LIST_COMPUTERS)
 		.forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
-
-		computerService = ComputerService.getInstance(App.dataSource);
 
 		String checked = request.getParameter("selection");
 		if (checked != null && !checked.equals("")) {
@@ -121,7 +119,7 @@ public class DashBoard extends HttpServlet{
 	public void errorRedirect(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
 		request.setAttribute("Exception", message);
 		this.getServletContext()
-		.getRequestDispatcher("/views/500.jsp")
+		.getRequestDispatcher(ServletData.VIEW_ERROR_500)
 		.forward(request, response);
 	}
 }

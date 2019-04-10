@@ -95,7 +95,6 @@ public class ComputerService {
 			}
 		}
 		PageBuilder<DtoComputer> builder = checkPage(url,result,index,size,search,order);
-		System.out.println(builder.getIndex());
 		Page<DtoComputer> page = builder.build();
 
 		return page;		

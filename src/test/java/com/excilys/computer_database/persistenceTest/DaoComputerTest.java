@@ -7,10 +7,14 @@ import static org.junit.Assert.fail;
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
 
-import com.excilys.computer_database.app.App;
+import com.excilys.computer_database.app.AppConfigTest;
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.model.Company;
@@ -21,13 +25,25 @@ import com.excilys.computer_database.util.Util;
 
 public class DaoComputerTest {
 
-	private DaoComputer daoComputer;
+	static private DaoComputer daoComputer;
 	private Computer computer;
 	private Computer computer2;
 	ComputerBuilder computerBuilder;
+	static GenericApplicationContext context;
+	
+	@BeforeAll
+	public static void start() {
+		context = new AnnotationConfigApplicationContext(AppConfigTest.class);
+		daoComputer = context.getBean(DaoComputer.class);
+	}
+	
+	@AfterAll
+	public static void end() {
+		context.close();
+	}
+	
 	@BeforeEach
 	public void setUp() {
-		daoComputer = DaoComputer.getInstance(App.dataSourceTest);
 		computerBuilder = new ComputerBuilder().setName("Computer 1")
 				.setId(0)
 				.setIntroduced(Util.stringToTimestamp(("2000-12-12")).get())
@@ -145,7 +161,6 @@ public class DaoComputerTest {
 		computer2.setIntroduced(Util.stringToTimestamp(("2000-12-12")).get());
 		computer2.setDiscontinued(Util.stringToTimestamp(("2000-12-13")).get());
 		computer2.setCompany(new Company(1,"Company 1"));
-
 		assertEquals(computer, computer2);	
 	}
 

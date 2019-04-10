@@ -1,6 +1,5 @@
 package com.excilys.computer_database.mapperTest;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -14,10 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.excilys.computer_database.app.App;
 import com.excilys.computer_database.dto.DtoComputer;
-import com.excilys.computer_database.dto.DtoComputerBuilder;
-import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Company;
@@ -62,27 +58,5 @@ public class ComputerMapperTest {
 		assertEquals(dtoComputer.getDiscontinued(),"2011-10-11 11:11:11.0");
 		assertEquals(dtoComputer.getCompanyId(),1);
 		assertEquals(dtoComputer.getCompanyName(), "Company name");
-	}
-
-	@Test
-	public void testDtoToComputerMapper(){
-
-		try {
-			DtoComputer dtoComputer = new DtoComputerBuilder().setId(0)
-															  .setName("test")
-															  .setIntroduced(null)
-															  .setDiscontinued(null)
-															  .setCompanyId(1)
-															  .setCompanyName("Company 1").build();
-			Computer computer = ComputerMapper.dtoComputerTocomputer(dtoComputer, App.dataSourceTest);
-			assertEquals((int)computer.getId(), 0);
-			assertEquals(computer.getName(),"test");
-			assertNull(computer.getIntroduced());
-			assertNull(computer.getDiscontinued());
-			assertEquals((int)computer.getCompany().getId(),1);
-			assertEquals(computer.getCompany().getName(), "Company 1");
-		} catch (ExceptionModel | ExceptionDao e) {
-			fail();
-		}
 	}
 }

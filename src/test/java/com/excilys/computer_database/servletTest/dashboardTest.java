@@ -37,7 +37,6 @@ public class dashboardTest {
 		try {
 			ChromeDriverService.start();
 		} catch (IOException e) {
-			e.printStackTrace();
 			fail("service couldn't start");
 		}
 		webDriver = new RemoteWebDriver(ChromeDriverService.getUrl(),
@@ -56,7 +55,6 @@ public class dashboardTest {
 		WebElement results = webDriver.findElement(By.id(TAB_COMPUTER_ID));
 		List<WebElement> list = results.findElements(By.tagName("tr"));
 		assertNotEquals(0,list.size());
-		System.out.println(webDriver.findElement(By.id("currentSize")).getText());
 		assertEquals(webDriver.findElement(By.id("currentSize")).getText(),Integer.toString(list.size()));
 	}  
 	

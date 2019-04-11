@@ -10,15 +10,19 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.TimeZone;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Computer;
-import com.zaxxer.hikari.HikariDataSource;
 
+@Repository
 public class DaoComputer {
 
 	private final String SELECT_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName FROM computer c "
@@ -31,15 +35,11 @@ public class DaoComputer {
 	private final String ALTER_AUTO_INCREMENTE = "ALTER TABLE computer AUTO_INCREMENT = ?";
 	private static Logger logger = LoggerFactory.getLogger(DaoComputer.class); 
 
-	private HikariDataSource dataSource;
-
-	public DaoComputer(HikariDataSource dataSource) {
-		this.dataSource = dataSource;
+	@Autowired
+	private DataSource dataSource;
+	
+	public DaoComputer() {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-	}
-
-	public HikariDataSource getDataSource() {
-		return this.dataSource;
 	}
 	
 	public Optional<Computer> findComputerById(Integer id) throws ExceptionModel, ExceptionDao{
@@ -52,7 +52,7 @@ public class DaoComputer {
 				while (resultSet.next()) {
 					result = Optional.of(ComputerMapper.resultSetToComputer(resultSet));
 				}
-			}
+			} 
 		} catch (SQLException e) {
 			logger.error("Error when looking for the id : " + id);
 			throw new ExceptionDao("Error when searching the computer.");

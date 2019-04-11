@@ -1,52 +1,32 @@
 package com.excilys.computer_database.app;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-
-import com.excilys.computer_database.persistence.DaoComputer;
-import com.excilys.computer_database.persistence.DaoCompany;
-import com.excilys.computer_database.service.CompanyService;
-import com.excilys.computer_database.service.ComputerService;
-import com.excilys.computer_database.controler.ControlerCli;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 
 @Configuration
+@PropertySource("classpath:dataSource.properties")
+@ComponentScan({ "com.excilys.computer_database.service", "com.excilys.computer_database.persistence" })
 public class AppConfig {
 	
-	@Bean
-	public HikariConfig HikariConfig() {
-		return new HikariConfig("/dataSource.properties");
-	}
-
-	@Bean
-	public HikariDataSource HikariDataSource() {
-		return new HikariDataSource(HikariConfig());
-	}
+	@Autowired
+    Environment env;
 	
 	@Bean
-	public DaoComputer DaoComputer() {
-		return new DaoComputer(HikariDataSource());
-	}
-	
-	@Bean
-	public DaoCompany DaoCompany() {
-		return new DaoCompany(HikariDataSource());
-	}
-	
-	@Bean
-	public ComputerService ComputerService() {
-		return new ComputerService(DaoComputer(),CompanyService());
-	}
-	
-	@Bean
-	public CompanyService CompanyService() {
-		return new CompanyService(DaoCompany());
-	}
-	
-	@Bean
-	public ControlerCli ControlerCli() {
-		return new ControlerCli(CompanyService());
+	public DataSource DataSource() {
+		 DataSource dataSource = DataSourceBuilder
+				 .create()
+				 .url(env.getProperty("jdbcUrl"))
+				 .driverClassName(env.getProperty("driverClassName"))
+				 .username(env.getProperty("login"))
+				 .password(env.getProperty("password"))
+				 .build();
+		 return dataSource;
 	}
 }

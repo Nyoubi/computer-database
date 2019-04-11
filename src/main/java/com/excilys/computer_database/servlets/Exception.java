@@ -15,9 +15,9 @@ public class Exception extends HttpServlet{
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
-		
+
 		String message = request.getParameter("Exception");
-		
+
 		if (message == null) {
 			response.sendRedirect("");
 		} else {
@@ -26,5 +26,5 @@ public class Exception extends HttpServlet{
 			.getRequestDispatcher("/views/500.html")
 			.forward(request, response);
 		}
-		}
 	}
+}

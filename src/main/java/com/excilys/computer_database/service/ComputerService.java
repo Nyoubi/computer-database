@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.dto.DtoComputer;
 import com.excilys.computer_database.exception.ExceptionDao;
@@ -23,15 +26,14 @@ import com.excilys.computer_database.model.PageBuilder;
 import com.excilys.computer_database.persistence.DaoComputer;
 import com.excilys.computer_database.util.Util;
 
-
+@Service
 public class ComputerService {
-	private DaoComputer daoComputer;
-	private CompanyService companyService;
 	
-	public ComputerService (DaoComputer daoComputer, CompanyService companyService) {
-		this.daoComputer = daoComputer;
-		this.companyService = companyService;
-	}
+	@Autowired
+	private DaoComputer daoComputer;
+	
+	@Autowired
+	private CompanyService companyService;
 
 	public List<DtoComputer> listAllComputer(String order)  throws ExceptionDao, ExceptionModel{
 		return daoComputer.listAllComputer(order).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
@@ -122,6 +124,7 @@ public class ComputerService {
 
 		Optional<Timestamp> OptIntroduced = Util.stringToTimestamp(introduced);
 		Optional<Timestamp> OptDiscontinued = Util.stringToTimestamp(discontinued);
+		
 
 		if (!OptIntroduced.isPresent() && OptDiscontinued.isPresent()) {
 			throw new ExceptionModel("Failed to create computer : Discontinued but not introduced");
@@ -138,6 +141,8 @@ public class ComputerService {
 			if (!company.isPresent()) {
 				throw new ExceptionModel("Mapper : Can't convert the dto company to company");
 			}
+		} else if (companyId != null){
+			throw new ExceptionModel("This company doesn't exist");
 		}
 		
 		ComputerBuilder computerBuilder = new ComputerBuilder().setName(name)

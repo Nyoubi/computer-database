@@ -2,11 +2,15 @@ package com.excilys.computer_database.servlets;
 
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.computer_database.dto.DtoComputer;
 import com.excilys.computer_database.exception.ExceptionDao;
@@ -20,13 +24,15 @@ public class DashBoard extends HttpServlet{
 
 	private static final long serialVersionUID = 4605140799487702645L;
 
+	@Autowired
 	private ComputerService computerService;
 
-	public void init() {
-		computerService = ServletData.context.getBean(ComputerService.class);
-
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 	}
-
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		getIndex(request);getSize(request);getSearch(request);getOrder(request);

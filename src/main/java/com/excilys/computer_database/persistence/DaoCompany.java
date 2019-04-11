@@ -7,37 +7,40 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.TimeZone;
+
+import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import com.excilys.computer_database.dto.DtoCompany;
-import com.excilys.computer_database.dto.DtoCompanyBuilder;
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionModel;
+import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
-import com.excilys.computer_database.model.CompanyBuilder;
-import com.zaxxer.hikari.HikariDataSource;
 
+
+@Repository
 public class DaoCompany {
 	
 	private final static String SELECT_ALL = "SELECT id as cId, name as cName FROM company ";
 	private final static String SELECT_ID = SELECT_ALL + "WHERE id=? ";
 	private final static String DELETE_ID = "DELETE FROM company WHERE id = ? ";
 	private final static String DELETE_COMPUTER_ID = "DELETE FROM computer WHERE company_id = ? ";
+	private final String CREATE = "INSERT INTO company (name) VALUES (?)";
+	private final String ALTER_AUTO_INCREMENTE = "ALTER TABLE company AUTO_INCREMENT = ?";
 
 	private static Logger logger = LoggerFactory.getLogger(DaoCompany.class);
 	
-	private HikariDataSource dataSource;
-
-	public DaoCompany(HikariDataSource dataSource) {
-		this.dataSource = dataSource;
+	@Autowired
+	private DataSource dataSource;
+	
+	public DaoCompany() {
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 	}
-
-	public HikariDataSource getDataSource() {
-		return this.dataSource;
-	}
-
+	
 	public Optional<Company> findCompanyById(Integer id) throws ExceptionModel, ExceptionDao{
 		
 		Optional<Company> result = Optional.empty();
@@ -47,7 +50,7 @@ public class DaoCompany {
 			statement.setInt(1, id);
 			try (ResultSet resultSet = statement.executeQuery();) {
 				if(resultSet.next()) {
-					result= Optional.of(resultSetToCompany(resultSet));			
+					result= Optional.of(CompanyMapper.resultSetToCompany(resultSet));			
 				}
 			}
 		} catch (SQLException e) {
@@ -66,7 +69,7 @@ public class DaoCompany {
 			
 			try (ResultSet resultSet = statement.executeQuery(SELECT_ALL);) {
 				while(resultSet.next()) {
-					Optional<Company> company = Optional.of(resultSetToCompany(resultSet));
+					Optional<Company> company = Optional.of(CompanyMapper.resultSetToCompany(resultSet));
 					if (company.isPresent()) {
 						companyList.add(company.get());	
 					}
@@ -100,51 +103,42 @@ public class DaoCompany {
 				logger.error("Error when deleting company " + id);
 				throw new ExceptionDao("Error when deleting the company");
 			} finally {
-				if (conn != null && ! conn.isClosed()) {
+				if (conn != null && !conn.isClosed()) {
 					conn.close();
 				}
-			} 
+			}
 		}catch (SQLException e1) {
 			throw new ExceptionDao("Error when deleting the company");
 		}
 	}
 	
-	public Company resultSetToCompany(ResultSet resultSet) throws SQLException{
-		Company company = null;
-		CompanyBuilder companyBuilder = new CompanyBuilder();
-
-		Integer id = resultSet.getInt("cId");
-		String name = resultSet.getString("cName");
-		
-		if (id == 0 || id == null)  {
-			company = null;
+	public Optional<Integer> createCompany(Company company) throws ExceptionDao {
+		Optional<Integer> idCreated = Optional.empty();
+		Integer lineAffected = null;
+		try (Connection conn = dataSource.getConnection();
+				PreparedStatement statement = conn.prepareStatement(CREATE,Statement.RETURN_GENERATED_KEYS);){
+			statement.setString(1, company.getName());
+			lineAffected = statement.executeUpdate();
+			try (ResultSet resultSet = statement.getGeneratedKeys();) {
+				if (lineAffected > 0) {
+					resultSet.next();
+				}
+				idCreated = Optional.of(resultSet.getInt(1));
+			}
+		} catch (SQLException e) {
+			logger.error("Error when creating the company " + company);
+			throw new ExceptionDao ("Error when creating the company.");
 		}
-		else {
-			company = companyBuilder.setId(id).setName(name).build();
-		}
-		return company;
+		return idCreated;
 	}
-
-	public Optional<DtoCompany> companyToDtoCompany(Company company){
-		Optional<DtoCompany> dtoCompany = Optional.empty();
-		if (company != null) {
-			DtoCompanyBuilder dtoCompanyBuilder = new DtoCompanyBuilder();
-			dtoCompany = Optional.of(dtoCompanyBuilder.setId(company.getId())
-					.setName(company.getName()).build());
-		}	
-		return dtoCompany;
-	}
-
-	public Optional<Company> dtoCompanyToCompany(DtoCompany dtoCompany){
-		
-		if(dtoCompany == null) {
-			return Optional.empty();
-		} else {
-		CompanyBuilder companyBuilder = new CompanyBuilder();
-		Company company = companyBuilder.setId(dtoCompany.getId())
-										.setName(dtoCompany.getName())
-										.build();
-		return Optional.of(company);
+	
+	public void resetAutoIncrement(Integer value) {
+		try (Connection conn = dataSource.getConnection();
+				PreparedStatement statement = conn.prepareStatement(ALTER_AUTO_INCREMENTE);){
+			statement.setInt(1,value);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			logger.error("Error when reseting auto increment value.");
 		}
 	}
 }

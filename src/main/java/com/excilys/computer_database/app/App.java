@@ -8,9 +8,7 @@ import org.springframework.context.support.GenericApplicationContext;
 import com.excilys.computer_database.controler.ControlerCli;
 
 public class App {
-
-	public static String dataSource = "/dataSource.properties";
-	public static String dataSourceTest = "/dataSourceTest.properties";
+	
 	private static Logger log= LoggerFactory.getLogger(App.class);
 
 	public static void main( String[] args )

@@ -3,8 +3,10 @@ package com.excilys.computer_database.persistenceTest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
@@ -20,16 +22,20 @@ import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
+import com.excilys.computer_database.model.Page.orderEnum;
 import com.excilys.computer_database.persistence.DaoComputer;
 import com.excilys.computer_database.util.Util;
 
 public class DaoComputerTest {
 
 	static private DaoComputer daoComputer;
+	
 	private Computer computer;
 	private Computer computer2;
 	ComputerBuilder computerBuilder;
+	
 	static GenericApplicationContext context;
+	
 	
 	@BeforeAll
 	public static void start() {
@@ -69,7 +75,7 @@ public class DaoComputerTest {
 			fail();
 		}
 		assertNotNull(test);
-		assertEquals(test,Integer.valueOf(2));
+		assertEquals(test,Integer.valueOf(4));
 		computer2.setId(test);
 		try {
 			computer = daoComputer.findComputerById(test).get();
@@ -163,5 +169,52 @@ public class DaoComputerTest {
 		computer2.setCompany(new Company(1,"Company 1"));
 		assertEquals(computer, computer2);	
 	}
+	
+	@Test
+	public void testListComputerOrder() {
+		ArrayList<Computer> list = new ArrayList<>();
+		try {
+		list = daoComputer.listAllComputer("");
+		assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
+		
+		list = daoComputer.listAllComputer(orderEnum.NAME_ASC.getValue());
+		assertTrue(list.get(1).getId() == 3 && list.get(2).getName().equals("test"));
+		
+		list = daoComputer.listAllComputer(orderEnum.NAME_DESC.getValue());
+		assertTrue(list.get(0).getId() == 2 	&& list.get(1).getName().equals("Computer 3"));
+		
+		list = daoComputer.listAllComputer(orderEnum.INTRO_ASC.getValue());
+		assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
+		
+		list = daoComputer.listAllComputer(orderEnum.INTRO_DESC.getValue());
+		assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
 
+		
+		list = daoComputer.listAllComputer(orderEnum.DISCON_ASC.getValue());
+		assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
+		
+		list = daoComputer.listAllComputer(orderEnum.DISCON_DESC.getValue());
+		assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
+		
+		list = daoComputer.listAllComputer(orderEnum.COMPANY_ASC.getValue());
+		assertTrue(list.get(0).getCompany().getId() == 1 && list.get(1).getCompany().getId() == 1);
+		
+		list = daoComputer.listAllComputer(orderEnum.COMPANY_DESC.getValue());
+		assertTrue(list.get(0).getId() == 2);
+		
+		} catch (ExceptionModel | ExceptionDao e) {
+			fail();
+		}
+	}
+	
+	@Test
+	public void testListComputerSearch() {
+		ArrayList<Computer> list = new ArrayList<>();
+		try {
+		list = daoComputer.listAllComputer("test","");
+		assertTrue(list.get(0).getId() == 2 && list.size() == 1);
+		} catch (ExceptionDao | ExceptionModel e) {
+			fail();
+		}
+	}
 }

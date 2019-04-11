@@ -1,11 +1,12 @@
 package com.excilys.computer_database.servlets;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.web.context.AbstractContextLoaderInitializer;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 import com.excilys.computer_database.app.AppConfig;
 
-public abstract class ServletData {
+public class ServletData extends AbstractContextLoaderInitializer{
 	
 	static final String URL_LIST_COMPUTERS = "dashboard";
 	
@@ -14,5 +15,13 @@ public abstract class ServletData {
 	static final String VIEW_LIST_COMPUTERS = "/views/dashboard.jsp";
 	static final String VIEW_ADD_COMPUTERS = "/views/addComputer.jsp";
 	
-	static final GenericApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+	
+	@Override
+	protected WebApplicationContext createRootApplicationContext() {
+		AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+		context.register(AppConfig.class);
+		return context;
+	}
+	
+	
 }

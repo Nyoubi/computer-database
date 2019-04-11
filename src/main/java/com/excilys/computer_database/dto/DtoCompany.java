@@ -9,29 +9,6 @@ public class DtoCompany {
 		this.name = name;
 	}
 	
-	public DtoCompany() {}
-	
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String toString() { 
-	    return "Id: '" + Integer.toString(this.id)
-	    		+ "', Name: '" + this.name  + "'";
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -60,5 +37,27 @@ public class DtoCompany {
 		return true;
 	}
 
+	public DtoCompany() {}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String toString() { 
+	    return "Id: '" + Integer.toString(this.id)
+	    		+ "', Name: '" + this.name  + "'";
+	}
 	
 }

@@ -14,7 +14,7 @@ import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
 import com.excilys.computer_database.util.Util;
 
-public class ComputerMapper {
+public abstract class ComputerMapper {
 	public static Computer resultSetToComputer(ResultSet resultSet) throws SQLException, ExceptionModel{
 		ComputerBuilder computerBuilder = new ComputerBuilder();
 		Integer id = resultSet.getInt("id");

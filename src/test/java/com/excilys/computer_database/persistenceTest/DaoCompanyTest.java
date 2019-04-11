@@ -1,5 +1,6 @@
 package com.excilys.computer_database.persistenceTest;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -23,8 +24,10 @@ import com.excilys.computer_database.persistence.DaoCompany;
 public class DaoCompanyTest {
 
 	static private DaoCompany daoCompany;
+	
 	private Company company;
 	CompanyBuilder companyBuilder;
+	
 	static GenericApplicationContext context;
 	
 	@BeforeAll
@@ -64,5 +67,26 @@ public class DaoCompanyTest {
 		} catch (ExceptionModel|ExceptionDao e) {
 			fail();
 		}
+	}
+
+	@Test
+	public void testDeleteCompany() {
+		Integer created = null;
+		try {
+			created = daoCompany.createCompany(company).get();
+		} catch (ExceptionDao e1) {
+			fail();
+		}
+		try {
+			daoCompany.deleteCompanyById(created);
+		} catch (ExceptionDao e) {
+			fail();
+		}
+		try {
+			assertEquals(daoCompany.findCompanyById(created), Optional.empty());
+		} catch (ExceptionModel | ExceptionDao e) {
+			fail();
+		}
+		daoCompany.resetAutoIncrement(created);		
 	}
 }

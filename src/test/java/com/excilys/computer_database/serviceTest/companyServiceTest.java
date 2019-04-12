@@ -1,5 +1,6 @@
 package com.excilys.computer_database.serviceTest;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -59,9 +60,9 @@ public class companyServiceTest {
 //
 //			companyService.deleteCompany(3);
 //
-//			//assertFalse(companyService.findCompanyById(3).isPresent());
+//			assertFalse(companyService.findCompanyById(3).isPresent());
 //
-//			//companyService.resetAutoIncrement(Integer.valueOf(2));
+//			companyService.resetAutoIncrement(Integer.valueOf(2));
 //
 //		} catch (ExceptionModel|ExceptionDao e) {
 //			fail();
@@ -78,7 +79,6 @@ public class companyServiceTest {
 		
 		try {
 			companyService.checkDataCreateCompany(null);
-			fail();
 		} catch (ExceptionModel|ExceptionDao e) {
 			assertTrue(true);
 		}

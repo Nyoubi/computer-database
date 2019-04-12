@@ -18,7 +18,7 @@ public class AppConfig {
 	@Autowired
     Environment env;
 	
-	@Bean
+	@Bean(destroyMethod = "close")
 	public DataSource DataSource() {
 		 DataSource dataSource = DataSourceBuilder
 				 .create()

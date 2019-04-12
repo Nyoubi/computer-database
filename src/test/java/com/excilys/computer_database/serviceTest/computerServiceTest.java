@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import com.excilys.computer_database.dto.DtoComputerBuilder;
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionInvalidInput;
 import com.excilys.computer_database.exception.ExceptionModel;
+import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.Page;
 import com.excilys.computer_database.persistence.DaoComputer;
 import com.excilys.computer_database.service.ComputerService;
@@ -78,46 +80,57 @@ public class computerServiceTest {
 			daoComputer.resetAutoIncrement(Integer.valueOf(3));
 
 			computerService.showDetails("4").isPresent();
-			fail();
 		} catch (ExceptionModel|ExceptionDao | ExceptionInvalidInput e) {
 			assertTrue(true);
 		}
 	}
 	
 	@Test
-	public void testCheckCreateComputer() {
+	public void testCheckDataComputer() {
 		try {
-			computerService.checkDataCreateComputer("test","1996-02-01",null,1);
+			computerService.checkDataComputer("test","1996-02-01",null,1);
 			assertTrue(true);
 		} catch (ExceptionModel|ExceptionDao e) {
 			fail();
 		}
 
 		try {
-			computerService.checkDataCreateComputer(null,null,null,0);
-			fail();
+			computerService.checkDataComputer(null,null,null,0);
 		} catch (ExceptionModel|ExceptionDao e) {
 			assertTrue(true);
 		}
 		
 		try {
-			computerService.checkDataCreateComputer("test",null,"1995-12-12",0);
-			fail();
+			computerService.checkDataComputer("test",null,"1995-12-12",0);
 		} catch (ExceptionModel|ExceptionDao e) {
 			assertTrue(true);
 		}
 		
 		try {
-			computerService.checkDataCreateComputer("test","1995-12-12","1995-10-10",-1);
-			fail();
+			computerService.checkDataComputer("test","1995-12-12","1995-10-10",-1);
 		} catch (ExceptionModel|ExceptionDao e) {
 			assertTrue(true);
 		}
 		
 		try {
-			computerService.checkDataCreateComputer("test","1995-10-10","1995-12-12",-1);
-			fail();
+			computerService.checkDataComputer("test","1995-10-10","1995-12-12",-1);
 		} catch (ExceptionModel|ExceptionDao e) {
+			assertTrue(true);
+		}
+	}
+	
+	@Test
+	public void testCheckId() {
+		try {
+			assertTrue(computerService.checkId(1)==1);
+		} catch (ExceptionModel e) {
+			fail();
+		}
+		
+		try {
+			computerService.checkId(null);
+			fail();
+		} catch (ExceptionModel e) {
 			assertTrue(true);
 		}
 	}
@@ -146,47 +159,20 @@ public class computerServiceTest {
 	}
 	
 	@Test
-	public void testCheckUpdateComputer() {
-		try {
-			computerService.checkDataUpdateComputer(1,"test","1996-02-01",null,1);
-		} catch (ExceptionModel|ExceptionDao e) {
-			fail();
-		}
-		
-		try {
-			computerService.checkDataUpdateComputer(1,null,null,null,0);
-			fail();
-		} catch (ExceptionModel|ExceptionDao e) {
-			assertTrue(true);
-		}
-		
-		try {
-			computerService.checkDataUpdateComputer(1,"test",null,"1995-12-12",0);
-			fail();
-		} catch (ExceptionModel|ExceptionDao e) {
-			assertTrue(true);
-		}
-		
-		try {
-			computerService.checkDataUpdateComputer(1,"test","1995-12-10","1995-10-12",0);
-			fail();
-		} catch (ExceptionModel|ExceptionDao e) {
-			assertTrue(true);
-		}
-		
-		try {
-			computerService.checkDataUpdateComputer(null,"test","1995-12-12","1995-12-13",0);
-			fail();
-		} catch (ExceptionModel|ExceptionDao e) {
-			assertTrue(true);
-		}
-		
-		try {
-			computerService.checkDataUpdateComputer(1,"test","1996-02-01",null,5);
-			fail();
-		} catch (ExceptionModel|ExceptionDao e) {
-			assertTrue(true);
-		}
+	public void testGetOrder() {
+		assertTrue(computerService.getOrder(null) == "");
+		assertTrue(computerService.getOrder("nameAsc") == "ORDER BY c.name");
 	}
 	
+	@Test
+	public void testUpdateComputer() {
+		try {
+			computerService.updateComputer(1, "testUpdate", null, null, 2);
+			assertTrue(computerService.showDetails("1").get().getCompanyId()==2);
+			assertTrue(computerService.showDetails("1").get().getName().equals("testUpdate"));
+			computerService.updateComputer(1, "Computer 1", null, null, 1);
+		} catch (ExceptionDao | ExceptionModel | ExceptionInvalidInput e) {
+			fail();
+		}
+	}
 }

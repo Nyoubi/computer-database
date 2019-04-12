@@ -2,6 +2,7 @@ package com.excilys.computer_database.service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,7 +18,6 @@ import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Company;
-import com.excilys.computer_database.model.CompanyBuilder;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
 import com.excilys.computer_database.model.Page;
@@ -38,12 +38,12 @@ public class ComputerService {
 	public List<DtoComputer> listAllComputer(String order)  throws ExceptionDao, ExceptionModel{
 		return daoComputer.listAllComputer(order).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
 	}
-
+	
 	public List<DtoComputer> listAllComputer(String search, String order)  throws ExceptionDao, ExceptionModel{
 		return daoComputer.listAllComputer(search,order).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
 
 	}
-
+	
 	public Optional<DtoComputer> showDetails(String id)  throws ExceptionDao, ExceptionModel, ExceptionInvalidInput {
 		Optional<Integer> ident = Util.parseInt(id);
 		if (ident.isPresent()) {
@@ -69,13 +69,13 @@ public class ComputerService {
 	}
 
 	public void createComputer(String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
-		Computer computer = checkDataCreateComputer(name, introduced, discontinued, companyId);
+		Computer computer = checkDataComputer(name, introduced, discontinued, companyId).build();
 		daoComputer.createComputer(computer);
 	}
 
 
 	public void updateComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
-		Computer computer = checkDataUpdateComputer(id, name, introduced, discontinued, companyId);
+		Computer computer = checkDataComputer(name, introduced, discontinued, companyId).setId(checkId(id)).build();
 		daoComputer.updateComputer(computer);
 	}
 
@@ -102,7 +102,7 @@ public class ComputerService {
 		return page;		
 	}
 
-	private String getOrder(String order) {
+	public String getOrder(String order) {
 		String orderBy = "";
 
 		if (order == null) {
@@ -116,24 +116,36 @@ public class ComputerService {
 		}		
 		return orderBy;
 	}
-
-	public Computer checkDataCreateComputer(String name, String introduced, String discontinued, Integer companyId) throws ExceptionModel, ExceptionDao {
-		if (name == null || name == "") {
-			throw new ExceptionModel("Failed to create computer : Invalid name");
+	
+	public Integer checkId(Integer id) throws ExceptionModel {
+		if (id == null) {
+			throw new ExceptionModel("Failed to check computer : Incorrect id");
 		}
-
+		return id;
+	}
+	
+	public void checkName(String name) throws ExceptionModel {
+		if (name == null || name == "") {
+			throw new ExceptionModel("Failed to check computer : Invalid name");
+		}
+	}
+	
+	public ArrayList<Optional<Timestamp>> checkDate(String introduced, String discontinued) throws ExceptionModel {
 		Optional<Timestamp> OptIntroduced = Util.stringToTimestamp(introduced);
 		Optional<Timestamp> OptDiscontinued = Util.stringToTimestamp(discontinued);
-		
 
 		if (!OptIntroduced.isPresent() && OptDiscontinued.isPresent()) {
-			throw new ExceptionModel("Failed to create computer : Discontinued but not introduced");
+			throw new ExceptionModel("Failed to check computer : Discontinued but not introduced");
 		}
 		if (OptIntroduced.isPresent() && OptDiscontinued.isPresent()
 				&& OptIntroduced.get().after(OptDiscontinued.get())) {
-			throw new ExceptionModel("Failed to create computer : Introduced can't be after discontinued date");
+			throw new ExceptionModel("Failed to check computer : Introduced can't be after discontinued date");
 		}
 		
+		return new ArrayList<Optional<Timestamp>>(Arrays.asList(OptIntroduced,OptDiscontinued));
+	}
+	
+	public Optional<Company> checkCompany(Integer companyId) throws ExceptionModel, ExceptionDao {
 		Optional<DtoCompany> dtoCompany = companyService.findCompanyById(companyId);
 		Optional<Company> company = Optional.empty();
 		if (dtoCompany.isPresent()) {
@@ -145,46 +157,20 @@ public class ComputerService {
 			throw new ExceptionModel("This company doesn't exist");
 		}
 		
-		ComputerBuilder computerBuilder = new ComputerBuilder().setName(name)
-				.setIntroduced(OptIntroduced.isPresent() ? OptIntroduced.get() : null)
-				.setDiscontinued(OptDiscontinued.isPresent() ? OptDiscontinued.get() : null)
-				.setCompany(company.isPresent() ? company.get() : null)
-				.setId(null);
-		return computerBuilder.build();
+		return company;
 	}
 
-	public Computer checkDataUpdateComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionModel, ExceptionDao {
-		if (name == null || name == "") {
-			throw new ExceptionModel("Failed to create update : Invalid new name");
-		}
-
-		Optional<Timestamp> OptIntroduced = Util.stringToTimestamp(introduced);
-		Optional<Timestamp> OptDiscontinued = Util.stringToTimestamp(discontinued);
-
-		if (!OptIntroduced.isPresent() && OptDiscontinued.isPresent()) {
-			throw new ExceptionModel("Failed to update computer : Discontinued but not introduced");
-		}
-		if (OptIntroduced.isPresent() && OptDiscontinued.isPresent()
-				&& OptIntroduced.get().after(OptDiscontinued.get())) {
-			throw new ExceptionModel("Failed to update computer : Introduced can't be after discontinued date");
-		}
-
-		if (id == null) {
-			throw new ExceptionModel("Failed to update computer : Incorrect id");
-		}
+	public ComputerBuilder checkDataComputer(String name, String introduced, String discontinued, Integer companyId) throws ExceptionModel, ExceptionDao {
+		checkName(name);
+		ArrayList<Optional<Timestamp>> date = checkDate(introduced,discontinued);
+		Optional<Company> company = checkCompany(companyId);
 		
-		Optional<DtoCompany> company = companyService.findCompanyById(companyId);
-		if (!company.isPresent()) {
-			throw new ExceptionModel("Failed to update computer : Company id doesn't exist");
-		}
-		
-		ComputerBuilder ComputerBuilder = new ComputerBuilder().setId(id)
-				.setName(name)
-				.setIntroduced(OptIntroduced.isPresent() ? OptIntroduced.get() : null)
-				.setDiscontinued(OptDiscontinued.isPresent() ? OptDiscontinued.get() : null)
-				.setCompany(new CompanyBuilder().setId(company.get().getId()).setName(company.get().getName()).build());
-		
-		return ComputerBuilder.build();
+		ComputerBuilder computerBuilder = new ComputerBuilder().setName(name)
+				.setIntroduced(date.get(0).isPresent() ? date.get(0).get() : null)
+				.setDiscontinued(date.get(1).isPresent() ? date.get(1).get() : null)
+				.setCompany(company.isPresent() ? company.get() : null)
+				.setId(null);
+		return computerBuilder;
 	}
 
 	public PageBuilder<DtoComputer> checkPage(String url, List<DtoComputer> content, Integer index, Integer size, String search, String order) throws ExceptionModel {

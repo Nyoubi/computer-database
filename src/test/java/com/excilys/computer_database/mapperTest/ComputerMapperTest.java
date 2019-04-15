@@ -38,7 +38,7 @@ public class ComputerMapperTest {
 			Mockito.doReturn(1).when(rs).getInt("cId");
 			Mockito.doReturn("Company name").when(rs).getString("cName");
 			computer = ComputerMapper.resultSetToComputer(rs);
-		} catch (SQLException |ExceptionModel e) {
+		} catch (SQLException e) {
 			fail();
 		}
 

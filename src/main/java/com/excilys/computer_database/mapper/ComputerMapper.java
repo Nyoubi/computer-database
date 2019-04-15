@@ -5,23 +5,26 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Optional;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.dto.DtoComputer;
 import com.excilys.computer_database.dto.DtoComputerBuilder;
-import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
 import com.excilys.computer_database.util.Util;
 
-public abstract class ComputerMapper {
-	public static Computer resultSetToComputer(ResultSet resultSet) throws SQLException, ExceptionModel{
+public class ComputerMapper implements RowMapper<Computer>{
+	public static Computer resultSetToComputer(ResultSet resultSet) throws SQLException{
 		ComputerBuilder computerBuilder = new ComputerBuilder();
 		Integer id = resultSet.getInt("id");
 		String name = resultSet.getString("name");
 		Timestamp introduced = resultSet.getTimestamp("introduced");
 		Timestamp discontinued = resultSet.getTimestamp("discontinued");
 		Company company = CompanyMapper.resultSetToCompany(resultSet);
+		
+		
 		Computer computer = computerBuilder.setId(id)
 				.setName(name)
 				.setIntroduced(introduced)
@@ -47,4 +50,13 @@ public abstract class ComputerMapper {
 		}
 		return dtoComputerBuilder.build();
 	}
+
+	@Override
+	  public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
+	    return resultSetToComputer(rs);
+	  }
+	
+	
+	
+	
 }

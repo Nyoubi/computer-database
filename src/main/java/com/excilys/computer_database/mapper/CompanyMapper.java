@@ -4,12 +4,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import com.excilys.computer_database.dto.DtoCompany;
 import com.excilys.computer_database.dto.DtoCompanyBuilder;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.CompanyBuilder;
 
-public abstract class CompanyMapper {
+public class CompanyMapper implements RowMapper<Company>{
+	
 	public static Company resultSetToCompany(ResultSet resultSet) throws SQLException{
 		Company company = null;
 		CompanyBuilder companyBuilder = new CompanyBuilder();
@@ -48,4 +51,9 @@ public abstract class CompanyMapper {
 		return Optional.of(company);
 		}
 	}
+	
+	@Override
+	  public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
+	    return resultSetToCompany(rs);
+	  }
 }

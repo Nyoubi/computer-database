@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,6 @@ import com.excilys.computer_database.dto.DtoComputerBuilder;
 import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.exception.ExceptionInvalidInput;
 import com.excilys.computer_database.exception.ExceptionModel;
-import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.Page;
 import com.excilys.computer_database.persistence.DaoComputer;
 import com.excilys.computer_database.service.ComputerService;

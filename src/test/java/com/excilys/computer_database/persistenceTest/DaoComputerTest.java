@@ -18,7 +18,6 @@ import org.springframework.context.support.GenericApplicationContext;
 
 import com.excilys.computer_database.app.AppConfigTest;
 import com.excilys.computer_database.exception.ExceptionDao;
-import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
@@ -29,25 +28,25 @@ import com.excilys.computer_database.util.Util;
 public class DaoComputerTest {
 
 	static private DaoComputer daoComputer;
-	
+
 	private Computer computer;
 	private Computer computer2;
 	ComputerBuilder computerBuilder;
-	
+
 	static GenericApplicationContext context;
-	
-	
+
+
 	@BeforeAll
 	public static void start() {
 		context = new AnnotationConfigApplicationContext(AppConfigTest.class);
 		daoComputer = context.getBean(DaoComputer.class);
 	}
-	
+
 	@AfterAll
 	public static void end() {
 		context.close();
 	}
-	
+
 	@BeforeEach
 	public void setUp() {
 		computerBuilder = new ComputerBuilder().setName("Computer 1")
@@ -56,14 +55,11 @@ public class DaoComputerTest {
 				.setDiscontinued(Util.stringToTimestamp(("2000-12-13")).get())
 				.setCompany(new Company(1, "Company 1"));
 
-		try {
-			computer = computerBuilder.build();
-			computer2 = computerBuilder.build();
-			computer.setId(null);
-			computer2.setId(null);
-		} catch (ExceptionModel e) {
-			fail();
-		}
+		computer = computerBuilder.build();
+		computer2 = computerBuilder.build();
+		computer.setId(null);
+		computer2.setId(null);
+
 	}
 
 	@Test
@@ -79,7 +75,7 @@ public class DaoComputerTest {
 		computer2.setId(test);
 		try {
 			computer = daoComputer.findComputerById(test).get();
-		} catch (ExceptionModel | ExceptionDao e1) {
+		} catch (ExceptionDao e1) {
 			fail();
 		}
 		assertNotNull(computer);
@@ -114,7 +110,7 @@ public class DaoComputerTest {
 		}
 		try {
 			computer = daoComputer.findComputerById(created).get();
-		} catch (ExceptionModel | ExceptionDao e1) {
+		} catch (ExceptionDao e1) {
 			fail();
 		}
 
@@ -147,7 +143,7 @@ public class DaoComputerTest {
 		}
 		try {
 			assertEquals(daoComputer.findComputerById(created), Optional.empty());
-		} catch (ExceptionModel | ExceptionDao e) {
+		} catch (ExceptionDao e) {
 			fail();
 		}
 		daoComputer.resetAutoIncrement(created);		
@@ -157,7 +153,7 @@ public class DaoComputerTest {
 	public void testFindComputerById() {
 		try {
 			computer = daoComputer.findComputerById(1).get();
-		} catch (ExceptionModel | ExceptionDao e1) {
+		} catch (ExceptionDao e1) {
 			fail();
 		}
 
@@ -169,51 +165,51 @@ public class DaoComputerTest {
 		computer2.setCompany(new Company(1,"Company 1"));
 		assertEquals(computer, computer2);	
 	}
-	
+
 	@Test
 	public void testListComputerOrder() {
 		ArrayList<Computer> list = new ArrayList<>();
 		try {
-		list = daoComputer.listAllComputer("");
-		assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
-		
-		list = daoComputer.listAllComputer(orderEnum.NAME_ASC.getValue());
-		assertTrue(list.get(1).getId() == 3 && list.get(2).getName().equals("test"));
-		
-		list = daoComputer.listAllComputer(orderEnum.NAME_DESC.getValue());
-		assertTrue(list.get(0).getId() == 2 	&& list.get(1).getName().equals("Computer 3"));
-		
-		list = daoComputer.listAllComputer(orderEnum.INTRO_ASC.getValue());
-		assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
-		
-		list = daoComputer.listAllComputer(orderEnum.INTRO_DESC.getValue());
-		assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
+			list = daoComputer.listAllComputer("");
+			assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
 
-		
-		list = daoComputer.listAllComputer(orderEnum.DISCON_ASC.getValue());
-		assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
-		
-		list = daoComputer.listAllComputer(orderEnum.DISCON_DESC.getValue());
-		assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
-		
-		list = daoComputer.listAllComputer(orderEnum.COMPANY_ASC.getValue());
-		assertTrue(list.get(0).getCompany().getId() == 1 && list.get(1).getCompany().getId() == 1);
-		
-		list = daoComputer.listAllComputer(orderEnum.COMPANY_DESC.getValue());
-		assertTrue(list.get(0).getId() == 2);
-		
-		} catch (ExceptionModel | ExceptionDao e) {
+			list = daoComputer.listAllComputer(orderEnum.NAME_ASC.getValue());
+			assertTrue(list.get(1).getId() == 3 && list.get(2).getName().equals("test"));
+
+			list = daoComputer.listAllComputer(orderEnum.NAME_DESC.getValue());
+			assertTrue(list.get(0).getId() == 2 	&& list.get(1).getName().equals("Computer 3"));
+
+			list = daoComputer.listAllComputer(orderEnum.INTRO_ASC.getValue());
+			assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
+
+			list = daoComputer.listAllComputer(orderEnum.INTRO_DESC.getValue());
+			assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
+
+
+			list = daoComputer.listAllComputer(orderEnum.DISCON_ASC.getValue());
+			assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
+
+			list = daoComputer.listAllComputer(orderEnum.DISCON_DESC.getValue());
+			assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
+
+			list = daoComputer.listAllComputer(orderEnum.COMPANY_ASC.getValue());
+			assertTrue(list.get(0).getCompany().getId() == 1 && list.get(1).getCompany().getId() == 1);
+
+			list = daoComputer.listAllComputer(orderEnum.COMPANY_DESC.getValue());
+			assertTrue(list.get(0).getId() == 2);
+
+		} catch (ExceptionDao e) {
 			fail();
 		}
 	}
-	
+
 	@Test
 	public void testListComputerSearch() {
 		ArrayList<Computer> list = new ArrayList<>();
 		try {
-		list = daoComputer.listAllComputer("test","");
-		assertTrue(list.get(0).getId() == 2 && list.size() == 1);
-		} catch (ExceptionDao | ExceptionModel e) {
+			list = daoComputer.listAllComputer("test","");
+			assertTrue(list.get(0).getId() == 2 && list.size() == 1);
+		} catch (ExceptionDao e) {
 			fail();
 		}
 	}

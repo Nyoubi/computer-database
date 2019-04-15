@@ -82,9 +82,9 @@ public class ControlerCli {
 
 	private void deleteAndShowView(Integer id) {
 		try {
-			companyService.deleteCompany(id);
+			//companyService.deleteCompany(id);
 			DeleteCompanyView.exec(true);
-		} catch (ExceptionDao e) {
+		} catch (Exception /*ExceptionDao*/ e) {
 			DeleteCompanyView.exec(false);
 		}
 	}

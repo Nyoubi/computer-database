@@ -9,11 +9,11 @@ import com.excilys.computer_database.controler.ControlerCli;
 
 public class App {
 	
-	private static Logger log= LoggerFactory.getLogger(App.class);
+	private static Logger logger = LoggerFactory.getLogger(App.class); 
 
 	public static void main( String[] args )
 	{
-		log.info("App starting");
+		logger.info("App starting");
 		GenericApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		ControlerCli controler = context.getBean(ControlerCli.class);
 		controler.run();

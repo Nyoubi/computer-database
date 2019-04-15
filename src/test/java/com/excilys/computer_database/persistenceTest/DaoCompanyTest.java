@@ -16,7 +16,6 @@ import org.springframework.context.support.GenericApplicationContext;
 
 import com.excilys.computer_database.app.AppConfigTest;
 import com.excilys.computer_database.exception.ExceptionDao;
-import com.excilys.computer_database.exception.ExceptionModel;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.CompanyBuilder;
 import com.excilys.computer_database.persistence.DaoCompany;
@@ -64,7 +63,7 @@ public class DaoCompanyTest {
 
 			assertFalse(optCompany.isPresent());
 
-		} catch (ExceptionModel|ExceptionDao e) {
+		} catch (ExceptionDao e) {
 			fail();
 		}
 	}
@@ -84,7 +83,7 @@ public class DaoCompanyTest {
 		}
 		try {
 			assertEquals(daoCompany.findCompanyById(created), Optional.empty());
-		} catch (ExceptionModel | ExceptionDao e) {
+		} catch (ExceptionDao e) {
 			fail();
 		}
 		daoCompany.resetAutoIncrement(created);		

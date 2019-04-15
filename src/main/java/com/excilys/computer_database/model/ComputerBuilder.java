@@ -2,8 +2,6 @@ package com.excilys.computer_database.model;
 
 import java.sql.Timestamp;
 
-import com.excilys.computer_database.exception.ExceptionModel;
-
 public class ComputerBuilder {
 	private Integer id;
 	private String name;
@@ -11,7 +9,7 @@ public class ComputerBuilder {
 	private Timestamp discontinued;
 	private Company company;
 	
-	public Computer build() throws ExceptionModel{
+	public Computer build(){
 		Computer computer = new Computer();
 
 		computer.setId(this.id);

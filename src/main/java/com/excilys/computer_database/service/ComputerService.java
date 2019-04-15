@@ -35,16 +35,16 @@ public class ComputerService {
 	@Autowired
 	private CompanyService companyService;
 
-	public List<DtoComputer> listAllComputer(String order)  throws ExceptionDao, ExceptionModel{
+	public List<DtoComputer> listAllComputer(String order)  throws ExceptionDao{
 		return daoComputer.listAllComputer(order).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
 	}
 	
-	public List<DtoComputer> listAllComputer(String search, String order)  throws ExceptionDao, ExceptionModel{
+	public List<DtoComputer> listAllComputer(String search, String order)  throws ExceptionDao{
 		return daoComputer.listAllComputer(search,order).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
 
 	}
 	
-	public Optional<DtoComputer> showDetails(String id)  throws ExceptionDao, ExceptionModel, ExceptionInvalidInput {
+	public Optional<DtoComputer> showDetails(String id)  throws ExceptionDao, ExceptionInvalidInput {
 		Optional<Integer> ident = Util.parseInt(id);
 		if (ident.isPresent()) {
 			Optional<Computer> computer = daoComputer.findComputerById(ident.get());
@@ -68,14 +68,14 @@ public class ComputerService {
 		}
 	}
 
-	public void createComputer(String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
-		Computer computer = checkDataComputer(name, introduced, discontinued, companyId).build();
+	public void createComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
+		Computer computer = checkDataComputer(id, name, introduced, discontinued, companyId).build();
 		daoComputer.createComputer(computer);
 	}
 
 
 	public void updateComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
-		Computer computer = checkDataComputer(name, introduced, discontinued, companyId).setId(checkId(id)).build();
+		Computer computer = checkDataComputer(checkId(id), name, introduced, discontinued, companyId).build();
 		daoComputer.updateComputer(computer);
 	}
 
@@ -160,7 +160,7 @@ public class ComputerService {
 		return company;
 	}
 
-	public ComputerBuilder checkDataComputer(String name, String introduced, String discontinued, Integer companyId) throws ExceptionModel, ExceptionDao {
+	public ComputerBuilder checkDataComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionModel, ExceptionDao {
 		checkName(name);
 		ArrayList<Optional<Timestamp>> date = checkDate(introduced,discontinued);
 		Optional<Company> company = checkCompany(companyId);
@@ -169,7 +169,7 @@ public class ComputerService {
 				.setIntroduced(date.get(0).isPresent() ? date.get(0).get() : null)
 				.setDiscontinued(date.get(1).isPresent() ? date.get(1).get() : null)
 				.setCompany(company.isPresent() ? company.get() : null)
-				.setId(null);
+				.setId(id);
 		return computerBuilder;
 	}
 

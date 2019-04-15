@@ -1,6 +1,5 @@
 package com.excilys.computer_database.persistence;
 
-import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
 import java.util.TimeZone;
@@ -9,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computer_database.exception.ExceptionDao;
@@ -53,26 +50,19 @@ public class DaoComputer {
 		return computers;
 	}
 
-	public Optional<Integer> createComputer(Computer computer) throws ExceptionDao {
+	public void createComputer(Computer computer) throws ExceptionDao {
 
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		
-		Integer lineAffected = jdbcTemplate.update(
-				connection -> {
-					PreparedStatement stmt = connection.prepareStatement(CREATE);
-					stmt.setInt(1, computer.getId());
-					stmt.setString(2, computer.getName());
-					stmt.setTimestamp(3, computer.getIntroduced());
-					stmt.setTimestamp(4, computer.getDiscontinued());
-					stmt.setInt(5, computer.getId());
-					return stmt;
-				}, keyHolder);
+		Integer lineAffected = jdbcTemplate.update(CREATE, new Object[] {
+				computer.getId(),
+				computer.getName(), 
+				computer.getIntroduced(), 
+				computer.getDiscontinued(), 
+				computer.getCompany().getId()
+		});
 
-		if( lineAffected == 0 ) {
+		if(lineAffected == 0) {
 			logger.error("Error when creating the computer " + computer.getName());
 			throw new ExceptionDao("Couldn't insert "+ computer.getName() );
-		} else {
-			return Optional.ofNullable(keyHolder.getKey().intValue());
 		}
 	}
 
@@ -83,19 +73,19 @@ public class DaoComputer {
 				computer.getDiscontinued(), 
 				computer.getCompany().getId(), 
 				computer.getId()
-			});
-	    if( lineAffected == 0 ) {
-	    	logger.error("Error when updating the computer.");
-	    	throw new ExceptionDao("Couldn't update "+ computer.getName() );
-	    }
+		});
+		if(lineAffected == 0) {
+			logger.error("Error when updating the computer.");
+			throw new ExceptionDao("Couldn't update "+ computer.getName() );
+		}
 	}
 
 	public void deleteComputerById(Integer id)  throws ExceptionDao {
 		Integer lineAffected = jdbcTemplate.update(DELETE_ID, new Object[] {id});
-	    if( lineAffected == 0 ) {
-	    	logger.error("Error when deleting the computer.");
-	    	throw new ExceptionDao("Couldn't delete computer "+ id );
-	    }
+		if( lineAffected == 0 ) {
+			logger.error("Error when deleting the computer.");
+			throw new ExceptionDao("Couldn't delete computer "+ id );
+		}
 	}
 
 	public void resetAutoIncrement(Integer value) {

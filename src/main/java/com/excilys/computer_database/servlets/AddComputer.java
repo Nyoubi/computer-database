@@ -46,7 +46,7 @@ public class AddComputer extends HttpServlet{
 		companyId = request.getParameter("companyId");
 		
 		try {
-			this.computerService.createComputer(name, introduced, discontinued, Integer.valueOf(companyId));
+			this.computerService.createComputer(null, name, introduced, discontinued, Integer.valueOf(companyId));
 			response.sendRedirect("dashboard");
 		} catch (ExceptionDao | ExceptionModel e) {
 			errorRedirect(request,response,e.getMessage());

@@ -25,8 +25,8 @@ public class AppConfig {
 				 .create()
 				 .url(env.getProperty("jdbcUrl"))
 				 .driverClassName(env.getProperty("driverClassName"))
-				 .username(env.getProperty("login"))
-				 .password(env.getProperty("password"))
+				 .username(env.getProperty("db.username"))
+				 .password(env.getProperty("db.password"))
 				 .build();
 		 return dataSource;
 	}

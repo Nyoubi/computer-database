@@ -74,7 +74,7 @@ public class EditComputer extends HttpServlet{
 			} else {
 				response.sendRedirect(ServletData.URL_LIST_COMPUTERS);
 			}
-		} catch (ExceptionDao | ExceptionModel | ExceptionInvalidInput e) {
+		} catch (ExceptionDao | ExceptionInvalidInput e) {
 			errorRedirect(request,response,e.getMessage());
 		}
 		this.getServletContext()

@@ -39,7 +39,7 @@ public class computerServiceTest {
 		List<DtoComputer> computers = new ArrayList<>();
 		try {
 			computers = computerService.listAllComputer("");
-		} catch (ExceptionDao | ExceptionModel e) {
+		} catch (ExceptionDao e) {
 			fail();
 		}
 		assertTrue((int)computers.size() == 3);
@@ -50,7 +50,7 @@ public class computerServiceTest {
 		List<DtoComputer> computers = new ArrayList<>();
 		try {
 			computers = computerService.listAllComputer("test","");
-		} catch (ExceptionDao | ExceptionModel e) {
+		} catch (ExceptionDao e) {
 			fail();
 		}
 		assertTrue((int)computers.size() == 1);
@@ -64,7 +64,7 @@ public class computerServiceTest {
 			DtoComputer computer = computerService.showDetails("2").get();
 			assertEquals(computer.toString(),computer2.toString());
 
-		} catch (ExceptionModel|ExceptionDao | ExceptionInvalidInput e) {
+		} catch (ExceptionDao | ExceptionInvalidInput e) {
 			fail();
 		}
 	}
@@ -72,7 +72,7 @@ public class computerServiceTest {
 	@Test
 	public void testDeleteComputer() {
 		try {
-			computerService.createComputer("delete", "", "", 1);
+			computerService.createComputer(4,"delete", "", "", 1);
 			computerService.deleteComputer("4");
 
 			daoComputer.resetAutoIncrement(Integer.valueOf(3));
@@ -86,32 +86,38 @@ public class computerServiceTest {
 	@Test
 	public void testCheckDataComputer() {
 		try {
-			computerService.checkDataComputer("test","1996-02-01",null,1);
+			computerService.checkDataComputer(1,"test","1996-02-01",null,1);
 			assertTrue(true);
 		} catch (ExceptionModel|ExceptionDao e) {
 			fail();
 		}
 
 		try {
-			computerService.checkDataComputer(null,null,null,0);
+			computerService.checkDataComputer(null, null,null,null,0);
 		} catch (ExceptionModel|ExceptionDao e) {
 			assertTrue(true);
 		}
 		
 		try {
-			computerService.checkDataComputer("test",null,"1995-12-12",0);
+			computerService.checkDataComputer(1, null,null,null,0);
 		} catch (ExceptionModel|ExceptionDao e) {
 			assertTrue(true);
 		}
 		
 		try {
-			computerService.checkDataComputer("test","1995-12-12","1995-10-10",-1);
+			computerService.checkDataComputer(1,"test",null,"1995-12-12",0);
 		} catch (ExceptionModel|ExceptionDao e) {
 			assertTrue(true);
 		}
 		
 		try {
-			computerService.checkDataComputer("test","1995-10-10","1995-12-12",-1);
+			computerService.checkDataComputer(1,"test","1995-12-12","1995-10-10",-1);
+		} catch (ExceptionModel|ExceptionDao e) {
+			assertTrue(true);
+		}
+		
+		try {
+			computerService.checkDataComputer(1,"test","1995-10-10","1995-12-12",-1);
 		} catch (ExceptionModel|ExceptionDao e) {
 			assertTrue(true);
 		}

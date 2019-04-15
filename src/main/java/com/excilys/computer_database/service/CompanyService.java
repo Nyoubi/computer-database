@@ -46,7 +46,7 @@ public class CompanyService {
 //	}
 	
 	public void createCompany(String name) throws ExceptionDao, ExceptionModel {
-		Company company =checkDataCreateCompany(name);
+		Company company = checkDataCreateCompany(name);
 		daoCompany.createCompany(company);
 	}
 	

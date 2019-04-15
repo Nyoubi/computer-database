@@ -50,16 +50,15 @@ public class DaoComputerTest {
 
 	@BeforeEach
 	public void setUp() {
-		computerBuilder = new ComputerBuilder().setName("Computer 1")
-				.setId(0)
-				.setIntroduced(Util.stringToTimestamp(("2000-12-12")).get())
-				.setDiscontinued(Util.stringToTimestamp(("2000-12-13")).get())
+		computerBuilder = new ComputerBuilder().setName("Computer 4")
+				.setId(4)
+				.setIntroduced(Util.stringToTimestamp(("2000-01-01")).get())
+				.setDiscontinued(Util.stringToTimestamp(("2000-01-06")).get())
 				.setCompany(new Company(1, "Company 1"));
 
 		computer = computerBuilder.build();
+		computerBuilder.setId(0).setName("Computer 1");
 		computer2 = computerBuilder.build();
-		computer.setId(4);
-		computer2.setId(4);
 
 	}
 
@@ -136,8 +135,8 @@ public class DaoComputerTest {
 		assertNotNull(computer);
 		computer2.setId(1);
 		computer2.setName("Computer 1");
-		computer2.setIntroduced(Util.stringToTimestamp(("2000-12-12")).get());
-		computer2.setDiscontinued(Util.stringToTimestamp(("2000-12-13")).get());
+		computer2.setIntroduced(Util.stringToTimestamp(("2000-01-01")).get());
+		computer2.setDiscontinued(Util.stringToTimestamp(("2000-01-06")).get());
 		computer2.setCompany(new Company(1,"Company 1"));
 		assertEquals(computer, computer2);	
 	}

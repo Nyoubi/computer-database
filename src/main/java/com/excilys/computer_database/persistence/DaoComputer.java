@@ -1,5 +1,6 @@
 package com.excilys.computer_database.persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.TimeZone;
@@ -7,6 +8,7 @@ import java.util.TimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -23,7 +25,7 @@ public class DaoComputer {
 	private final String SELECT_ID = SELECT_ALL + "WHERE c.id=? ";
 	private final String UPDATE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 	private final String DELETE_ID = "DELETE FROM computer WHERE id=?";
-	private final String CREATE = "INSERT INTO computer (name, introduced, discontinued,company_id) VALUES (?,?,?,?)";
+	private final String CREATE = "INSERT INTO computer (id, name, introduced, discontinued,company_id) VALUES (?,?,?,?,?)";
 	private final String ALTER_AUTO_INCREMENTE = "ALTER TABLE computer AUTO_INCREMENT = ?";
 	private static Logger logger = LoggerFactory.getLogger(DaoComputer.class); 
 
@@ -36,8 +38,12 @@ public class DaoComputer {
 	}
 
 	public Optional<Computer> findComputerById(Integer id) {
-		Computer computer = jdbcTemplate.queryForObject(SELECT_ID, new Object[]{id} ,new ComputerMapper());
-		return Optional.ofNullable(computer);
+		try {
+			Computer computer = jdbcTemplate.queryForObject(SELECT_ID, new Object[]{id} ,new ComputerMapper());
+			return Optional.of(computer);
+		} catch (EmptyResultDataAccessException e) {
+			return Optional.empty();
+		}
 	}
 
 	public List<Computer> listAllComputer(String order) {
@@ -46,8 +52,13 @@ public class DaoComputer {
 	}
 
 	public List<Computer> listAllComputer(String search, String order) {
-		List<Computer> computers = jdbcTemplate.query(SELECT_NAME, new Object[]{search,search} ,new ComputerMapper());
-		return computers;
+		try {
+			List<Computer> computers = jdbcTemplate.query(SELECT_NAME + order, new Object[]{"%"+search+"%","%"+search+"%"} ,new ComputerMapper());
+			return computers;
+		} catch (EmptyResultDataAccessException e) {
+			return new ArrayList<Computer>();
+		}
+
 	}
 
 	public void createComputer(Computer computer) throws ExceptionDao {

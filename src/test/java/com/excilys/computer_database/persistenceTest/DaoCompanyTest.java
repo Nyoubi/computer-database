@@ -1,9 +1,7 @@
 package com.excilys.computer_database.persistenceTest;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +13,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.GenericApplicationContext;
 
 import com.excilys.computer_database.app.AppConfigTest;
-import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.CompanyBuilder;
 import com.excilys.computer_database.persistence.DaoCompany;

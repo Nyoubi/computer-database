@@ -91,14 +91,12 @@ public class ComputerService {
 		} else {
 			if ("".equals(orderBy)) {
 				result = listAllComputer(search,"");
-
 			} else {
 				result = listAllComputer(search,orderBy);
 			}
 		}
 		PageBuilder<DtoComputer> builder = checkPage(url,result,index,size,search,order);
 		Page<DtoComputer> page = builder.build();
-
 		return page;		
 	}
 

@@ -1,8 +1,5 @@
 package com.excilys.computer_database.persistence;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.TimeZone;
@@ -10,9 +7,8 @@ import java.util.TimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.computer_database.exception.ExceptionDao;
@@ -24,7 +20,7 @@ import com.excilys.computer_database.model.Company;
 public class DaoCompany {
 	
 	private final static String SELECT_ALL = "SELECT id as cId, name as cName FROM company ";
-	private final static String SELECT_ID = SELECT_ALL + "WHERE id=? ";
+	private final static String SELECT_ID = SELECT_ALL + "WHERE id= ? ";
 	private final static String DELETE_ID = "DELETE FROM company WHERE id = ? ";
 	private final static String DELETE_COMPUTER_ID = "DELETE FROM computer WHERE company_id = ? ";
 	private final String CREATE = "INSERT INTO company (name) VALUES (?)";
@@ -41,8 +37,12 @@ public class DaoCompany {
 	}
 	
 	public Optional<Company> findCompanyById(Integer id) {
-		Company company = jdbcTemplate.queryForObject(SELECT_ID, new Object[]{id} ,new CompanyMapper());
-		return Optional.ofNullable(company);
+		try {
+			Company company = jdbcTemplate.queryForObject(SELECT_ID, new Object[]{id} ,new CompanyMapper());
+			return Optional.of(company);
+		} catch (EmptyResultDataAccessException e) {
+			return Optional.empty();
+		}
 	}
 	
 	public List<Company> listAllCompany(){
@@ -80,22 +80,16 @@ public class DaoCompany {
 //		}
 //	}
 	
-	public Optional<Integer> createCompany(Company company) throws ExceptionDao {
+	public void createCompany(Company company) throws ExceptionDao {
 
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		
-		Integer lineAffected = jdbcTemplate.update(
-				connection -> {
-					PreparedStatement stmt = connection.prepareStatement(CREATE);
-					stmt.setString(1, company.getName());
-					return stmt;
-				}, keyHolder);
+		Integer lineAffected = jdbcTemplate.update(CREATE, new Object[] {
+				company.getId(),
+				company.getName()
+		});
 
-		if( lineAffected == 0 ) {
+		if(lineAffected == 0) {
 			logger.error("Error when creating the company " + company.getName());
 			throw new ExceptionDao("Couldn't insert "+ company.getName() );
-		} else {
-			return Optional.ofNullable(keyHolder.getKey().intValue());
 		}
 	}
 	

@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <!DOCTYPE html>
 <html>
@@ -32,7 +33,8 @@
 		</div>
 		<div id="discontinuedError" class="alert alert-danger" role="alert"
 			style="display: none">
-			<strong>Discontinued date must respect the format dd/mm/yyyy and be after introduced date</strong>
+			<strong>Discontinued date must respect the format dd/mm/yyyy
+				and be after introduced date</strong>
 		</div>
 		<div id="companyIdError" class="alert alert-danger" role="alert"
 			style="display: none">
@@ -45,35 +47,41 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
-					<form name="addForm" id="addForm" action="addComputer" method="POST">
+					<form:form modelAttribute="computer" name="addForm" id="addForm"
+						action="addComputer" method="POST">
 						<fieldset>
 							<div class="form-group">
-								<label for="name">Computer name</label> <input type="text"
+								<form:label path="name" for="name">Computer name</form:label>
+								<form:input path="name" type="text"
 									class="form-control" id="name" name="name"
-									placeholder="Computer name" required>
+									placeholder="Computer name"/>
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date <br /> 
+								<form:label path="introduced" for="introduced">Introduced date <br />
 									<small class="text-muted">(Can be empty)</small>
-								</label> 
-								<input type="date" class="form-control" id="introduced"
-									name="introduced" placeholder="Introduced date">
+								</form:label>
+								<form:input path="introduced" type="date"
+									class="form-control" id="introduced" name="introduced"
+									placeholder="Introduced date" />
 							</div>
 							<div class="form-group" data-toggle="tooltip"
 								title="You need to fill introduced first">
-								<label for="discontinued">Discontinued date <br /> 
+								<form:label path="discontinued" for="discontinued">Discontinued date <br />
 									<small class="text-muted">(Can be empty)</small>
-								</label> <input type="date" class="form-control" id="discontinued"
-									name=discontinued placeholder="Discontinued date">
+								</form:label>
+								<form:input path="discontinued" type="date"
+									class="form-control" id="discontinued" name="discontinued"
+									placeholder="Discontinued date" />
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label> <select
-									class="form-control" id="companyId" name="companyId">
-									<option value="0">--</option>
+								<form:label path="companyId" for="companyId">Company</form:label>
+								<form:select path="companyId" class="form-control"
+									id="companyId" name="companyId">
+									<form:option value="0">--</form:option>
 									<c:forEach var="company" items="${listCompanies}">
-										<option value="${company.id}">${company.name}</option>
+										<form:option value="${company.id}">${company.name}</form:option>
 									</c:forEach>
-								</select>
+								</form:select>
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
@@ -81,7 +89,7 @@
 								id="btnAdd"> or <a href=<c:url value ="/dashboard"/>
 								class="btn btn-default">Cancel</a>
 						</div>
-					</form>
+					</form:form>
 				</div>
 			</div>
 		</div>

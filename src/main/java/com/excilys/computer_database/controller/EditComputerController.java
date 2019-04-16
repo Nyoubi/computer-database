@@ -9,7 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -38,19 +41,12 @@ public class EditComputerController {
 	private CompanyService companyService;
 	
 	@PostMapping({ "/editComputer", "/editcomputer", "/Editcomputer", "/EditComputer" })
-	protected String postEditcomputer(Model model , @RequestParam(required = false) Map<String, String> param) {
+	protected String postEditcomputer(@Validated @ModelAttribute("computer")ComputerDto computer, 
+		      BindingResult result, Model model) {
 		logger.info("postEditcomputer has been called");
 
-		String id, name, introduced, discontinued, companyId;
-
-		id = param.get("idComputer");
-		name = param.get("name");
-		introduced = param.get("introduced");
-		discontinued = param.get("discontinued");
-		companyId = param.get("companyId");
-		
 		try {
-			computerService.updateComputer(Integer.valueOf(id), name, introduced, discontinued, Integer.valueOf(companyId));
+			computerService.updateComputer(Integer.valueOf(computer.getId()), computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), Integer.valueOf(computer.getCompanyId()));
 			return VIEW_LIST_COMPUTERS;
 		} catch (DaoException | ModelException e) {
 			return VIEW_ERROR_500;

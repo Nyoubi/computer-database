@@ -139,16 +139,17 @@ public class Page<T> {
 	}
 	
 	public Integer getStart () {
+		System.out.println( Math.ceil((double)content.size() / size));
 		if (index <= 3) {
 			return 1;
-		} else if (index >= Math.round(content.size() / size)) {
-			return  (int) (Math.round(content.size() / size) - 2);
+		} else if (index > Math.ceil(content.size() / size)) {
+			return  (int) (Math.ceil(content.size() / size) - 3);
 		}
 		return index - 2;
 	}
 	
 	public Integer getEnd () {
-		return Math.min(Math.round(content.size() / size),4);
+		return (int) Math.min(Math.ceil(content.size() / size),4);
 	}
 	
 	

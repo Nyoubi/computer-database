@@ -171,10 +171,10 @@ public class computerServiceTest {
 	@Test
 	public void testUpdateComputer() {
 		try {
-			computerService.updateComputer(1, "testUpdate", null, null, 2);
+			computerService.updateComputer(1, "testUpdate", "2000-01-01", "2000-01-06", 2);
 			assertTrue(computerService.showDetails("1").get().getCompanyId()==2);
 			assertTrue(computerService.showDetails("1").get().getName().equals("testUpdate"));
-			computerService.updateComputer(1, "Computer 1", null, null, 1);
+			computerService.updateComputer(1, "Computer 1", "2000-01-01", "2000-01-06", 1);
 		} catch (ExceptionDao | ExceptionModel | ExceptionInvalidInput e) {
 			fail();
 		}

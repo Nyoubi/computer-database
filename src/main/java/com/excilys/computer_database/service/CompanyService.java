@@ -41,9 +41,9 @@ public class CompanyService {
 		return dtoCompany;
 	}
 	
-//	public void deleteCompany(Integer id) throws ExceptionDao {
-//		daoCompany.deleteCompanyById(id);
-//	}
+	public void deleteCompany(Integer id) throws ExceptionDao {
+		daoCompany.deleteCompanyById(id);
+	}
 	
 	public void createCompany(String name) throws ExceptionDao, ExceptionModel {
 		Company company = checkDataCreateCompany(name);

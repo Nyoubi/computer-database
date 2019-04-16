@@ -32,7 +32,7 @@ public class AppConfigTest {
 	}
 	
 	@Bean
-	  public JdbcTemplate JdbcTemplate() {
+	  public JdbcTemplate jdbcTemplate() {
 	    JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSource());
 	    return jdbcTemplate;
 	  }

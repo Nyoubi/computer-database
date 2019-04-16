@@ -1,7 +1,6 @@
 package com.excilys.computer_database.persistenceTest;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,8 +29,8 @@ public class DaoComputerTest {
 
 	static private DaoComputer daoComputer;
 
-	private Computer computer;
-	private Computer computer2;
+	private static Computer computer;
+	private static Computer computer2;
 	ComputerBuilder computerBuilder;
 
 	static GenericApplicationContext context;
@@ -41,11 +40,6 @@ public class DaoComputerTest {
 	public static void start() {
 		context = new AnnotationConfigApplicationContext(AppConfigTest.class);
 		daoComputer = context.getBean(DaoComputer.class);
-	}
-
-	@AfterAll
-	public static void end() {
-		context.close();
 	}
 
 	@BeforeEach
@@ -61,6 +55,11 @@ public class DaoComputerTest {
 		computer2 = computerBuilder.build();
 
 	}
+	
+	@AfterEach
+	public void end() {
+		context.close();
+	}
 
 	@Test
 	public void testCreateComputer() {
@@ -69,8 +68,8 @@ public class DaoComputerTest {
 		} catch (ExceptionDao e2) {
 			fail();
 		}
-		computer = daoComputer.findComputerById(computer2.getId()).get();
-		assertNotNull(computer);
+		computer2 = daoComputer.findComputerById(computer.getId()).get();
+		assertNotNull(computer2);
 		assertEquals(computer,computer2);
 
 		try {
@@ -78,7 +77,7 @@ public class DaoComputerTest {
 		} catch (ExceptionDao e) {
 			fail();
 		}
-		daoComputer.resetAutoIncrement(computer.getId());
+		daoComputer.resetAutoIncrement(computer.getId()-1);
 	}
 
 
@@ -96,20 +95,16 @@ public class DaoComputerTest {
 		} catch (ExceptionDao e) {
 			fail();
 		}
-		computer = daoComputer.findComputerById(computer.getId()).get();
+		computer2 = daoComputer.findComputerById(computer.getId()).get();
 
-		assertNotEquals(computer2,computer);
-
-		computer2.setName("updated");
-
-		assertEquals(computer,computer2);
-
+		assertEquals(computer2,computer);
+		
 		try {
 			daoComputer.deleteComputerById(computer.getId());
 		} catch (ExceptionDao e) {
 			fail();
 		}
-		daoComputer.resetAutoIncrement(computer.getId());
+		daoComputer.resetAutoIncrement(computer.getId()-1);
 	}
 
 	@Test
@@ -125,7 +120,7 @@ public class DaoComputerTest {
 			fail();
 		}
 		assertEquals(daoComputer.findComputerById(computer.getId()), Optional.empty());
-		daoComputer.resetAutoIncrement(computer.getId());		
+		daoComputer.resetAutoIncrement(computer.getId()-1);		
 	}
 
 	@Test

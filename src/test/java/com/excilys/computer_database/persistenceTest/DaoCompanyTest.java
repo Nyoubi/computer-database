@@ -1,7 +1,9 @@
 package com.excilys.computer_database.persistenceTest;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +15,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.GenericApplicationContext;
 
 import com.excilys.computer_database.app.AppConfigTest;
+import com.excilys.computer_database.exception.ExceptionDao;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.CompanyBuilder;
 import com.excilys.computer_database.persistence.DaoCompany;
@@ -60,24 +63,21 @@ public class DaoCompanyTest {
 		assertFalse(optCompany.isPresent());
 	}
 
-//	@Test
-//	public void testDeleteCompany() {
-//		Integer created = null;
-//		try {
-//			created = daoCompany.createCompany(company).get();
-//		} catch (ExceptionDao e1) {
-//			fail();
-//		}
-//		try {
-//			daoCompany.deleteCompanyById(created);
-//		} catch (ExceptionDao e) {
-//			fail();
-//		}
-//		try {
-//			assertEquals(daoCompany.findCompanyById(created), Optional.empty());
-//		} catch (ExceptionDao e) {
-//			fail();
-//		}
-//		daoCompany.resetAutoIncrement(created);		
-//	}
+	@Test
+	public void testDeleteCompany() {
+		try {
+			company.setId(3);
+			company.setName("Test Delete");
+			daoCompany.createCompany(company);
+		} catch (ExceptionDao e1) {
+			fail();
+		}
+		try {
+			daoCompany.deleteCompanyById(3);
+		} catch (ExceptionDao e) {
+			fail();
+		}
+		assertEquals(daoCompany.findCompanyById(3), Optional.empty());
+		daoCompany.resetAutoIncrement(3);		
+	}
 }

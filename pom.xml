@@ -30,6 +30,7 @@
 		<HikariCP>3.3.1</HikariCP>
 		<spring>5.1.6.RELEASE</spring>
 		<springboot>2.1.4.RELEASE</springboot>
+		<tomcatjuli>9.0.0.M6</tomcatjuli>
 	</properties>
 
 	<dependencies>
@@ -59,10 +60,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>${jupiterapi}</version>
-			<scope>test</scope>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring}</version>
 		</dependency>
 
 		<dependency>
@@ -86,19 +86,7 @@
 
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>${spring}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
 			<version>${spring}</version>
 		</dependency>
 
@@ -106,6 +94,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot</artifactId>
 			<version>${springboot}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-logging-juli</artifactId>
+			<version>${tomcatjuli}</version>
 		</dependency>
 
 		<dependency>
@@ -144,12 +138,12 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${spring}</version>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${jupiterapi}</version>
+			<scope>test</scope>
 		</dependency>
-
-
+		
 	</dependencies>
 
 </project>

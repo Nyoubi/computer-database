@@ -183,7 +183,7 @@ public class ComputerService {
 		PageBuilder<ComputerDto> pageBuilder = new PageBuilder<ComputerDto>();
 
 		if(index == null) {
-			index = Integer.valueOf(0);
+			index = Integer.valueOf(1);
 		}
 		if(size == null) {
 			size = Integer.valueOf(10);

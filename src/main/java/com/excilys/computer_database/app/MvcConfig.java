@@ -15,10 +15,11 @@ public class MvcConfig implements WebMvcConfigurer  {
 
 	@Bean
 	public ViewResolver viewResolver() {
+
 		InternalResourceViewResolver bean = new InternalResourceViewResolver();
 
 		bean.setViewClass(JstlView.class);
-		bean.setPrefix("/WebContent/views/");
+		bean.setPrefix("/views/");
 		bean.setSuffix(".jsp");
 
 		return bean;

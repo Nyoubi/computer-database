@@ -142,7 +142,7 @@ public class Page<T> {
 		if (index <= 3) {
 			return 1;
 		} else if (index >= Math.round(content.size() / size)) {
-			return  (int) (Math.round(content.size() / size) - 3);
+			return  (int) (Math.round(content.size() / size) - 2);
 		}
 		return index - 2;
 	}

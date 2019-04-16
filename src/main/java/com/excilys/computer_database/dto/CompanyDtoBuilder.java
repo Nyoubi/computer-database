@@ -1,22 +1,22 @@
 package com.excilys.computer_database.dto;
 
-public class DtoCompanyBuilder {
+public class CompanyDtoBuilder {
 	private int id;
 	private String name;
 
-	public DtoCompany build() {
-		DtoCompany company = new DtoCompany();
+	public CompanyDto build() {
+		CompanyDto company = new CompanyDto();
 		company.setId(this.id);
 		company.setName(this.name);
 		return company;
 	}
 	
-	public DtoCompanyBuilder setId(int id) {
+	public CompanyDtoBuilder setId(int id) {
 		this.id = id;
 		return this;
 	}
 	
-	public DtoCompanyBuilder setName(String name) {
+	public CompanyDtoBuilder setName(String name) {
 		this.name = name;
 		return this;
 	}

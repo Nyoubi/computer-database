@@ -6,8 +6,8 @@ import java.util.Optional;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.excilys.computer_database.dto.DtoCompany;
-import com.excilys.computer_database.dto.DtoCompanyBuilder;
+import com.excilys.computer_database.dto.CompanyDto;
+import com.excilys.computer_database.dto.CompanyDtoBuilder;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.CompanyBuilder;
 
@@ -29,17 +29,17 @@ public class CompanyMapper implements RowMapper<Company>{
 		return company;
 	}
 
-	public static Optional<DtoCompany> companyToDtoCompany(Company company){
-		Optional<DtoCompany> dtoCompany = Optional.empty();
+	public static Optional<CompanyDto> companyToDtoCompany(Company company){
+		Optional<CompanyDto> dtoCompany = Optional.empty();
 		if (company != null) {
-			DtoCompanyBuilder dtoCompanyBuilder = new DtoCompanyBuilder();
+			CompanyDtoBuilder dtoCompanyBuilder = new CompanyDtoBuilder();
 			dtoCompany = Optional.of(dtoCompanyBuilder.setId(company.getId())
 					.setName(company.getName()).build());
 		}	
 		return dtoCompany;
 	}
 
-	public static Optional<Company> dtoCompanyToCompany(DtoCompany dtoCompany){
+	public static Optional<Company> dtoCompanyToCompany(CompanyDto dtoCompany){
 		
 		if(dtoCompany == null) {
 			return Optional.empty();

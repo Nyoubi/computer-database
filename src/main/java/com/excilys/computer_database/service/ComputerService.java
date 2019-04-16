@@ -10,11 +10,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.excilys.computer_database.dto.DtoCompany;
-import com.excilys.computer_database.dto.DtoComputer;
-import com.excilys.computer_database.exception.ExceptionDao;
-import com.excilys.computer_database.exception.ExceptionInvalidInput;
-import com.excilys.computer_database.exception.ExceptionModel;
+import com.excilys.computer_database.dto.CompanyDto;
+import com.excilys.computer_database.dto.ComputerDto;
+import com.excilys.computer_database.exception.DaoException;
+import com.excilys.computer_database.exception.InvalidInputException;
+import com.excilys.computer_database.exception.ModelException;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Company;
@@ -35,52 +35,52 @@ public class ComputerService {
 	@Autowired
 	private CompanyService companyService;
 
-	public List<DtoComputer> listAllComputer(String order)  throws ExceptionDao{
+	public List<ComputerDto> listAllComputer(String order)  throws DaoException{
 		return daoComputer.listAllComputer(order).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
 	}
 	
-	public List<DtoComputer> listAllComputer(String search, String order)  throws ExceptionDao{
+	public List<ComputerDto> listAllComputer(String search, String order)  throws DaoException{
 		return daoComputer.listAllComputer(search,order).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
 
 	}
 	
-	public Optional<DtoComputer> showDetails(String id)  throws ExceptionDao, ExceptionInvalidInput {
+	public Optional<ComputerDto> showDetails(String id)  throws DaoException, InvalidInputException {
 		Optional<Integer> ident = Util.parseInt(id);
 		if (ident.isPresent()) {
 			Optional<Computer> computer = daoComputer.findComputerById(ident.get());
 			if (computer.isPresent()) {
 				return Optional.of(ComputerMapper.computerToDtoComputer(computer.get()));
 			} else {
-				throw new ExceptionDao("The computer " + id + " doesn't exist in the database.");
+				throw new DaoException("The computer " + id + " doesn't exist in the database.");
 			}
 		} else {
-			throw new ExceptionInvalidInput("This id can't be converted to an integer.");
+			throw new InvalidInputException("This id can't be converted to an integer.");
 		}
 	}
 
-	public void deleteComputer(String id) throws ExceptionDao, ExceptionInvalidInput {
+	public void deleteComputer(String id) throws DaoException, InvalidInputException {
 
 		Optional<Integer> ident = Util.parseInt(id);
 		if (Util.checkOptional(ident) != null) {
 			daoComputer.deleteComputerById(ident.get());
 		} else {
-			throw new ExceptionInvalidInput("This id : " + id + " is invalid.");
+			throw new InvalidInputException("This id : " + id + " is invalid.");
 		}
 	}
 
-	public void createComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
+	public void createComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws DaoException, ModelException {
 		Computer computer = checkDataComputer(id, name, introduced, discontinued, companyId).build();
 		daoComputer.createComputer(computer);
 	}
 
 
-	public void updateComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionDao, ExceptionModel {
+	public void updateComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws DaoException, ModelException {
 		Computer computer = checkDataComputer(checkId(id), name, introduced, discontinued, companyId).build();
 		daoComputer.updateComputer(computer);
 	}
 
-	public Page<DtoComputer> pageDtoComputer(String url, Integer index, Integer size, String search, String order) throws ExceptionDao, ExceptionModel{
-		List<DtoComputer> result = new ArrayList<>();
+	public Page<ComputerDto> pageDtoComputer(String url, String index, String size, String search, String order) throws DaoException, ModelException{
+		List<ComputerDto> result = new ArrayList<>();
 		String orderBy = getOrder(order);
 		if (search == null || search.equals("")) {
 			if ("".equals(orderBy)) {
@@ -95,8 +95,16 @@ public class ComputerService {
 				result = listAllComputer(search,orderBy);
 			}
 		}
-		PageBuilder<DtoComputer> builder = checkPage(url,result,index,size,search,order);
-		Page<DtoComputer> page = builder.build();
+		
+		Optional<Integer> optIndex = Util.parseInt(index);
+		Optional<Integer> optSize = Util.parseInt(size);
+
+		PageBuilder<ComputerDto> builder = checkPage(url,
+													 result,
+													 optIndex.isPresent() ? optIndex.get() : null,
+													 optIndex.isPresent() ? optSize.get() : null,
+													 search,order);
+		Page<ComputerDto> page = builder.build();
 		return page;		
 	}
 
@@ -115,50 +123,50 @@ public class ComputerService {
 		return orderBy;
 	}
 	
-	public Integer checkId(Integer id) throws ExceptionModel {
+	public Integer checkId(Integer id) throws ModelException {
 		if (id == null) {
-			throw new ExceptionModel("Failed to check computer : Incorrect id");
+			throw new ModelException("Failed to check computer : Incorrect id");
 		}
 		return id;
 	}
 	
-	public void checkName(String name) throws ExceptionModel {
+	public void checkName(String name) throws ModelException {
 		if (name == null || name == "") {
-			throw new ExceptionModel("Failed to check computer : Invalid name");
+			throw new ModelException("Failed to check computer : Invalid name");
 		}
 	}
 	
-	public ArrayList<Optional<Timestamp>> checkDate(String introduced, String discontinued) throws ExceptionModel {
+	public ArrayList<Optional<Timestamp>> checkDate(String introduced, String discontinued) throws ModelException {
 		Optional<Timestamp> OptIntroduced = Util.stringToTimestamp(introduced);
 		Optional<Timestamp> OptDiscontinued = Util.stringToTimestamp(discontinued);
 
 		if (!OptIntroduced.isPresent() && OptDiscontinued.isPresent()) {
-			throw new ExceptionModel("Failed to check computer : Discontinued but not introduced");
+			throw new ModelException("Failed to check computer : Discontinued but not introduced");
 		}
 		if (OptIntroduced.isPresent() && OptDiscontinued.isPresent()
 				&& OptIntroduced.get().after(OptDiscontinued.get())) {
-			throw new ExceptionModel("Failed to check computer : Introduced can't be after discontinued date");
+			throw new ModelException("Failed to check computer : Introduced can't be after discontinued date");
 		}
 		
 		return new ArrayList<Optional<Timestamp>>(Arrays.asList(OptIntroduced,OptDiscontinued));
 	}
 	
-	public Optional<Company> checkCompany(Integer companyId) throws ExceptionModel, ExceptionDao {
-		Optional<DtoCompany> dtoCompany = companyService.findCompanyById(companyId);
+	public Optional<Company> checkCompany(Integer companyId) throws ModelException, DaoException {
+		Optional<CompanyDto> dtoCompany = companyService.findCompanyById(companyId);
 		Optional<Company> company = Optional.empty();
 		if (dtoCompany.isPresent()) {
 			company = CompanyMapper.dtoCompanyToCompany(dtoCompany.get());
 			if (!company.isPresent()) {
-				throw new ExceptionModel("Mapper : Can't convert the dto company to company");
+				throw new ModelException("Mapper : Can't convert the dto company to company");
 			}
 		} else if (companyId != null){
-			throw new ExceptionModel("This company doesn't exist");
+			throw new ModelException("This company doesn't exist");
 		}
 		
 		return company;
 	}
 
-	public ComputerBuilder checkDataComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ExceptionModel, ExceptionDao {
+	public ComputerBuilder checkDataComputer(Integer id, String name, String introduced, String discontinued, Integer companyId) throws ModelException, DaoException {
 		checkName(name);
 		ArrayList<Optional<Timestamp>> date = checkDate(introduced,discontinued);
 		Optional<Company> company = checkCompany(companyId);
@@ -171,8 +179,8 @@ public class ComputerService {
 		return computerBuilder;
 	}
 
-	public PageBuilder<DtoComputer> checkPage(String url, List<DtoComputer> content, Integer index, Integer size, String search, String order) throws ExceptionModel {
-		PageBuilder<DtoComputer> pageBuilder = new PageBuilder<DtoComputer>();
+	public PageBuilder<ComputerDto> checkPage(String url, List<ComputerDto> content, Integer index, Integer size, String search, String order) throws ModelException {
+		PageBuilder<ComputerDto> pageBuilder = new PageBuilder<ComputerDto>();
 
 		if(index == null) {
 			index = Integer.valueOf(0);
@@ -181,7 +189,7 @@ public class ComputerService {
 			size = Integer.valueOf(10);
 		}
 		if(url == null) {
-			throw new ExceptionModel("An url is needed");
+			throw new ModelException("An url is needed");
 		}
 		if(search == null) {
 			search = "";

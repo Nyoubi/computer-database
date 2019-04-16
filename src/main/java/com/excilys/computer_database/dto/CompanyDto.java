@@ -1,10 +1,10 @@
 package com.excilys.computer_database.dto;
 
-public class DtoCompany {
+public class CompanyDto {
 	private int id;
 	private String name;
 	
-	public DtoCompany(int id, String name) {
+	public CompanyDto(int id, String name) {
 		this.id = id;
 		this.name = name;
 	}
@@ -26,7 +26,7 @@ public class DtoCompany {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DtoCompany other = (DtoCompany) obj;
+		CompanyDto other = (CompanyDto) obj;
 		if (id != other.id)
 			return false;
 		if (name == null) {
@@ -37,7 +37,7 @@ public class DtoCompany {
 		return true;
 	}
 
-	public DtoCompany() {}
+	public CompanyDto() {}
 	
 	public int getId() {
 		return id;

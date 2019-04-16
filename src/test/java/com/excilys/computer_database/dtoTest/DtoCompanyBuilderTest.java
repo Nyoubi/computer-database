@@ -3,7 +3,7 @@ package com.excilys.computer_database.dtoTest;
 
 import org.junit.jupiter.api.Test;
 
-import com.excilys.computer_database.dto.DtoCompanyBuilder;
+import com.excilys.computer_database.dto.CompanyDtoBuilder;
 
 import junit.framework.TestCase;
 
@@ -12,7 +12,7 @@ public class DtoCompanyBuilderTest extends TestCase {
 	
 	@Test
 	public void testDtoCompanyBuilder() {
-		DtoCompanyBuilder dtoCompanyBuilder = new DtoCompanyBuilder();
+		CompanyDtoBuilder dtoCompanyBuilder = new CompanyDtoBuilder();
 		dtoCompanyBuilder = dtoCompanyBuilder.setId(1)
 									   .setName("Name");
 		

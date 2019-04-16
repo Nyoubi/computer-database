@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 
-import com.excilys.computer_database.controler.ControlerCli;
+import com.excilys.computer_database.controller.CliController;
 
 public class App {
 	
@@ -15,7 +15,7 @@ public class App {
 	{
 		logger.info("App starting");
 		GenericApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-		ControlerCli controler = context.getBean(ControlerCli.class);
+		CliController controler = context.getBean(CliController.class);
 		controler.run();
 		context.close();
 	}

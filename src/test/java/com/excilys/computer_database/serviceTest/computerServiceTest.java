@@ -13,11 +13,11 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.GenericApplicationContext;
 
 import com.excilys.computer_database.app.AppConfigTest;
-import com.excilys.computer_database.dto.DtoComputer;
-import com.excilys.computer_database.dto.DtoComputerBuilder;
-import com.excilys.computer_database.exception.ExceptionDao;
-import com.excilys.computer_database.exception.ExceptionInvalidInput;
-import com.excilys.computer_database.exception.ExceptionModel;
+import com.excilys.computer_database.dto.ComputerDto;
+import com.excilys.computer_database.dto.ComputerDtobuilder;
+import com.excilys.computer_database.exception.DaoException;
+import com.excilys.computer_database.exception.InvalidInputException;
+import com.excilys.computer_database.exception.ModelException;
 import com.excilys.computer_database.model.Page;
 import com.excilys.computer_database.persistence.DaoComputer;
 import com.excilys.computer_database.service.ComputerService;
@@ -36,10 +36,10 @@ public class computerServiceTest {
 
 	@Test
 	public void testListComputers() {
-		List<DtoComputer> computers = new ArrayList<>();
+		List<ComputerDto> computers = new ArrayList<>();
 		try {
 			computers = computerService.listAllComputer("");
-		} catch (ExceptionDao e) {
+		} catch (DaoException e) {
 			fail();
 		}
 		assertTrue((int)computers.size() == 3);
@@ -47,10 +47,10 @@ public class computerServiceTest {
 
 	@Test
 	public void testListComputersSearch() {
-		List<DtoComputer> computers = new ArrayList<>();
+		List<ComputerDto> computers = new ArrayList<>();
 		try {
 			computers = computerService.listAllComputer("test","");
-		} catch (ExceptionDao e) {
+		} catch (DaoException e) {
 			fail();
 		}
 		assertTrue((int)computers.size() == 1);
@@ -60,11 +60,11 @@ public class computerServiceTest {
 	@Test
 	public void testFindById() {
 		try {
-			DtoComputer computer2 = new DtoComputerBuilder().setId(2).setName("test").setCompanyId(2).setCompanyName("Company 2").build();
-			DtoComputer computer = computerService.showDetails("2").get();
+			ComputerDto computer2 = new ComputerDtobuilder().setId(2).setName("test").setCompanyId(2).setCompanyName("Company 2").build();
+			ComputerDto computer = computerService.showDetails("2").get();
 			assertEquals(computer.toString(),computer2.toString());
 
-		} catch (ExceptionDao | ExceptionInvalidInput e) {
+		} catch (DaoException | InvalidInputException e) {
 			fail();
 		}
 	}
@@ -78,7 +78,7 @@ public class computerServiceTest {
 			daoComputer.resetAutoIncrement(Integer.valueOf(3));
 
 			computerService.showDetails("4").isPresent();
-		} catch (ExceptionModel|ExceptionDao | ExceptionInvalidInput e) {
+		} catch (ModelException|DaoException | InvalidInputException e) {
 			assertTrue(true);
 		}
 	}
@@ -88,37 +88,37 @@ public class computerServiceTest {
 		try {
 			computerService.checkDataComputer(1,"test","1996-02-01",null,1);
 			assertTrue(true);
-		} catch (ExceptionModel|ExceptionDao e) {
+		} catch (ModelException|DaoException e) {
 			fail();
 		}
 
 		try {
 			computerService.checkDataComputer(null, null,null,null,0);
-		} catch (ExceptionModel|ExceptionDao e) {
+		} catch (ModelException|DaoException e) {
 			assertTrue(true);
 		}
 		
 		try {
 			computerService.checkDataComputer(1, null,null,null,0);
-		} catch (ExceptionModel|ExceptionDao e) {
+		} catch (ModelException|DaoException e) {
 			assertTrue(true);
 		}
 		
 		try {
 			computerService.checkDataComputer(1,"test",null,"1995-12-12",0);
-		} catch (ExceptionModel|ExceptionDao e) {
+		} catch (ModelException|DaoException e) {
 			assertTrue(true);
 		}
 		
 		try {
 			computerService.checkDataComputer(1,"test","1995-12-12","1995-10-10",-1);
-		} catch (ExceptionModel|ExceptionDao e) {
+		} catch (ModelException|DaoException e) {
 			assertTrue(true);
 		}
 		
 		try {
 			computerService.checkDataComputer(1,"test","1995-10-10","1995-12-12",-1);
-		} catch (ExceptionModel|ExceptionDao e) {
+		} catch (ModelException|DaoException e) {
 			assertTrue(true);
 		}
 	}
@@ -127,14 +127,14 @@ public class computerServiceTest {
 	public void testCheckId() {
 		try {
 			assertTrue(computerService.checkId(1)==1);
-		} catch (ExceptionModel e) {
+		} catch (ModelException e) {
 			fail();
 		}
 		
 		try {
 			computerService.checkId(null);
 			fail();
-		} catch (ExceptionModel e) {
+		} catch (ModelException e) {
 			assertTrue(true);
 		}
 	}
@@ -142,21 +142,21 @@ public class computerServiceTest {
 	@Test
 	public void testPageComputer() {
 		try {
-			Page<DtoComputer> test = computerService.pageDtoComputer("testurl",1,10,"test","");
+			Page<ComputerDto> test = computerService.pageDtoComputer("testurl","1","10","test","");
 			assertTrue(test.getContent().size() == 1);
 			
-			test = computerService.pageDtoComputer("testurl",1,10,"","nameDesc");
+			test = computerService.pageDtoComputer("testurl","1","10","","nameDesc");
 			assertTrue(test.getContent().size() == 3);
 			assertTrue(test.getContent().get(0).getName().equals("test"));
 			
-			test = computerService.pageDtoComputer("testurl",1,10,"Computer","companyAsc");
+			test = computerService.pageDtoComputer("testurl","1","10","Computer","companyAsc");
 			assertTrue(test.getContent().size() == 2);
 			assertTrue(test.getContent().get(0).getName().equals("Computer 1"));
 
-			test = computerService.pageDtoComputer("testurl",1,10,null,"");
+			test = computerService.pageDtoComputer("testurl","1","10",null,"");
 			assertTrue(test.getContent().size() == 3);
 			
-		} catch (ExceptionDao | ExceptionModel e) {
+		} catch (DaoException | ModelException e) {
 			fail();
 		}
 			
@@ -175,7 +175,7 @@ public class computerServiceTest {
 			assertTrue(computerService.showDetails("1").get().getCompanyId()==2);
 			assertTrue(computerService.showDetails("1").get().getName().equals("testUpdate"));
 			computerService.updateComputer(1, "Computer 1", "2000-01-01", "2000-01-06", 1);
-		} catch (ExceptionDao | ExceptionModel | ExceptionInvalidInput e) {
+		} catch (DaoException | ModelException | InvalidInputException e) {
 			fail();
 		}
 	}

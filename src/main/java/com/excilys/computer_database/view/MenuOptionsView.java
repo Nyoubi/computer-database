@@ -1,18 +1,18 @@
 package com.excilys.computer_database.view;
 
-public enum MenuViewOptions {
+public enum MenuOptionsView {
 	ERROR(-1),
 	DELETE_COMPANY(1),
 	EXIT(2);
 	
 	private final Integer id;
 	
-	MenuViewOptions(Integer id) {
+	MenuOptionsView(Integer id) {
 		this.id = id;
 	}
 	
-	public static MenuViewOptions getById(Integer id) {
-		MenuViewOptions[] options = MenuViewOptions.values();
+	public static MenuOptionsView getById(Integer id) {
+		MenuOptionsView[] options = MenuOptionsView.values();
 		Integer i = 0;
 		
 		while(i < options.length) {

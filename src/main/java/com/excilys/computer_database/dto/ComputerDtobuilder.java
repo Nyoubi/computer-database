@@ -1,6 +1,6 @@
 package com.excilys.computer_database.dto;
 
-public class DtoComputerBuilder {
+public class ComputerDtobuilder {
 	private int id;
 	private String name;
 	private String introduced;
@@ -8,8 +8,8 @@ public class DtoComputerBuilder {
 	private int companyId;
 	private String companyName;
 
-	public DtoComputer build() {
-		DtoComputer computer = new DtoComputer();
+	public ComputerDto build() {
+		ComputerDto computer = new ComputerDto();
 
 		computer.setId(this.id);
 		computer.setName(this.name);
@@ -20,32 +20,32 @@ public class DtoComputerBuilder {
 		return computer;
 	}
 	
-	public DtoComputerBuilder setId(int id) {
+	public ComputerDtobuilder setId(int id) {
 		this.id = id;
 		return this;
 	}
 	
-	public DtoComputerBuilder setName(String name) {
+	public ComputerDtobuilder setName(String name) {
 		this.name = name;
 		return this;
 	}
 
-	public DtoComputerBuilder setIntroduced(String introduced) {
+	public ComputerDtobuilder setIntroduced(String introduced) {
 		this.introduced = introduced;
 		return this;
 	}
 
-	public DtoComputerBuilder setDiscontinued(String discontinued) {
+	public ComputerDtobuilder setDiscontinued(String discontinued) {
 		this.discontinued = discontinued;
 		return this;
 	}
 
-	public DtoComputerBuilder setCompanyName(String companyName) {
+	public ComputerDtobuilder setCompanyName(String companyName) {
 		this.companyName = companyName;
 		return this;
 	}
 	
-	public DtoComputerBuilder setCompanyId(int companyId) {
+	public ComputerDtobuilder setCompanyId(int companyId) {
 		this.companyId = companyId;
 		return this;
 	}

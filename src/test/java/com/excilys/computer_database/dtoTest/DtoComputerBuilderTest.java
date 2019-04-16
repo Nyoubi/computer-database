@@ -3,7 +3,7 @@ package com.excilys.computer_database.dtoTest;
 
 import org.junit.jupiter.api.Test;
 
-import com.excilys.computer_database.dto.DtoComputerBuilder;
+import com.excilys.computer_database.dto.ComputerDtobuilder;
 
 import junit.framework.TestCase;
 
@@ -11,7 +11,7 @@ public class DtoComputerBuilderTest extends TestCase {
 	
 	@Test
 	public void testDtoComputerBuilder() {
-		DtoComputerBuilder dtoComputerBuilder = new DtoComputerBuilder();
+		ComputerDtobuilder dtoComputerBuilder = new ComputerDtobuilder();
 		dtoComputerBuilder = dtoComputerBuilder.setId(1)
 					.setName("Name")
 					.setIntroduced("2010-01-01 11:11:11")

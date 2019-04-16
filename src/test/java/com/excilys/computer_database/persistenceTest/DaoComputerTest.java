@@ -17,7 +17,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.GenericApplicationContext;
 
 import com.excilys.computer_database.app.AppConfigTest;
-import com.excilys.computer_database.exception.ExceptionDao;
+import com.excilys.computer_database.exception.DaoException;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
@@ -65,7 +65,7 @@ public class DaoComputerTest {
 	public void testCreateComputer() {
 		try {
 			daoComputer.createComputer(computer);
-		} catch (ExceptionDao e2) {
+		} catch (DaoException e2) {
 			fail();
 		}
 		computer2 = daoComputer.findComputerById(computer.getId()).get();
@@ -74,7 +74,7 @@ public class DaoComputerTest {
 
 		try {
 			daoComputer.deleteComputerById(computer.getId());
-		} catch (ExceptionDao e) {
+		} catch (DaoException e) {
 			fail();
 		}
 		daoComputer.resetAutoIncrement(computer.getId()-1);
@@ -85,14 +85,14 @@ public class DaoComputerTest {
 	public void testUpdateComputer() {
 		try {
 			daoComputer.createComputer(computer);
-		} catch (ExceptionDao e2) {
+		} catch (DaoException e2) {
 			fail();
 		}
 		computer.setName("updated");
 
 		try {
 			daoComputer.updateComputer(computer);
-		} catch (ExceptionDao e) {
+		} catch (DaoException e) {
 			fail();
 		}
 		computer2 = daoComputer.findComputerById(computer.getId()).get();
@@ -101,7 +101,7 @@ public class DaoComputerTest {
 		
 		try {
 			daoComputer.deleteComputerById(computer.getId());
-		} catch (ExceptionDao e) {
+		} catch (DaoException e) {
 			fail();
 		}
 		daoComputer.resetAutoIncrement(computer.getId()-1);
@@ -111,12 +111,12 @@ public class DaoComputerTest {
 	public void testDeleteComputer() {
 		try {
 			daoComputer.createComputer(computer);
-		} catch (ExceptionDao e1) {
+		} catch (DaoException e1) {
 			fail();
 		}
 		try {
 			daoComputer.deleteComputerById(computer.getId());
-		} catch (ExceptionDao e) {
+		} catch (DaoException e) {
 			fail();
 		}
 		assertEquals(daoComputer.findComputerById(computer.getId()), Optional.empty());

@@ -6,19 +6,19 @@ import static org.junit.Assert.assertNotEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.excilys.computer_database.dto.DtoComputer;
+import com.excilys.computer_database.dto.ComputerDto;
 
 import junit.framework.TestCase;
 
 public class DtoComputerTest extends TestCase {
 
-	DtoComputer computer1;
-	DtoComputer computer2;
+	ComputerDto computer1;
+	ComputerDto computer2;
 	
 	@BeforeEach
 	public void setUp() {
-		computer1 = new DtoComputer(0,"Name","2000-01-01 01:01:01","2000-01-01 01:01:05",1,"Name");
-		computer2 = new DtoComputer(0,"Name","2000-01-01 01:01:01","2000-01-01 01:01:05",1,"Name");
+		computer1 = new ComputerDto(0,"Name","2000-01-01 01:01:01","2000-01-01 01:01:05",1,"Name");
+		computer2 = new ComputerDto(0,"Name","2000-01-01 01:01:01","2000-01-01 01:01:05",1,"Name");
 	}
 	
 	@Test

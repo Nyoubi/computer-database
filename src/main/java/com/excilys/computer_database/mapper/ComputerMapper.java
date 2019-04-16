@@ -7,9 +7,9 @@ import java.util.Optional;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.excilys.computer_database.dto.DtoCompany;
-import com.excilys.computer_database.dto.DtoComputer;
-import com.excilys.computer_database.dto.DtoComputerBuilder;
+import com.excilys.computer_database.dto.CompanyDto;
+import com.excilys.computer_database.dto.ComputerDto;
+import com.excilys.computer_database.dto.ComputerDtobuilder;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
@@ -33,8 +33,8 @@ public class ComputerMapper implements RowMapper<Computer>{
 		return computer;
 	}
 
-	public static DtoComputer computerToDtoComputer(Computer computer){
-		DtoComputerBuilder dtoComputerBuilder = new DtoComputerBuilder();
+	public static ComputerDto computerToDtoComputer(Computer computer){
+		ComputerDtobuilder dtoComputerBuilder = new ComputerDtobuilder();
 
 		dtoComputerBuilder.setId(computer.getId())
 						  .setName(computer.getName());
@@ -42,7 +42,7 @@ public class ComputerMapper implements RowMapper<Computer>{
 		
 		dtoComputerBuilder.setDiscontinued(Util.checkOptional(Util.timestampToString(computer.getDiscontinued())));
 
-		Optional<DtoCompany> dtoCompany = CompanyMapper.companyToDtoCompany(computer.getCompany());
+		Optional<CompanyDto> dtoCompany = CompanyMapper.companyToDtoCompany(computer.getCompany());
 
 		if (dtoCompany.isPresent()) {
 			dtoComputerBuilder.setCompanyName(dtoCompany.get().getName().toString())

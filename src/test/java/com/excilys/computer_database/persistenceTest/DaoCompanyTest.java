@@ -15,7 +15,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.GenericApplicationContext;
 
 import com.excilys.computer_database.app.AppConfigTest;
-import com.excilys.computer_database.exception.ExceptionDao;
+import com.excilys.computer_database.exception.DaoException;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.CompanyBuilder;
 import com.excilys.computer_database.persistence.DaoCompany;
@@ -69,12 +69,12 @@ public class DaoCompanyTest {
 			company.setId(3);
 			company.setName("Test Delete");
 			daoCompany.createCompany(company);
-		} catch (ExceptionDao e1) {
+		} catch (DaoException e1) {
 			fail();
 		}
 		try {
 			daoCompany.deleteCompanyById(3);
-		} catch (ExceptionDao e) {
+		} catch (DaoException e) {
 			fail();
 		}
 		assertEquals(daoCompany.findCompanyById(3), Optional.empty());

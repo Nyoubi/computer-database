@@ -14,8 +14,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.excilys.computer_database.dto.DtoCompany;
-import com.excilys.computer_database.dto.DtoCompanyBuilder;
+import com.excilys.computer_database.dto.CompanyDto;
+import com.excilys.computer_database.dto.CompanyDtoBuilder;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 
@@ -41,7 +41,7 @@ public class companyMapperTest {
 		assertEquals((int)company.getId(), 1);
 		assertEquals(company.getName(),"Company name");
 		
-		Optional<DtoCompany> dtoCompany = CompanyMapper.companyToDtoCompany(company);
+		Optional<CompanyDto> dtoCompany = CompanyMapper.companyToDtoCompany(company);
 		if (!dtoCompany.isPresent()) {
 			fail();
 		}
@@ -55,7 +55,7 @@ public class companyMapperTest {
 	@Test
 	public void testDtoToCompanyMapper() throws SQLException {
 		
-		DtoCompany dtoCompany = new DtoCompanyBuilder().setId(1).setName("test").build();
+		CompanyDto dtoCompany = new CompanyDtoBuilder().setId(1).setName("test").build();
 		
 		Optional<Company> company = CompanyMapper.dtoCompanyToCompany(dtoCompany);
 

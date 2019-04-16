@@ -13,9 +13,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 @Configuration
 @PropertySource("classpath:dataSource.properties")
-@ComponentScan({"com.excilys.computer_database.controler", "com.excilys.computer_database.service", "com.excilys.computer_database.persistence" })
+@ComponentScan({"com.excilys.computer_database.controller", 
+				"com.excilys.computer_database.service", 
+				"com.excilys.computer_database.persistence"})
+
 public class AppConfig {
-	
 	@Autowired
     Environment env;
 	

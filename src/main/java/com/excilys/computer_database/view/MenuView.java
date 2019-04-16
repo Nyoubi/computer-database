@@ -15,8 +15,8 @@ public class MenuView {
 		input = new Scanner(System.in);
 		System.out.println("\n==========================");
 		System.out.println("Choose an option");
-		System.out.println(MenuViewOptions.DELETE_COMPANY.getId() + " - Delete a company");
-		System.out.println(MenuViewOptions.EXIT.getId() + " - Exit");
+		System.out.println(MenuOptionsView.DELETE_COMPANY.getId() + " - Delete a company");
+		System.out.println(MenuOptionsView.EXIT.getId() + " - Exit");
 		System.out.println("==========================\n");
 
 		value = input.nextLine();

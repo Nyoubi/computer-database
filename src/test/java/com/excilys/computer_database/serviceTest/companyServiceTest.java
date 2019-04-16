@@ -11,10 +11,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.GenericApplicationContext;
 
 import com.excilys.computer_database.app.AppConfigTest;
-import com.excilys.computer_database.dto.DtoCompany;
-import com.excilys.computer_database.dto.DtoCompanyBuilder;
-import com.excilys.computer_database.exception.ExceptionDao;
-import com.excilys.computer_database.exception.ExceptionModel;
+import com.excilys.computer_database.dto.CompanyDto;
+import com.excilys.computer_database.dto.CompanyDtoBuilder;
+import com.excilys.computer_database.exception.DaoException;
+import com.excilys.computer_database.exception.ModelException;
 import com.excilys.computer_database.service.CompanyService;
 
 public class companyServiceTest {
@@ -29,10 +29,10 @@ public class companyServiceTest {
 
 	@Test
 	public void testListCompany() {
-		ArrayList<DtoCompany> companies = new ArrayList<>();
+		ArrayList<CompanyDto> companies = new ArrayList<>();
 		try {
 			companies = companyService.listCompanies();
-		} catch (ExceptionDao e) {
+		} catch (DaoException e) {
 			fail();
 		}
 		
@@ -43,11 +43,11 @@ public class companyServiceTest {
 	@Test
 	public void testFindById() {
 		try {
-			DtoCompany company2 = new DtoCompanyBuilder().setId(1).setName("Company 1").build();
-			DtoCompany company = companyService.findCompanyById(1).get();
+			CompanyDto company2 = new CompanyDtoBuilder().setId(1).setName("Company 1").build();
+			CompanyDto company = companyService.findCompanyById(1).get();
 			assertTrue(company.equals(company2));
 
-		} catch (ExceptionModel|ExceptionDao e) {
+		} catch (ModelException|DaoException e) {
 			fail();
 		}
 	}
@@ -72,13 +72,13 @@ public class companyServiceTest {
 	public void testCheckCreateCompany() {
 		try {
 			companyService.checkDataCreateCompany("a");
-		} catch (ExceptionModel|ExceptionDao e) {
+		} catch (ModelException|DaoException e) {
 			fail();
 		}
 		
 		try {
 			companyService.checkDataCreateCompany(null);
-		} catch (ExceptionModel|ExceptionDao e) {
+		} catch (ModelException|DaoException e) {
 			assertTrue(true);
 		}
 	}

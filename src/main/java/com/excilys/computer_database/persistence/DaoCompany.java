@@ -13,7 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.computer_database.exception.ExceptionDao;
+import com.excilys.computer_database.exception.DaoException;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 
@@ -53,18 +53,18 @@ public class DaoCompany {
 	}
 	
 	@Transactional(rollbackFor = {DataAccessException.class})
-	public void deleteCompanyById(Integer id) throws ExceptionDao {
+	public void deleteCompanyById(Integer id) throws DaoException {
 		try {
 			jdbcTemplate.update(DELETE_COMPUTER_ID, new Object[]{id} );
 			jdbcTemplate.update(DELETE_ID, new Object[]{id});
 		} catch (DataAccessException e) {
 			logger.error("Error when deleting company " + id);
-			throw new ExceptionDao("Error when deleting the company");
+			throw new DaoException("Error when deleting the company");
 		}
 		
 	}
 	
-	public void createCompany(Company company) throws ExceptionDao {
+	public void createCompany(Company company) throws DaoException {
 
 		Integer lineAffected = jdbcTemplate.update(CREATE, new Object[] {
 				company.getId(),
@@ -73,7 +73,7 @@ public class DaoCompany {
 
 		if(lineAffected == 0) {
 			logger.error("Error when creating the company " + company.getName());
-			throw new ExceptionDao("Couldn't insert "+ company.getName() );
+			throw new DaoException("Couldn't insert "+ company.getName() );
 		}
 	}
 	

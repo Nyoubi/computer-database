@@ -1,4 +1,4 @@
-package com.excilys.computer_database.controler;
+package com.excilys.computer_database.controller;
 
 
 import java.util.Optional;
@@ -6,16 +6,16 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import com.excilys.computer_database.service.CompanyService;
 import com.excilys.computer_database.util.Util;
 import com.excilys.computer_database.view.DeleteCompanyView;
 import com.excilys.computer_database.view.MenuView;
-import com.excilys.computer_database.view.MenuViewOptions;
+import com.excilys.computer_database.view.MenuOptionsView;
 
-@Component
-public class ControlerCli {
+@Controller
+public class CliController {
 	
 	@Autowired
 	private CompanyService companyService;
@@ -23,7 +23,7 @@ public class ControlerCli {
 	/**
 	 * Controller logger, used to trace logs
 	 */
-	private static Logger logger = LoggerFactory.getLogger(ControlerCli.class);
+	private static Logger logger = LoggerFactory.getLogger(CliController.class);
 
 
 	/**
@@ -36,7 +36,7 @@ public class ControlerCli {
 		boolean run = true;
 		while (run) {
 			String input = MenuView.show();
-			switch(MenuViewOptions.getById(Util.parseInt(input).get())) {
+			switch(MenuOptionsView.getById(Util.parseInt(input).get())) {
 			
 			case DELETE_COMPANY:
 			Optional<Integer> idd = Util.parseInt(DeleteCompanyView.show());

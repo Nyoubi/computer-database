@@ -13,8 +13,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.excilys.computer_database.dto.DtoComputer;
-import com.excilys.computer_database.exception.ExceptionModel;
+import com.excilys.computer_database.dto.ComputerDto;
+import com.excilys.computer_database.exception.ModelException;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
@@ -27,7 +27,7 @@ public class ComputerMapperTest {
 
 
 	@Test
-	public void testComputerToDtoMapper() throws ExceptionModel{
+	public void testComputerToDtoMapper() throws ModelException{
 
 		Computer computer = null;
 		try {
@@ -49,7 +49,7 @@ public class ComputerMapperTest {
 		assertEquals(computer.getDiscontinued(),Timestamp.valueOf("2011-10-11 11:11:11"));
 		assertEquals(computer.getCompany(),new Company(1,"Company name"));
 
-		DtoComputer dtoComputer = new DtoComputer();
+		ComputerDto dtoComputer = new ComputerDto();
 		dtoComputer = ComputerMapper.computerToDtoComputer(computer);
 
 		assertEquals((int)dtoComputer.getId(), 1);

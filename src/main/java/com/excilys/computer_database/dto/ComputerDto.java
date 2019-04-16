@@ -1,6 +1,6 @@
 package com.excilys.computer_database.dto;
 
-public class DtoComputer {
+public class ComputerDto {
 	private int id;
 	private String name;
 	private String introduced;
@@ -8,7 +8,7 @@ public class DtoComputer {
 	private int companyId;
 	private String companyName;
 	
-	public DtoComputer(int id, String name, String introduced, String discontinued, int companyId, String companyName) {
+	public ComputerDto(int id, String name, String introduced, String discontinued, int companyId, String companyName) {
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
@@ -17,7 +17,7 @@ public class DtoComputer {
 		this.companyName = companyName;
 	}
 	
-	public DtoComputer () {}
+	public ComputerDto () {}
 	
 
 	public int getId() {

@@ -12,7 +12,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.computer_database.exception.ExceptionDao;
+import com.excilys.computer_database.exception.DaoException;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Computer;
 
@@ -61,7 +61,7 @@ public class DaoComputer {
 
 	}
 
-	public void createComputer(Computer computer) throws ExceptionDao {
+	public void createComputer(Computer computer) throws DaoException {
 
 		Integer lineAffected = jdbcTemplate.update(CREATE, new Object[] {
 				computer.getId(),
@@ -73,11 +73,11 @@ public class DaoComputer {
 
 		if(lineAffected == 0) {
 			logger.error("Error when creating the computer " + computer.getName());
-			throw new ExceptionDao("Couldn't insert "+ computer.getName() );
+			throw new DaoException("Couldn't insert "+ computer.getName() );
 		}
 	}
 
-	public void updateComputer(Computer computer) throws ExceptionDao {
+	public void updateComputer(Computer computer) throws DaoException {
 		Integer lineAffected = jdbcTemplate.update(UPDATE, new Object[] {
 				computer.getName(), 
 				computer.getIntroduced(), 
@@ -87,15 +87,15 @@ public class DaoComputer {
 		});
 		if(lineAffected == 0) {
 			logger.error("Error when updating the computer.");
-			throw new ExceptionDao("Couldn't update "+ computer.getName() );
+			throw new DaoException("Couldn't update "+ computer.getName() );
 		}
 	}
 
-	public void deleteComputerById(Integer id)  throws ExceptionDao {
+	public void deleteComputerById(Integer id)  throws DaoException {
 		Integer lineAffected = jdbcTemplate.update(DELETE_ID, new Object[] {id});
 		if( lineAffected == 0 ) {
 			logger.error("Error when deleting the computer.");
-			throw new ExceptionDao("Couldn't delete computer "+ id );
+			throw new DaoException("Couldn't delete computer "+ id );
 		}
 	}
 

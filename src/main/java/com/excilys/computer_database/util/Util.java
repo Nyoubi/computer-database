@@ -10,7 +10,7 @@ public abstract class Util {
 
 	private static Logger logger = LoggerFactory.getLogger(Util.class);
 	public static Optional<Integer> parseInt(String input) {
-		if (input != null || "".equals(input))
+		if (!"".equals(input))
 		{
 			try {
 				return Optional.of(Integer.valueOf(input));
@@ -23,7 +23,7 @@ public abstract class Util {
 	
 	public static Optional<Timestamp> stringToTimestamp(String stringDate){
 		try {
-			if(stringDate != null && !("".equals(stringDate))) {
+			if(!"".equals(stringDate)) {
 				return Optional.of(Timestamp.valueOf(stringDate + " 00:00:00"));
 			}
 		} catch (IllegalArgumentException e) {

@@ -6,19 +6,19 @@ import static org.junit.Assert.assertNotEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.excilys.computer_database.dto.DtoCompany;
+import com.excilys.computer_database.dto.CompanyDto;
 
 import junit.framework.TestCase;
 
 public class DtoCompanyTest extends TestCase {
 
-	DtoCompany company1;
-	DtoCompany company2;
+	CompanyDto company1;
+	CompanyDto company2;
 	
 	@BeforeEach
 	public void setUp() {
-		company1 = new DtoCompany(0,"Name");
-		company2 = new DtoCompany(0,"Name");
+		company1 = new CompanyDto(0,"Name");
+		company2 = new CompanyDto(0,"Name");
 	}
 	
 	@Test

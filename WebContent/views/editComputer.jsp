@@ -55,7 +55,7 @@
 								<form:label path="name" for="name">Computer name</form:label>
 								<form:input path="name" type="text" class="form-control" id="name"
 									name="name" placeholder="${computer.getName()}"
-									value="${computer.getName()}" required />
+									value="${computer.getName()}" required="true" />
 							</div>
 							<div class="form-group">
 								<form:label path="introduced" for="introduced">Introduced date <br />
@@ -78,8 +78,12 @@
 								<form:select path="companyId" class="form-control" id="companyId" name="companyId">
 									<form:option value="0">--</form:option>
 									<c:forEach var="company" items="${listCompanies}">
-										<form:option value="${company.id}"
-											<c:if test="${company.id == computer.companyId}">selected</c:if>>${company.name}</form:option>
+										<c:if test="${company.id == computer.companyId}"> 
+												<form:option value="${company.id}" selected="true"> ${company.name}</form:option>
+										</c:if>
+										<c:if test="${company.id == computer.companyId}"> 
+												<form:option value="${company.id}"> ${company.name}</form:option>
+										</c:if>
 									</c:forEach>
 								</form:select>
 							</div>

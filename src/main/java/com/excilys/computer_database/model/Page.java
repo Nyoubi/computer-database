@@ -139,7 +139,6 @@ public class Page<T> {
 	}
 	
 	public Integer getStart () {
-		System.out.println( Math.ceil((double)content.size() / size));
 		if (index <= 3) {
 			return 1;
 		} else if (index > Math.ceil(content.size() / size)) {

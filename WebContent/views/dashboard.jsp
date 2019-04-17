@@ -1,9 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><spring:message code="dashboard.title" /></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
@@ -17,31 +18,50 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application - Computer
-				Database </a>
+			<a class="navbar-brand" href="dashboard"> <spring:message
+					code="dashboard.title" />
+			</a>
 		</div>
+		<div id="lang">
+			<a href="#" onClick="changeLanguage('en')"><img class="lang-flag" src="<c:url value="assets/en.png" />"/></a>
+			<a href="#" onClick="changeLanguage('fr')"><img class="lang-flag" src="<c:url value="assets/fr.png" />"/></a>
+		</div>
+
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1>
-				<c:out value="${numberComputer} Computers found" />
-			</h1>
+			<c:choose>
+				<c:when test="${numberComputer>0}">
+					<h1>
+						${numberComputer}
+						<spring:message code="dashboard.number_computer" />
+					</h1>
+				</c:when>
+				<c:otherwise>
+					<h1>
+						<spring:message code="dashboard.no_number_computer" />
+					</h1>
+				</c:otherwise>
+			</c:choose>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							class="form-control"
+							placeholder="<spring:message code='dashboard.filter_placeholder'/>" />
+						<input type="submit" id="searchsubmit"
+							value="<spring:message code="dashboard.filter"/>"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
-						href=<c:url value ="/addComputer"/>>Add Computer</a> <a
-						class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+						href=<c:url value ="/addComputer"/>><spring:message
+							code="dashboard.add_computer" /></a> <a class="btn btn-default"
+						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message
+							code="dashboard.edit" /></a>
 				</div>
 			</div>
 		</div>
@@ -65,40 +85,40 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th style="text-align: center">Computer name <a
+						<th style="text-align: center"><spring:message
+								code="dashboard.computer_name" /><a
 							title="Order by name ascendant"
 							href="${computerPage.getOrder('nameAsc')}"><i
 								class="fa fa-arrow-down"></i></a> <a
 							title="Order by name descendant"
 							href="${computerPage.getOrder('nameDesc')}"><i
-								class="fa fa-arrow-up"></i></a>
-						</th>
-						<th style="text-align: center">Introduced date <a
+								class="fa fa-arrow-up"></i></a></th>
+						<th style="text-align: center"><spring:message
+								code="dashboard.introduced_date" /> <a
 							title="Order by introducted date ascendant"
 							href="${computerPage.getOrder('introAsc')}"><i
 								class="fa fa-arrow-down"></i></a> <a
 							title="Order by introducted date descendant"
 							href="${computerPage.getOrder('introDesc')}"><i
-								class="fa fa-arrow-up"></i></a>
-						</th>
+								class="fa fa-arrow-up"></i></a></th>
 						<!-- Table header for Discontinued Date -->
-						<th style="text-align: center">Discontinued date <a
+						<th style="text-align: center"><spring:message
+								code="dashboard.discontinued_date" /> <a
 							title="Order by discontinued ascendant"
 							href="${computerPage.getOrder('disconAsc')}"><i
 								class="fa fa-arrow-down"></i></a> <a
 							title="Order by discontinued descendant"
 							href="${computerPage.getOrder('disconDesc')}"><i
-								class="fa fa-arrow-up"></i></a>
-						</th>
+								class="fa fa-arrow-up"></i></a></th>
 						<!-- Table header for Company -->
-						<th style="text-align: center">Company <a
+						<th style="text-align: center"><spring:message
+								code="dashboard.company" /> <a
 							title="Order by company name ascendant"
 							href="${computerPage.getOrder('companyAsc')}"><i
 								class="fa fa-arrow-down"></i></a> <a
 							title="Order by company name descendant"
 							href="${computerPage.getOrder('companyDesc')}"><i
-								class="fa fa-arrow-up"></i></a>
-						</th>
+								class="fa fa-arrow-up"></i></a></th>
 
 					</tr>
 				</thead>
@@ -166,8 +186,8 @@
 		</div>
 	</footer>
 	<script src="<c:url value="/js/jquery.min.js"/>"></script>
-	<script src="<c:url value="/js/bootstrap.min.js"/>"></script>
 	<script src="<c:url value="/js/dashboard.js"/>"></script>
-
+	<script src="<c:url value="/js/i18n.js"/>"></script>
+	<script src="<c:url value="/js/bootstrap.min.js"/>"></script>
 </body>
 </html>

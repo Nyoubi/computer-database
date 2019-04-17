@@ -27,3 +27,15 @@ input[type='checkbox'] {
     border-radius: 5px;
     white-space: nowrap;
 }
+
+#lang {
+	margin-right : 5%;
+}
+
+.lang-flag {
+	width: 32px;
+	height: auto;
+	margin-left : 10px;
+	float: right;
+	margin-top : -31px
+}

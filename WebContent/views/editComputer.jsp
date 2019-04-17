@@ -1,10 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><spring:message code="dashboard.title"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
 <link href=<c:url value ="/css/bootstrap.min.css"/> rel="stylesheet"
@@ -18,27 +19,26 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href=<c:url value ="/dashboard"/>>
-				Application - Computer Database </a>
+				<spring:message code="editComputer.heading"/></a>
 		</div>
 	</header>
 
 	<div class="container">
 		<div id="nameError" class="alert alert-danger" role="alert"
 			style="display: none">
-			<strong>Name can't be empty</strong>
+			<strong><spring:message code="error.name_empty"/></strong>
 		</div>
 		<div id="introducedError" class="alert alert-danger" role="alert"
 			style="display: none">
-			<strong>Introduced date must respect the format dd/mm/yyyy</strong>
+			<strong><spring:message code="error.intro"/></strong>
 		</div>
 		<div id="discontinuedError" class="alert alert-danger" role="alert"
 			style="display: none">
-			<strong>Discontinued date must respect the format dd/mm/yyyy
-				and be after introduced date</strong>
+			<strong><spring:message code="error.discon"/></strong>
 		</div>
 		<div id="companyIdError" class="alert alert-danger" role="alert"
 			style="display: none">
-			<strong>This company is not an option</strong>
+			<strong><spring:message code="error.company"/></strong>
 		</div>
 	</div>
 
@@ -46,52 +46,47 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<h1>Edit Computer ${computer.getName()}</h1>
+					<h1><spring:message code="editComputer.edit_computer"/> ${computer.getName()}</h1>
 					<form:form modelAttribute="computer" name="editForm" id="editForm" action="editComputer" method="POST">
 						<form:input path="id" type="hidden" value="${computer.getId()}"
 							id="idComputer" name="idComputer" />
 						<fieldset>
 							<div class="form-group">
-								<form:label path="name" for="name">Computer name</form:label>
+								<form:label path="name" for="name"><spring:message code="editComputer.computer_name"/></form:label>
 								<form:input path="name" type="text" class="form-control" id="name"
 									name="name" placeholder="${computer.getName()}"
 									value="${computer.getName()}" required="true" />
 							</div>
 							<div class="form-group">
-								<form:label path="introduced" for="introduced">Introduced date <br />
-									<small class="text-muted">(Can be empty)</small>
+								<form:label path="introduced" for="introduced"><spring:message code="editComputer.introduced_date"/><br />
+									<small class="text-muted"><spring:message code="editComputer.empty"/></small>
 								</form:label>
 								<form:input path="introduced" type="date" class="form-control" id="introduced"
 									name="introduced" value="${computer.getIntroduced()}"/>
 							</div>
 							<div class="form-group" data-toggle="tooltip"
 								title="You need to fill introduced first">
-								<form:label path="discontinued" for="discontinued">Discontinued date <br /> 
+								<form:label path="discontinued" for="discontinued"><spring:message code="editComputer.discontinued_date"/> <br /> 
 								<small
-									class="text-muted">(Can be empty)</small>
+									class="text-muted"><spring:message code="editComputer.empty"/></small>
 								</form:label> 
 								<form:input path="discontinued" type="date" class="form-control" id="discontinued"
 									name="discontinued" value="${computer.getDiscontinued()}"/>
 							</div>
 							<div class="form-group">
-								<form:label path="companyId" for="companyId">Company</form:label> 
+								<form:label path="companyId" for="companyId"><spring:message code="editComputer.company"/></form:label> 
 								<form:select path="companyId" class="form-control" id="companyId" name="companyId">
 									<form:option value="0">--</form:option>
 									<c:forEach var="company" items="${listCompanies}">
-										<c:if test="${company.id == computer.companyId}"> 
-												<form:option value="${company.id}" selected="true"> ${company.name}</form:option>
-										</c:if>
-										<c:if test="${company.id == computer.companyId}"> 
-												<form:option value="${company.id}"> ${company.name}</form:option>
-										</c:if>
+										<form:option value="${company.id}" > ${company.name}</form:option>
 									</c:forEach>
 								</form:select>
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Edit" class="btn btn-primary"
-								id="btnEdit" /> or <a href=<c:url value ="/dashboard"/>
-								class="btn btn-default">Cancel</a>
+							<input type="submit" value="<spring:message code="editComputer.edit"/>" class="btn btn-primary"
+								id="btnEdit" /> <spring:message code="editComputer.or"/> <a href=<c:url value ="/dashboard"/>
+								class="btn btn-default"><spring:message code="editComputer.cancel"/></a>
 						</div>
 					</form:form>
 				</div>

@@ -139,16 +139,23 @@ public class Page<T> {
 	}
 	
 	public Integer getStart () {
+		int value = (int) Math.ceil((double)content.size() / size);
 		if (index <= 3) {
 			return 1;
-		} else if (index > Math.ceil(content.size() / size)) {
-			return  (int) (Math.ceil(content.size() / size) - 3);
+		} else if (index + 2 <= value) {
+			return index - 2;
+		} else {
+			return Math.max(index - 4 + (value - index),1) ;
 		}
-		return index - 2;
 	}
 	
 	public Integer getEnd () {
-		return (int) Math.min(Math.ceil(content.size() / size),4);
+		int value = (int) Math.ceil((double)content.size() / size);
+		if (value <= 4) {
+			return --value;
+		} else {
+			return Math.min(value,4);
+		}
 	}
 	
 	

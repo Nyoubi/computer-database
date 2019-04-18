@@ -17,8 +17,11 @@ import com.excilys.computer_database.dto.CompanyDto;
 import com.excilys.computer_database.dto.ComputerDto;
 import com.excilys.computer_database.exception.DaoException;
 import com.excilys.computer_database.exception.ModelException;
+import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.service.CompanyService;
 import com.excilys.computer_database.service.ComputerService;
+
+import validation.DtoComputerValidation;
 
 @Controller
 public class AddComputerController {
@@ -56,7 +59,7 @@ public class AddComputerController {
 	}
 
 	@PostMapping({ "/addComputer", "/addcomputer", "/AddComputer", "/Addcomputer" })
-	public String postAddComputer(@Validated @ModelAttribute("computer")ComputerDto computer, 
+	public String postAddComputer(@Validated @ModelAttribute("computer")ComputerDto dtoComputer, 
 		      BindingResult result, Model model) {
 		logger.info("postAddComputer has been called");
 
@@ -65,7 +68,8 @@ public class AddComputerController {
         }
 		
 		try {
-			this.computerService.createComputer(null, computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), Integer.valueOf(computer.getCompanyId()));
+			Computer computer = DtoComputerValidation.checkDataComputer(dtoComputer, this.companyService, false);
+			this.computerService.createComputer(computer);
 			return VIEW_LIST_COMPUTERS;
 		} catch (DaoException | ModelException e) {
 			return VIEW_ERROR_500;

@@ -21,8 +21,11 @@ import com.excilys.computer_database.dto.ComputerDto;
 import com.excilys.computer_database.exception.DaoException;
 import com.excilys.computer_database.exception.InvalidInputException;
 import com.excilys.computer_database.exception.ModelException;
+import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.service.CompanyService;
 import com.excilys.computer_database.service.ComputerService;
+
+import validation.DtoComputerValidation;
 
 @Controller
 public class EditComputerController {
@@ -41,12 +44,13 @@ public class EditComputerController {
 	private CompanyService companyService;
 	
 	@PostMapping({ "/editComputer", "/editcomputer", "/Editcomputer", "/EditComputer" })
-	protected String postEditcomputer(@Validated @ModelAttribute("computer")ComputerDto computer, 
+	protected String postEditcomputer(@Validated @ModelAttribute("computer")ComputerDto dtoComputer, 
 		      BindingResult result, Model model) {
 		logger.info("postEditcomputer has been called");
 
 		try {
-			computerService.updateComputer(Integer.valueOf(computer.getId()), computer.getName(), computer.getIntroduced(), computer.getDiscontinued(), Integer.valueOf(computer.getCompanyId()));
+			Computer computer = DtoComputerValidation.checkDataComputer(dtoComputer, this.companyService, true);
+			computerService.updateComputer(computer);
 			return VIEW_LIST_COMPUTERS;
 		} catch (DaoException | ModelException e) {
 			return VIEW_ERROR_500;

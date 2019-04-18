@@ -45,24 +45,15 @@ $(function() {
 (function ( $ ) {
 
     $.fn.toggleEditMode = function() {
-    	console.log(navigator.language);
         if($(".editMode").is(":visible")) {
             $(".editMode").hide();
-            if (navigator.language === "fr-FR") {
-            	$("#editComputer").text("Editer");
-            }
-            else {
-            	$("#editComputer").text("Edit");
-            }
+            $("#editComputer").show();
+            $("#viewComputer").hide();
         }
         else {
             $(".editMode").show();
-            if (navigator.language === "fr-FR") {
-            	$("#editComputer").text("Vue");
-            }
-            else {
-            	$("#editComputer").text("View");
-            }
+            $("#editComputer").hide();
+            $("#viewComputer").show();
         }
         return this;
     };
@@ -73,17 +64,9 @@ $(function() {
 // Function delete selected: Asks for confirmation to delete selected computers, then submits it to the deleteForm
 (function ( $ ) {
     $.fn.deleteSelected = function() {
-    	if (navigator.language === "fr-FR") {
-    		if (confirm("Êtes-vous sur de vouloir supprimer les ordinateurs selectionnés ?")) { 
-                $('#deleteForm input[name=selection]').setCheckboxValues('selection','cb');
-                $('#deleteForm').submit();
-            }
-        }
-        else {
-        	if (confirm("Are you sure you want to delete the selected computers?")) { 
-                $('#deleteForm input[name=selection]').setCheckboxValues('selection','cb');
-                $('#deleteForm').submit();
-            }
+        if (confirm("Are you sure you want to delete the selected computers?")) { 
+            $('#deleteForm input[name=selection]').setCheckboxValues('selection','cb');
+            $('#deleteForm').submit();
         }
     };
 }( jQuery ));

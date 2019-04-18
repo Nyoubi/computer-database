@@ -59,9 +59,14 @@
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
 						href=<c:url value ="/addComputer"/>><spring:message
-							code="dashboard.add_computer" /></a> <a class="btn btn-default"
-						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message
-							code="dashboard.edit" /></a>
+							code="dashboard.add_computer" /></a> 
+						<a class="btn btn-default" id="editComputer" 
+							href="#" onclick="$.fn.toggleEditMode();"> <spring:message code="dashboard.edit"/>
+						</a>
+						<a class="btn btn-default" id="viewComputer" 
+							href="#" onclick="$.fn.toggleEditMode();" style="display: none">
+							<spring:message code="dashboard.view"/>
+						</a>
 				</div>
 			</div>
 		</div>

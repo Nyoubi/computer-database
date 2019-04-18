@@ -1,8 +1,6 @@
 package com.excilys.computer_database.service;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,16 +8,12 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.excilys.computer_database.dto.CompanyDto;
 import com.excilys.computer_database.dto.ComputerDto;
 import com.excilys.computer_database.exception.DaoException;
 import com.excilys.computer_database.exception.InvalidInputException;
 import com.excilys.computer_database.exception.ModelException;
-import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.mapper.ComputerMapper;
-import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
-import com.excilys.computer_database.model.ComputerBuilder;
 import com.excilys.computer_database.model.Page;
 import com.excilys.computer_database.model.Page.orderEnum;
 import com.excilys.computer_database.model.PageBuilder;
@@ -31,9 +25,6 @@ public class ComputerService {
 	
 	@Autowired
 	private DaoComputer daoComputer;
-	
-	@Autowired
-	private CompanyService companyService;
 
 	public List<ComputerDto> listAllComputer(String order)  throws DaoException{
 		return daoComputer.listAllComputer(order).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());

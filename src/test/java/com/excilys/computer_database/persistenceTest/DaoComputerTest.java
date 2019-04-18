@@ -55,7 +55,7 @@ public class DaoComputerTest {
 		computer2 = computerBuilder.build();
 
 	}
-	
+
 	@AfterEach
 	public void end() {
 		context.close();
@@ -98,7 +98,7 @@ public class DaoComputerTest {
 		computer2 = daoComputer.findComputerById(computer.getId()).get();
 
 		assertEquals(computer2,computer);
-		
+
 		try {
 			daoComputer.deleteComputerById(computer.getId());
 		} catch (DaoException e) {
@@ -126,46 +126,61 @@ public class DaoComputerTest {
 	@Test
 	public void testFindComputerById() {
 		computer = daoComputer.findComputerById(1).get();
-
 		assertNotNull(computer);
 		computer2.setId(1);
 		computer2.setName("Computer 1");
 		computer2.setIntroduced(Util.stringToTimestamp(("2000-01-01")).get());
 		computer2.setDiscontinued(Util.stringToTimestamp(("2000-01-06")).get());
-		computer2.setCompany(new Company(1,"Company 1"));
+		computer2.setCompany(new Company(2,"Company 2"));
 		assertEquals(computer, computer2);	
 	}
 
 	@Test
-	public void testListComputerOrder() {
+	public void testListComputerOrderName() {
 		List<Computer> list = new ArrayList<>();
+		
 		list = daoComputer.listAllComputer("");
-		assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
+		assertTrue(list.get(0).getId() == 1);
+		assertTrue(list.get(0).getName().equals("Computer 1"));
 
 		list = daoComputer.listAllComputer(orderEnum.NAME_ASC.getValue());
 		assertTrue(list.get(1).getId() == 3 && list.get(2).getName().equals("test"));
 
 		list = daoComputer.listAllComputer(orderEnum.NAME_DESC.getValue());
 		assertTrue(list.get(0).getId() == 2 	&& list.get(1).getName().equals("Computer 3"));
+	}
 
+	@Test
+	public void testListComputerOrderIntro() {
+		List<Computer> list = new ArrayList<>();
+		
 		list = daoComputer.listAllComputer(orderEnum.INTRO_ASC.getValue());
 		assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
 
 		list = daoComputer.listAllComputer(orderEnum.INTRO_DESC.getValue());
 		assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
+	}
 
-
+	@Test
+	public void testListComputerOrderDiscon() {
+		List<Computer> list = new ArrayList<>();
+		
 		list = daoComputer.listAllComputer(orderEnum.DISCON_ASC.getValue());
 		assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
 
 		list = daoComputer.listAllComputer(orderEnum.DISCON_DESC.getValue());
 		assertTrue(list.get(0).getId() == 1 && list.get(0).getName().equals("Computer 1"));
+	}
 
+	@Test
+	public void testListComputerOrderCompany() {
+		List<Computer> list = new ArrayList<>();
+		
 		list = daoComputer.listAllComputer(orderEnum.COMPANY_ASC.getValue());
-		assertTrue(list.get(0).getCompany().getId() == 1 && list.get(1).getCompany().getId() == 1);
-
+		assertTrue(list.get(0).getCompany().getId() == 1 && list.get(2).getCompany().getId() == 2);
+		
 		list = daoComputer.listAllComputer(orderEnum.COMPANY_DESC.getValue());
-		assertTrue(list.get(0).getId() == 2);
+		assertTrue(list.get(0).getId() == 1);
 	}
 
 	@Test

@@ -47,6 +47,9 @@ public class DaoComputer {
 	}
 
 	public List<Computer> listAllComputer(String order) {
+		if ("".equals(order)) {
+			order = "ORDER BY c.id ASC";
+		}
 		List<Computer> computers = jdbcTemplate.query(SELECT_ALL + order, new ComputerMapper());
 		return computers;
 	}
@@ -68,7 +71,7 @@ public class DaoComputer {
 				computer.getName(), 
 				computer.getIntroduced(), 
 				computer.getDiscontinued(), 
-				computer.getCompany().getId()
+				computer.getCompany() != null ? computer.getCompany().getId() : null
 		});
 
 		if(lineAffected == 0) {

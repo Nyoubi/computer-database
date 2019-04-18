@@ -14,16 +14,16 @@ public class Page<T> {
 	private static List<Integer> sizeList = Arrays.asList(new Integer[]{10,20,50,100});
 	
 	public enum orderEnum {
-        NAME_ASC("nameAsc","ORDER BY c.name"), 
+        NAME_ASC("nameAsc","ORDER BY c.name ASC"), 
         NAME_DESC("nameDesc","ORDER BY c.name DESC"), 
         
-        INTRO_ASC("introAsc","ORDER BY c.introduced IS NULL, c.introduced"), 
+        INTRO_ASC("introAsc","ORDER BY c.introduced IS NULL, c.introduced ASC"), 
         INTRO_DESC("introDesc","ORDER BY c.introduced DESC"), 
         
-        DISCON_ASC("disconAsc","ORDER BY c.discontinued IS NULL, c.discontinued"), 
+        DISCON_ASC("disconAsc","ORDER BY c.discontinued IS NULL, c.discontinued ASC"), 
         DISCON_DESC("disconDesc","ORDER BY c.discontinued  DESC"), 
         
-        COMPANY_ASC("companyAsc","ORDER BY cName IS NULL, cName"), 
+        COMPANY_ASC("companyAsc","ORDER BY cName IS NULL, cName ASC"), 
         COMPANY_DESC("companyDesc","ORDER BY cName DESC");
 		
 		private String tag;
@@ -145,7 +145,7 @@ public class Page<T> {
 		} else if (index + 2 <= value) {
 			return index - 2;
 		} else {
-			return Math.max(index - 4 + (value - index),1) ;
+			return Math.max(value - 4,1) ;
 		}
 	}
 	

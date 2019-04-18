@@ -14,13 +14,17 @@ import org.springframework.context.support.GenericApplicationContext;
 
 import com.excilys.computer_database.app.AppConfigTest;
 import com.excilys.computer_database.dto.ComputerDto;
-import com.excilys.computer_database.dto.ComputerDtobuilder;
+import com.excilys.computer_database.dto.ComputerDtoBuilder;
 import com.excilys.computer_database.exception.DaoException;
 import com.excilys.computer_database.exception.InvalidInputException;
 import com.excilys.computer_database.exception.ModelException;
+import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.model.Computer;
+import com.excilys.computer_database.model.ComputerBuilder;
 import com.excilys.computer_database.model.Page;
 import com.excilys.computer_database.persistence.DaoComputer;
 import com.excilys.computer_database.service.ComputerService;
+import com.excilys.computer_database.util.Util;
 
 public class computerServiceTest {
 	static private ComputerService computerService;
@@ -60,7 +64,7 @@ public class computerServiceTest {
 	@Test
 	public void testFindById() {
 		try {
-			ComputerDto computer2 = new ComputerDtobuilder().setId(2).setName("test").setCompanyId(2).setCompanyName("Company 2").build();
+			ComputerDto computer2 = new ComputerDtoBuilder().setId(2).setName("test").setCompanyId(2).setCompanyName("Company 2").build();
 			ComputerDto computer = computerService.showDetails("2").get();
 			assertEquals(computer.toString(),computer2.toString());
 
@@ -72,7 +76,8 @@ public class computerServiceTest {
 	@Test
 	public void testDeleteComputer() {
 		try {
-			computerService.createComputer(4,"delete", "", "", 1);
+			Computer computer = new ComputerBuilder().setId(4).setName("deleted").build();
+			computerService.createComputer(computer);
 			computerService.deleteComputer("4");
 
 			daoComputer.resetAutoIncrement(Integer.valueOf(3));
@@ -83,61 +88,6 @@ public class computerServiceTest {
 		}
 	}
 	
-	@Test
-	public void testCheckDataComputer() {
-		try {
-			computerService.checkDataComputer(1,"test","1996-02-01",null,1);
-			assertTrue(true);
-		} catch (ModelException|DaoException e) {
-			fail();
-		}
-
-		try {
-			computerService.checkDataComputer(null, null,null,null,0);
-		} catch (ModelException|DaoException e) {
-			assertTrue(true);
-		}
-		
-		try {
-			computerService.checkDataComputer(1, null,null,null,0);
-		} catch (ModelException|DaoException e) {
-			assertTrue(true);
-		}
-		
-		try {
-			computerService.checkDataComputer(1,"test",null,"1995-12-12",0);
-		} catch (ModelException|DaoException e) {
-			assertTrue(true);
-		}
-		
-		try {
-			computerService.checkDataComputer(1,"test","1995-12-12","1995-10-10",-1);
-		} catch (ModelException|DaoException e) {
-			assertTrue(true);
-		}
-		
-		try {
-			computerService.checkDataComputer(1,"test","1995-10-10","1995-12-12",-1);
-		} catch (ModelException|DaoException e) {
-			assertTrue(true);
-		}
-	}
-	
-	@Test
-	public void testCheckId() {
-		try {
-			assertTrue(computerService.checkId(1)==1);
-		} catch (ModelException e) {
-			fail();
-		}
-		
-		try {
-			computerService.checkId(null);
-			fail();
-		} catch (ModelException e) {
-			assertTrue(true);
-		}
-	}
 	
 	@Test
 	public void testPageComputer() {
@@ -151,7 +101,7 @@ public class computerServiceTest {
 			
 			test = computerService.pageDtoComputer("testurl","1","10","Computer","companyAsc");
 			assertTrue(test.getContent().size() == 2);
-			assertTrue(test.getContent().get(0).getName().equals("Computer 1"));
+			assertTrue(test.getContent().get(0).getName().equals("Computer 3"));
 
 			test = computerService.pageDtoComputer("testurl","1","10",null,"");
 			assertTrue(test.getContent().size() == 3);
@@ -165,16 +115,22 @@ public class computerServiceTest {
 	@Test
 	public void testGetOrder() {
 		assertTrue(computerService.getOrder(null) == "");
-		assertTrue(computerService.getOrder("nameAsc") == "ORDER BY c.name");
+		assertTrue(computerService.getOrder("nameAsc") == "ORDER BY c.name ASC");
 	}
 	
 	@Test
 	public void testUpdateComputer() {
 		try {
-			computerService.updateComputer(1, "testUpdate", "2000-01-01", "2000-01-06", 2);
+			Computer computer = new ComputerBuilder().setId(1).setName("testUpdate")
+													 .setIntroduced(Util.stringToTimestamp("2000-01-01").get())
+													 .setDiscontinued(Util.stringToTimestamp("2000-01-06").get())
+													 .setCompany(new Company(2,"Company 2")).build();
+			
+			computerService.updateComputer(computer);
 			assertTrue(computerService.showDetails("1").get().getCompanyId()==2);
 			assertTrue(computerService.showDetails("1").get().getName().equals("testUpdate"));
-			computerService.updateComputer(1, "Computer 1", "2000-01-01", "2000-01-06", 1);
+			computer.setName("Computer 1");
+			computerService.updateComputer(computer);
 		} catch (DaoException | ModelException | InvalidInputException e) {
 			fail();
 		}

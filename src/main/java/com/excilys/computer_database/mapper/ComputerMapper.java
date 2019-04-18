@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.excilys.computer_database.dto.CompanyDto;
 import com.excilys.computer_database.dto.ComputerDto;
-import com.excilys.computer_database.dto.ComputerDtobuilder;
+import com.excilys.computer_database.dto.ComputerDtoBuilder;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
@@ -34,7 +34,7 @@ public class ComputerMapper implements RowMapper<Computer>{
 	}
 
 	public static ComputerDto computerToDtoComputer(Computer computer){
-		ComputerDtobuilder dtoComputerBuilder = new ComputerDtobuilder();
+		ComputerDtoBuilder dtoComputerBuilder = new ComputerDtoBuilder();
 
 		dtoComputerBuilder.setId(computer.getId())
 						  .setName(computer.getName());

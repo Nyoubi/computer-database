@@ -16,12 +16,8 @@
 	media="screen">
 </head>
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<a class="navbar-brand" href=<c:url value ="/dashboard"/>>
-				<spring:message code="addComputer.heading"/> </a>
-		</div>
-	</header>
+	<%@include file="/views/imports/header.jsp"%>
+	<%@include file="/views/imports/error.jsp"%>
 
 	<div class="container">
 		<div id="nameError" class="alert alert-danger" role="alert"

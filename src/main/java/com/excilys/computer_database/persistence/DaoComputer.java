@@ -76,7 +76,7 @@ public class DaoComputer {
 
 		if(lineAffected == 0) {
 			logger.error("Error when creating the computer " + computer.getName());
-			throw new DaoException("Couldn't insert "+ computer.getName() );
+			throw new DaoException("daocomputer.insertComputer");
 		}
 	}
 
@@ -90,7 +90,7 @@ public class DaoComputer {
 		});
 		if(lineAffected == 0) {
 			logger.error("Error when updating the computer.");
-			throw new DaoException("Couldn't update "+ computer.getName() );
+			throw new DaoException("daocomputer.updateComputer");
 		}
 	}
 
@@ -98,7 +98,7 @@ public class DaoComputer {
 		Integer lineAffected = jdbcTemplate.update(DELETE_ID, new Object[] {id});
 		if( lineAffected == 0 ) {
 			logger.error("Error when deleting the computer.");
-			throw new DaoException("Couldn't delete computer "+ id );
+			throw new DaoException("daocomputer.deleteComputer");
 		}
 	}
 

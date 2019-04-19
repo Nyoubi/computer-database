@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 
-import com.excilys.computer_database.app.AppConfigTest;
+import com.excilys.computer_database.appTest.AppConfigTest;
 import com.excilys.computer_database.dto.ComputerDto;
 import com.excilys.computer_database.dto.ComputerDtoBuilder;
 import com.excilys.computer_database.exception.DaoException;
 import com.excilys.computer_database.exception.InvalidInputException;
-import com.excilys.computer_database.exception.ModelException;
+import com.excilys.computer_database.exception.ValidationException;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.ComputerBuilder;
@@ -83,7 +83,7 @@ public class computerServiceTest {
 			daoComputer.resetAutoIncrement(Integer.valueOf(3));
 
 			computerService.showDetails("4").isPresent();
-		} catch (ModelException|DaoException | InvalidInputException e) {
+		} catch (DaoException | InvalidInputException e) {
 			assertTrue(true);
 		}
 	}
@@ -106,7 +106,7 @@ public class computerServiceTest {
 			test = computerService.pageDtoComputer("testurl","1","10",null,"");
 			assertTrue(test.getContent().size() == 3);
 			
-		} catch (DaoException | ModelException e) {
+		} catch (DaoException | ValidationException e) {
 			fail();
 		}
 			
@@ -131,7 +131,7 @@ public class computerServiceTest {
 			assertTrue(computerService.showDetails("1").get().getName().equals("testUpdate"));
 			computer.setName("Computer 1");
 			computerService.updateComputer(computer);
-		} catch (DaoException | ModelException | InvalidInputException e) {
+		} catch (DaoException | InvalidInputException e) {
 			fail();
 		}
 	}

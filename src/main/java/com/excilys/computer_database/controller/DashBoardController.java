@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.excilys.computer_database.dto.ComputerDto;
 import com.excilys.computer_database.exception.DaoException;
 import com.excilys.computer_database.exception.InvalidInputException;
-import com.excilys.computer_database.exception.ModelException;
+import com.excilys.computer_database.exception.ValidationException;
 import com.excilys.computer_database.model.Page;
 import com.excilys.computer_database.service.ComputerService;
 
@@ -41,7 +41,8 @@ public class DashBoardController {
 		try {
 			showComputers = computerService.pageDtoComputer(VIEW_LIST_COMPUTERS, index, size, search, order);
 
-		} catch (DaoException | ModelException e) {
+		} catch (DaoException | ValidationException e) {
+			model.addAttribute("stackTrace", e.getMessage());
 			return VIEW_ERROR_500;
 		}
 
@@ -67,10 +68,11 @@ public class DashBoardController {
 				try {
 					computerService.deleteComputer(id);
 				} catch (DaoException | InvalidInputException e) {
+					model.addAttribute("stackTrace", e.getMessage());
 					return VIEW_ERROR_500;
 				}
 			}
-		}
+		} 
 		return "redirect:"+VIEW_LIST_COMPUTERS;
 	}
 }

@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 
-import com.excilys.computer_database.app.AppConfigTest;
+import com.excilys.computer_database.appTest.AppConfigTest;
 import com.excilys.computer_database.exception.DaoException;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.CompanyBuilder;

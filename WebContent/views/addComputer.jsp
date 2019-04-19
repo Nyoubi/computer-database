@@ -47,6 +47,7 @@
 						action="addComputer" method="POST">
 						<fieldset>
 							<div class="form-group">
+								<form:errors path="name" cssClass="alert alert-danger" element="p"/>
 								<form:label path="name" for="name"><spring:message code="addComputer.computer_name"/></form:label>
 								<spring:message code='addComputer.computer_name' var='computer_name' />
 								<form:input path="name" type="text"
@@ -55,6 +56,7 @@
 								/>
 							</div>
 							<div class="form-group">
+								<form:errors path="introduced" cssClass="alert alert-danger" element="p"/>
 								<form:label path="introduced" for="introduced"><spring:message code="addComputer.introduced_date"/><br />
 									<small class="text-muted"><spring:message code="addComputer.empty"/></small>
 								</form:label>
@@ -64,6 +66,7 @@
 							</div>
 							<div class="form-group" data-toggle="tooltip"
 								title="You need to fill introduced first">
+								<form:errors path="discontinued" cssClass="alert alert-danger" element="p"/>
 								<form:label path="discontinued" for="discontinued"><spring:message code="addComputer.discontinued_date"/><br />
 									<small class="text-muted"><spring:message code="addComputer.empty"/></small>
 								</form:label>
@@ -72,6 +75,7 @@
 									 />
 							</div>
 							<div class="form-group">
+								<form:errors path="companyId" cssClass="alert alert-danger" element="p"/>
 								<form:label path="companyId" for="companyId"><spring:message code="addComputer.company"/></form:label>
 								<form:select path="companyId" class="form-control"
 									id="companyId" name="companyId">
@@ -95,6 +99,7 @@
 	<script src="<c:url value="/js/jquery.min.js"/>"></script>
 	<script src="<c:url value="/js/bootstrap.min.js"/>"></script>
 	<script src="<c:url value="/js/validate.js"/>"></script>
+	<script src="<c:url value="/js/i18n.js"/>"></script>
 
 </body>
 

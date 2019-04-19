@@ -14,7 +14,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.excilys.computer_database.dto.ComputerDto;
-import com.excilys.computer_database.exception.ModelException;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.Computer;
@@ -27,7 +26,7 @@ public class ComputerMapperTest {
 
 
 	@Test
-	public void testComputerToDtoMapper() throws ModelException{
+	public void testComputerToDtoMapper(){
 
 		Computer computer = null;
 		try {

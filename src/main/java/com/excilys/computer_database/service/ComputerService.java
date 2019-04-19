@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.excilys.computer_database.dto.ComputerDto;
 import com.excilys.computer_database.exception.DaoException;
 import com.excilys.computer_database.exception.InvalidInputException;
-import com.excilys.computer_database.exception.ModelException;
+import com.excilys.computer_database.exception.ValidationException;
 import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.model.Page;
@@ -59,16 +59,16 @@ public class ComputerService {
 		}
 	}
 
-	public void createComputer(Computer computer) throws DaoException, ModelException {
+	public void createComputer(Computer computer) throws DaoException {
 		daoComputer.createComputer(computer);
 	}
 
 
-	public void updateComputer(Computer computer) throws DaoException, ModelException {
+	public void updateComputer(Computer computer) throws DaoException {
 		daoComputer.updateComputer(computer);
 	}
 
-	public Page<ComputerDto> pageDtoComputer(String url, String index, String size, String search, String order) throws DaoException, ModelException{
+	public Page<ComputerDto> pageDtoComputer(String url, String index, String size, String search, String order) throws ValidationException, DaoException {
 		List<ComputerDto> result = new ArrayList<>();
 		String orderBy = getOrder(order);
 		if (search == null || search.equals("")) {
@@ -111,8 +111,8 @@ public class ComputerService {
 		}		
 		return orderBy;
 	}
-
-	public PageBuilder<ComputerDto> checkPage(String url, List<ComputerDto> content, Integer index, Integer size, String search, String order) throws ModelException {
+	
+	public PageBuilder<ComputerDto> checkPage(String url, List<ComputerDto> content, Integer index, Integer size, String search, String order) throws ValidationException{
 		PageBuilder<ComputerDto> pageBuilder = new PageBuilder<ComputerDto>();
 
 		if(index == null) {
@@ -122,7 +122,7 @@ public class ComputerService {
 			size = Integer.valueOf(10);
 		}
 		if(url == null) {
-			throw new ModelException("An url is needed");
+			throw new ValidationException("An url is needed");
 		}
 		if(search == null) {
 			search = "";

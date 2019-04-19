@@ -16,7 +16,9 @@
 	media="screen">
 </head>
 <body>
+
 	<%@include file="/views/imports/header.jsp"%>
+	
 	<%@include file="/views/imports/error.jsp"%>
 
 	<section id="main">
@@ -29,12 +31,15 @@
 							id="idComputer" name="idComputer" />
 						<fieldset>
 							<div class="form-group">
+								 <form:errors path="name" cssClass="alert alert-danger" element="p"/>
+				
 								<form:label path="name" for="name"><spring:message code="editComputer.computer_name"/></form:label>
 								<form:input path="name" type="text" class="form-control" id="name"
 									name="name" placeholder="${computer.getName()}"
 									value="${computer.getName()}" required="true" />
 							</div>
 							<div class="form-group">
+							<form:errors path="introduced" cssClass="alert alert-danger" element="p"/>
 								<form:label path="introduced" for="introduced"><spring:message code="editComputer.introduced_date"/><br />
 									<small class="text-muted"><spring:message code="editComputer.empty"/></small>
 								</form:label>
@@ -43,6 +48,7 @@
 							</div>
 							<div class="form-group" data-toggle="tooltip"
 								title="You need to fill introduced first">
+								<form:errors path="discontinued" cssClass="alert alert-danger" element="p"/>
 								<form:label path="discontinued" for="discontinued"><spring:message code="editComputer.discontinued_date"/> <br /> 
 								<small
 									class="text-muted"><spring:message code="editComputer.empty"/></small>
@@ -51,6 +57,7 @@
 									name="discontinued" value="${computer.getDiscontinued()}"/>
 							</div>
 							<div class="form-group">
+							<form:errors path="companyId" cssClass="alert alert-danger" element="p"/>
 								<form:label path="companyId" for="companyId"><spring:message code="editComputer.company"/></form:label> 
 								<form:select path="companyId" class="form-control" id="companyId" name="companyId">
 									<form:option value="0">--</form:option>
@@ -73,6 +80,7 @@
 	<script src="<c:url value="/js/jquery.min.js"/>"></script>
 	<script src="<c:url value="/js/bootstrap.min.js"/>"></script>
 	<script src="<c:url value="/js/validate.js"/>"></script>
+	<script src="<c:url value="/js/i18n.js"/>"></script>
 
 </body>
 

@@ -1,7 +1,7 @@
 package com.excilys.computer_database.dto;
 
 public class ComputerDto {
-	private int id;
+	private int id = 0;
 	private String name;
 	private String introduced;
 	private String discontinued;

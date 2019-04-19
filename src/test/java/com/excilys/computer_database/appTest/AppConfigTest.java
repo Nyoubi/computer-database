@@ -1,4 +1,4 @@
-package com.excilys.computer_database.app;
+package com.excilys.computer_database.appTest;
 
 import javax.sql.DataSource;
 

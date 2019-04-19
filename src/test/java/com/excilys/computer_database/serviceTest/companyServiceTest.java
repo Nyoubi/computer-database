@@ -10,11 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 
-import com.excilys.computer_database.app.AppConfigTest;
+import com.excilys.computer_database.appTest.AppConfigTest;
 import com.excilys.computer_database.dto.CompanyDto;
 import com.excilys.computer_database.dto.CompanyDtoBuilder;
 import com.excilys.computer_database.exception.DaoException;
-import com.excilys.computer_database.exception.ModelException;
 import com.excilys.computer_database.service.CompanyService;
 
 public class companyServiceTest {
@@ -47,7 +46,7 @@ public class companyServiceTest {
 			CompanyDto company = companyService.findCompanyById(1).get();
 			assertTrue(company.equals(company2));
 
-		} catch (ModelException|DaoException e) {
+		} catch (DaoException e) {
 			fail();
 		}
 	}
@@ -72,13 +71,13 @@ public class companyServiceTest {
 	public void testCheckCreateCompany() {
 		try {
 			companyService.checkDataCreateCompany("a");
-		} catch (ModelException|DaoException e) {
+		} catch (DaoException | javax.xml.bind.ValidationException e) {
 			fail();
 		}
 		
 		try {
 			companyService.checkDataCreateCompany(null);
-		} catch (ModelException|DaoException e) {
+		} catch (DaoException | javax.xml.bind.ValidationException e) {
 			assertTrue(true);
 		}
 	}

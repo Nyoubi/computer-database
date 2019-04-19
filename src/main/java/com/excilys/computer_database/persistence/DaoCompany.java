@@ -59,7 +59,7 @@ public class DaoCompany {
 			jdbcTemplate.update(DELETE_ID, new Object[]{id});
 		} catch (DataAccessException e) {
 			logger.error("Error when deleting company " + id);
-			throw new DaoException("Error when deleting the company");
+			throw new DaoException("daoException.deleteCompany");
 		}
 		
 	}
@@ -73,7 +73,7 @@ public class DaoCompany {
 
 		if(lineAffected == 0) {
 			logger.error("Error when creating the company " + company.getName());
-			throw new DaoException("Couldn't insert "+ company.getName() );
+			throw new DaoException("daoException.insertCompany");
 		}
 	}
 	

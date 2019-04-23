@@ -1,108 +1,55 @@
 package com.excilys.computer_database.persistence;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.computer_database.exception.DaoException;
-import com.excilys.computer_database.mapper.ComputerMapper;
 import com.excilys.computer_database.model.Computer;
 
+
 @Repository
-public class DaoComputer {
+public interface DaoComputer extends JpaRepository<Computer,Integer>{
 
-	private final String SELECT_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName FROM computer c "
+	final String SELECT_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName FROM computer c "
 			+ "LEFT JOIN company cn ON c.company_id=cn.id ";
-	private final String SELECT_NAME = SELECT_ALL + "WHERE c.name LIKE ? OR cn.name LIKE ? ";
-	private final String SELECT_ID = SELECT_ALL + "WHERE c.id=? ";
-	private final String UPDATE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
-	private final String DELETE_ID = "DELETE FROM computer WHERE id=?";
-	private final String CREATE = "INSERT INTO computer (id, name, introduced, discontinued,company_id) VALUES (?,?,?,?,?)";
-	private final String ALTER_AUTO_INCREMENTE = "ALTER TABLE computer AUTO_INCREMENT = ?";
-	private static Logger logger = LoggerFactory.getLogger(DaoComputer.class); 
+	final String ORDER_BY = "ORDER BY :order ";
+	final String SELECT_NAME = SELECT_ALL + "WHERE c.name LIKE :search OR cn.name LIKE :search ";
+	final String UPDATE = "UPDATE computer SET name = :#{#computer.name}, introduced = :#{#computer.introduced}, discontinued = :#{#computer.discontinued}, company_id = :#{#computer.company.id} WHERE id = :#{#computer.id}";
+	final String CREATE = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (:#{#computer.name}, :#{#computer.introduced},  :#{#computer.discontinued}, :#{#computer.company.id})";
+	final String ALTER_AUTO_INCREMENTE = "ALTER TABLE computer AUTO_INCREMENT = ?";
+	static Logger logger = LoggerFactory.getLogger(DaoComputer.class); 
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	public Computer getById(Integer id);
+	
+	@Query(value = SELECT_ALL + ORDER_BY , nativeQuery = true)
+	public List<Computer> findAll(@Param("order") String order);
 
-	public DaoComputer(JdbcTemplate jdbcTemplate) {
-		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-		this.jdbcTemplate = jdbcTemplate;
-	}
+	@Query(value = SELECT_NAME + ORDER_BY, nativeQuery = true)
+	public List<Computer> findAll(@Param("search") String search, @Param("order") String order);
+	
+	@Transactional
+	@Modifying
+	@Query(value = CREATE, nativeQuery = true)
+	public int insert(@Param("computer") Computer computer);
 
-	public Optional<Computer> findComputerById(Integer id) {
-		try {
-			Computer computer = jdbcTemplate.queryForObject(SELECT_ID, new Object[]{id} ,new ComputerMapper());
-			return Optional.of(computer);
-		} catch (EmptyResultDataAccessException e) {
-			return Optional.empty();
-		}
-	}
 
-	public List<Computer> listAllComputer(String order) {
-		if ("".equals(order)) {
-			order = "ORDER BY c.id ASC";
-		}
-		List<Computer> computers = jdbcTemplate.query(SELECT_ALL + order, new ComputerMapper());
-		return computers;
-	}
+	@Transactional
+	@Modifying
+	@Query(value = UPDATE, nativeQuery = true)
+	public int update(@Param("computer") Computer computer);
+	
+	@Transactional
+	@Modifying
+	public int deleteById(@Param("id") Long id);
 
-	public List<Computer> listAllComputer(String search, String order) {
-		try {
-			List<Computer> computers = jdbcTemplate.query(SELECT_NAME + order, new Object[]{"%"+search+"%","%"+search+"%"} ,new ComputerMapper());
-			return computers;
-		} catch (EmptyResultDataAccessException e) {
-			return new ArrayList<Computer>();
-		}
-
-	}
-
-	public void createComputer(Computer computer) throws DaoException {
-
-		Integer lineAffected = jdbcTemplate.update(CREATE, new Object[] {
-				computer.getId(),
-				computer.getName(), 
-				computer.getIntroduced(), 
-				computer.getDiscontinued(), 
-				computer.getCompany() != null ? computer.getCompany().getId() : null
-		});
-
-		if(lineAffected == 0) {
-			logger.error("Error when creating the computer " + computer.getName());
-			throw new DaoException("daocomputer.insertComputer");
-		}
-	}
-
-	public void updateComputer(Computer computer) throws DaoException {
-		Integer lineAffected = jdbcTemplate.update(UPDATE, new Object[] {
-				computer.getName(), 
-				computer.getIntroduced(), 
-				computer.getDiscontinued(), 
-				computer.getCompany().getId(), 
-				computer.getId()
-		});
-		if(lineAffected == 0) {
-			logger.error("Error when updating the computer.");
-			throw new DaoException("daocomputer.updateComputer");
-		}
-	}
-
-	public void deleteComputerById(Integer id)  throws DaoException {
-		Integer lineAffected = jdbcTemplate.update(DELETE_ID, new Object[] {id});
-		if( lineAffected == 0 ) {
-			logger.error("Error when deleting the computer.");
-			throw new DaoException("daocomputer.deleteComputer");
-		}
-	}
-
-	public void resetAutoIncrement(Integer value) {
-		jdbcTemplate.update(ALTER_AUTO_INCREMENTE, new Object[] {value});
-	}
+	@Modifying
+	@Query(ALTER_AUTO_INCREMENTE)
+	public int resetAutoIncrement(@Param("id") Integer id);
 }

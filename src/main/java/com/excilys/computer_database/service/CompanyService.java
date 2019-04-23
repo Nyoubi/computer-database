@@ -24,7 +24,7 @@ public class CompanyService {
 	
 	public ArrayList<CompanyDto> listCompanies()  throws DaoException {
 		ArrayList<CompanyDto> result = new ArrayList<>();
-		for (Company company : daoCompany.listAllCompany()) {
+		for (Company company : daoCompany.findAll()) {
 			Optional<CompanyDto> dtoCompany = CompanyMapper.companyToDtoCompany(company);
 			if (dtoCompany.isPresent()) {
 				result.add(dtoCompany.get());
@@ -34,7 +34,7 @@ public class CompanyService {
 	}
 	
 	public Optional<CompanyDto> findCompanyById(Integer id) throws DaoException{
-		Optional<Company> company = daoCompany.findCompanyById(id);
+		Optional<Company> company = daoCompany.findById(id);
 		Optional<CompanyDto> dtoCompany = Optional.empty();
 		if (company.isPresent()) {
 			dtoCompany = CompanyMapper.companyToDtoCompany(company.get());
@@ -43,15 +43,15 @@ public class CompanyService {
 	}
 	
 	public void deleteCompany(Integer id) throws DaoException {
-		daoCompany.deleteCompanyById(id);
+		daoCompany.deleteById(id);
 	}
 	
 	public void createCompany(String name) throws DaoException , ValidationException{
 		Company company = checkDataCreateCompany(name);
-		daoCompany.createCompany(company);
+		daoCompany.insert(company);
 	}
 	
-	public void resetAutoIncrement(Integer id) throws DaoException {
+	public void resetAutoxœIncrement(Integer id) throws DaoException {
 		daoCompany.resetAutoIncrement(id);
 	}
 	

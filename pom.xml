@@ -31,6 +31,9 @@
 		<spring>5.1.6.RELEASE</spring>
 		<springboot>2.1.4.RELEASE</springboot>
 		<tomcatjuli>9.0.0.M6</tomcatjuli>
+		<springjpa>2.1.6.RELEASE</springjpa>
+		<javaxpersistence>2.2.1</javaxpersistence>
+
 	</properties>
 
 	<dependencies>
@@ -73,6 +76,13 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<version>${javaxpersistence}</version>
+		</dependency>
+
+
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>${jstl}</version>
@@ -94,6 +104,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot</artifactId>
 			<version>${springboot}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${springjpa}</version>
 		</dependency>
 
 		<dependency>
@@ -124,6 +140,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-api</artifactId>
+			<version>${selenium}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring}</version>
@@ -143,7 +165,7 @@
 			<version>${jupiterapi}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 	</dependencies>
 
 </project>

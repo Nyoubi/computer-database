@@ -3,11 +3,42 @@ package com.excilys.computer_database.model;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.ForeignKey;
+
+
+@Entity
+@Table(name="computer")
 public class Computer {
+	
+	@Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
+	
+	@Basic(optional = false)
+	@Column(nullable = false)
 	private String name;
+	
 	private Timestamp introduced;
+	
 	private Timestamp discontinued;
+	
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "company_id",
+		table = "computer",
+		referencedColumnName = "id",
+		foreignKey = @ForeignKey(name = "fk_computer_company_1")
+	)
 	private Company company;
 
 	public Computer(Integer id, String name, Timestamp introduced, Timestamp discontinued, Company company) {
@@ -18,7 +49,7 @@ public class Computer {
 		this.company = company;
 	}
 
-	public Computer () {}
+	protected Computer () {}
 
 	public Integer getId() {
 		return id;

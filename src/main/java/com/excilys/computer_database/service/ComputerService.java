@@ -27,18 +27,18 @@ public class ComputerService {
 	private DaoComputer daoComputer;
 
 	public List<ComputerDto> listAllComputer(String order)  throws DaoException{
-		return daoComputer.listAllComputer(order).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
+		return daoComputer.findAll(order).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
 	}
 	
 	public List<ComputerDto> listAllComputer(String search, String order)  throws DaoException{
-		return daoComputer.listAllComputer(search,order).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
+		return daoComputer.findAll("%"+search+"%",order).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
 
 	}
 	
 	public Optional<ComputerDto> showDetails(String id)  throws DaoException, InvalidInputException {
 		Optional<Integer> ident = Util.parseInt(id);
 		if (ident.isPresent()) {
-			Optional<Computer> computer = daoComputer.findComputerById(ident.get());
+			Optional<Computer> computer = daoComputer.findById(ident.get());
 			if (computer.isPresent()) {
 				return Optional.of(ComputerMapper.computerToDtoComputer(computer.get()));
 			} else {
@@ -53,19 +53,19 @@ public class ComputerService {
 
 		Optional<Integer> ident = Util.parseInt(id);
 		if (Util.checkOptional(ident) != null) {
-			daoComputer.deleteComputerById(ident.get());
+			daoComputer.deleteById(ident.get());
 		} else {
 			throw new InvalidInputException("This id : " + id + " is invalid.");
 		}
 	}
 
 	public void createComputer(Computer computer) throws DaoException {
-		daoComputer.createComputer(computer);
+		daoComputer.insert(computer);
 	}
 
 
 	public void updateComputer(Computer computer) throws DaoException {
-		daoComputer.updateComputer(computer);
+		daoComputer.update(computer);
 	}
 
 	public Page<ComputerDto> pageDtoComputer(String url, String index, String size, String search, String order) throws ValidationException, DaoException {

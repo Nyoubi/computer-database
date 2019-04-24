@@ -19,25 +19,6 @@
 	<%@include file="/views/imports/header.jsp"%>
 	<%@include file="/views/imports/error.jsp"%>
 
-	<div class="container">
-		<div id="nameError" class="alert alert-danger" role="alert"
-			style="display: none">
-			<strong><spring:message code="error.name_empty"/></strong>
-		</div>
-		<div id="introducedError" class="alert alert-danger" role="alert"
-			style="display: none">
-			<strong><spring:message code="error.intro"/></strong>
-		</div>
-		<div id="discontinuedError" class="alert alert-danger" role="alert"
-			style="display: none">
-			<strong><spring:message code="error.discon"/></strong>
-		</div>
-		<div id="companyIdError" class="alert alert-danger" role="alert"
-			style="display: none">
-			<strong><spring:message code="error.company"/></strong>
-		</div>
-	</div>
-
 	<section id="main">
 		<div class="container">
 			<div class="row">
@@ -47,7 +28,7 @@
 						action="addComputer" method="POST">
 						<fieldset>
 							<div class="form-group">
-								<form:errors path="name" cssClass="alert alert-danger" element="p"/>
+								<form:errors id = "name.errors" path="name" cssClass="alert alert-danger" element="p"/>
 								<form:label path="name" for="name"><spring:message code="addComputer.computer_name"/></form:label>
 								<spring:message code='addComputer.computer_name' var='computer_name' />
 								<form:input path="name" type="text"
@@ -56,7 +37,7 @@
 								/>
 							</div>
 							<div class="form-group">
-								<form:errors path="introduced" cssClass="alert alert-danger" element="p"/>
+								<form:errors id = "introduced.errors" path="introduced" cssClass="alert alert-danger" element="p"/>
 								<form:label path="introduced" for="introduced"><spring:message code="addComputer.introduced_date"/><br />
 									<small class="text-muted"><spring:message code="addComputer.empty"/></small>
 								</form:label>
@@ -66,7 +47,7 @@
 							</div>
 							<div class="form-group" data-toggle="tooltip"
 								title="You need to fill introduced first">
-								<form:errors path="discontinued" cssClass="alert alert-danger" element="p"/>
+								<form:errors id="discontinued.errors" path="discontinued" cssClass="alert alert-danger" element="p"/>
 								<form:label path="discontinued" for="discontinued"><spring:message code="addComputer.discontinued_date"/><br />
 									<small class="text-muted"><spring:message code="addComputer.empty"/></small>
 								</form:label>
@@ -75,7 +56,7 @@
 									 />
 							</div>
 							<div class="form-group">
-								<form:errors path="companyId" cssClass="alert alert-danger" element="p"/>
+								<form:errors id="companyId.errors" path="companyId" cssClass="alert alert-danger" element="p"/>
 								<form:label path="companyId" for="companyId"><spring:message code="addComputer.company"/></form:label>
 								<form:select path="companyId" class="form-control"
 									id="companyId" name="companyId">
@@ -88,7 +69,7 @@
 						</fieldset>
 						<div class="actions pull-right">
 							<input type="submit" value="<spring:message code="addComputer.add"/>" class="btn btn-primary"
-								id="btnAdd"> <spring:message code="addComputer.or"/> <a href=<c:url value ="/dashboard"/>
+								id="btnAdd"> <spring:message code="addComputer.or"/> <a href=<c:url value ="/computer/dashboard"/>
 								class="btn btn-default"><spring:message code="addComputer.cancel"/></a>
 						</div>
 					</form:form>

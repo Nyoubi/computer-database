@@ -29,12 +29,7 @@ public class companyServiceTest {
 	@Test
 	public void testListCompany() {
 		ArrayList<CompanyDto> companies = new ArrayList<>();
-		try {
-			companies = companyService.listCompanies();
-		} catch (DaoException e) {
-			fail();
-		}
-		
+		companies = companyService.listCompanies();
 		assertTrue((int)companies.size() == 2);
 	}
 

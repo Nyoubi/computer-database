@@ -16,8 +16,8 @@ import com.excilys.computer_database.model.Company;
 public interface DaoCompany extends JpaRepository<Company,Integer> {
 	
 	final String CREATE = "INSERT INTO company (name) VALUES (:#{#company.name})";
-	final String ALTER_AUTO_INCREMENTE = "ALTER TABLE company AUTO_INCREMENT = ?";
-	final String DELETE = "DELETE from Company where id = :id";
+	final String ALTER_AUTO_INCREMENTE = "ALTER TABLE company AUTO_INCREMENT = :id";
+	final String DELETE = "DELETE FROM Company WHERE id = :id";
 
 	
 	public Company getById(Integer id);
@@ -26,7 +26,8 @@ public interface DaoCompany extends JpaRepository<Company,Integer> {
 	
 	@Transactional
 	@Modifying
-	public void deleteById(@Param("id") Integer id);
+	@Query(value = DELETE)
+	public int delete(@Param("id") Integer id);
 	
 	@Transactional
 	@Modifying
@@ -34,6 +35,6 @@ public interface DaoCompany extends JpaRepository<Company,Integer> {
 	public int insert(@Param("company") Company company);
 	
 	@Modifying
-	@Query(ALTER_AUTO_INCREMENTE)
+	@Query(value = ALTER_AUTO_INCREMENTE, nativeQuery = true)
 	public int resetAutoIncrement(@Param("id") Integer id);
 }

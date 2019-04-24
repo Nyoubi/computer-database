@@ -42,17 +42,18 @@ public class DtoComputerValidation implements Validator{
 		if (update && id == 0) {
 			throw new ValidationException("dtoValidatorError.idnullupdate");
 		}
-		
+
 		Optional<Company> company = checkCompany(computerDto.getCompanyId(), companyService);
-		
+
 		Optional<Timestamp> OptIntroduced = Util.stringToTimestamp(computerDto.getIntroduced());
 		Optional<Timestamp> OptDiscontinued = Util.stringToTimestamp(computerDto.getDiscontinued());
-		
+
 		ComputerBuilder computerBuilder = new ComputerBuilder().setName(computerDto.getName())
 				.setIntroduced(OptIntroduced.isPresent() ? OptIntroduced.get() : null)
 				.setDiscontinued(OptDiscontinued.isPresent() ? OptDiscontinued.get() : null)
 				.setCompany(company.isPresent() ? company.get() : null)
 				.setId(id);
+
 		return computerBuilder.build();
 	}
 	
@@ -75,12 +76,15 @@ public class DtoComputerValidation implements Validator{
 	}
 	
 	private static void checkCompanyId(Integer companyId, Errors errors) {
-		if (companyId != null && companyId < 0){
+		if (companyId < 0){
 			errors.rejectValue("companyId", "dtoValidatorError.negativeCompanyId");
 		}
 	}
 	
 	private static Optional<Company> checkCompany(Integer companyId, CompanyService companyService) throws ValidationException, DaoException {
+		if (companyId == 0) {
+			return Optional.empty();
+		}
 		Optional<CompanyDto> dtoCompany = companyService.findCompanyById(companyId);
 		Optional<Company> company = Optional.empty();
 		if (dtoCompany.isPresent()) {
@@ -88,7 +92,7 @@ public class DtoComputerValidation implements Validator{
 			if (!company.isPresent()) {
 				throw new ValidationException("dtoValidatorError.companymapper");
 			}
-		} else if (companyId != null){
+		} else {
 			throw new ValidationException("dtoValidatorError.companynotfound");
 		}
 		

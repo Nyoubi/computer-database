@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.xml.bind.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.excilys.computer_database.dto.CompanyDto;
@@ -22,7 +23,7 @@ public class CompanyService {
 	@Autowired
 	private DaoCompany daoCompany;
 	
-	public ArrayList<CompanyDto> listCompanies()  throws DaoException {
+	public ArrayList<CompanyDto> listCompanies() {
 		ArrayList<CompanyDto> result = new ArrayList<>();
 		for (Company company : daoCompany.findAll()) {
 			Optional<CompanyDto> dtoCompany = CompanyMapper.companyToDtoCompany(company);
@@ -33,22 +34,22 @@ public class CompanyService {
 		return result;
 	}
 	
-	public Optional<CompanyDto> findCompanyById(Integer id) throws DaoException{
-		Optional<Company> company = daoCompany.findById(id);
-		Optional<CompanyDto> dtoCompany = Optional.empty();
-		if (company.isPresent()) {
-			dtoCompany = CompanyMapper.companyToDtoCompany(company.get());
+	public Optional<CompanyDto> findCompanyById(Integer id) throws DaoException {
+		Company company;
+		try {
+			company = daoCompany.getById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new DaoException("daoException.findCompany");
 		}
+		Optional<CompanyDto> dtoCompany = Optional.empty();
+		dtoCompany = CompanyMapper.companyToDtoCompany(company);
 		return dtoCompany;
 	}
 	
 	public void deleteCompany(Integer id) throws DaoException {
-		daoCompany.deleteById(id);
-	}
-	
-	public void createCompany(String name) throws DaoException , ValidationException{
-		Company company = checkDataCreateCompany(name);
-		daoCompany.insert(company);
+		if(daoCompany.delete(id) == 0) {
+			throw new DaoException("daoException.deleteCompany");
+		}
 	}
 	
 	public void resetAutoxœIncrement(Integer id) throws DaoException {

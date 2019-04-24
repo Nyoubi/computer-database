@@ -17,13 +17,13 @@ import com.excilys.computer_database.model.Computer;
 @Repository
 public interface DaoComputer extends JpaRepository<Computer,Integer>{
 
-	final String SELECT_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as cId, cn.name as cName FROM computer c "
+	final String SELECT_ALL = "SELECT c.id, c.name, c.introduced, c.discontinued, cn.id as company_id, cn.name FROM computer c "
 			+ "LEFT JOIN company cn ON c.company_id=cn.id ";
 	final String ORDER_BY = "ORDER BY :order ";
 	final String SELECT_NAME = SELECT_ALL + "WHERE c.name LIKE :search OR cn.name LIKE :search ";
 	final String UPDATE = "UPDATE computer SET name = :#{#computer.name}, introduced = :#{#computer.introduced}, discontinued = :#{#computer.discontinued}, company_id = :#{#computer.company.id} WHERE id = :#{#computer.id}";
-	final String CREATE = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (:#{#computer.name}, :#{#computer.introduced},  :#{#computer.discontinued}, :#{#computer.company.id})";
-	final String ALTER_AUTO_INCREMENTE = "ALTER TABLE computer AUTO_INCREMENT = ?";
+	final String CREATE = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (:#{#computer.name}, :#{#computer.introduced},  :#{#computer.discontinued}, :#{#computer.company})";
+	final String ALTER_AUTO_INCREMENTE = "ALTER TABLE computer AUTO_INCREMENT = :id";
 	static Logger logger = LoggerFactory.getLogger(DaoComputer.class); 
 
 	public Computer getById(Integer id);
@@ -48,8 +48,13 @@ public interface DaoComputer extends JpaRepository<Computer,Integer>{
 	@Transactional
 	@Modifying
 	public int deleteById(@Param("id") Long id);
+	
+	@Transactional
+	@Modifying
+	public void deleteByCompany_id(Integer companyId);
+
 
 	@Modifying
-	@Query(ALTER_AUTO_INCREMENTE)
+	@Query(value = ALTER_AUTO_INCREMENTE, nativeQuery = true)
 	public int resetAutoIncrement(@Param("id") Integer id);
 }

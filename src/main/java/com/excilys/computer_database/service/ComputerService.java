@@ -60,12 +60,16 @@ public class ComputerService {
 	}
 
 	public void createComputer(Computer computer) throws DaoException {
-		daoComputer.insert(computer);
+			if(daoComputer.insert(computer) == 0) {
+				throw new DaoException("daoException.insertComputer");
+			}
 	}
 
 
 	public void updateComputer(Computer computer) throws DaoException {
-		daoComputer.update(computer);
+		if(daoComputer.update(computer) == 0) {
+			throw new DaoException("daoException.updateComputer");
+		}
 	}
 
 	public Page<ComputerDto> pageDtoComputer(String url, String index, String size, String search, String order) throws ValidationException, DaoException {
@@ -98,18 +102,13 @@ public class ComputerService {
 	}
 
 	public String getOrder(String order) {
-		String orderBy = "";
-
-		if (order == null) {
-			return orderBy;
-		}
-
+	
 		for (orderEnum o : Page.orderEnum.values()) {
 			if (o.getTag().equals(order)) {
-				orderBy = o.getValue();
+				return o.getValue();
 			}
-		}		
-		return orderBy;
+		}
+		return Page.orderEnum.DEFAULT.getValue();
 	}
 	
 	public PageBuilder<ComputerDto> checkPage(String url, List<ComputerDto> content, Integer index, Integer size, String search, String order) throws ValidationException{

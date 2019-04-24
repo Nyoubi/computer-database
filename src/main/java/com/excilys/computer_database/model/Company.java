@@ -1,14 +1,11 @@
 package com.excilys.computer_database.model;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -18,7 +15,6 @@ public class Company {
 	
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE )
 	private Integer id;
 	
 	@Basic(optional = false)

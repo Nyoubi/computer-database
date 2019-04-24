@@ -1,6 +1,8 @@
 $(function() {
 
 	let dateFormat = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/
+	$("form input[type='submit']").attr("disabled",true);
+
 	$("#introducedError").hide();
 	$("#nameError").hide();
 	$("#discontinuedError").hide();
@@ -16,6 +18,7 @@ $(function() {
 			validate($(this));
 		} else {
 			$("#nameError").show();
+			$("#name.errors").hide();
 			invalidate($(this));
 		}
 	});
@@ -36,6 +39,7 @@ $(function() {
 			
 		} else {
 			$("#introducedError").show();
+			$("#introduced.errors").hide();
 			invalidate($(this))
 		}
 	});
@@ -49,6 +53,7 @@ $(function() {
 		} else {
 			console.log(stringToDate($(this).val()).getTime() >= stringToDate($("#introduced").val()).getTime());
 			$("#discontinuedError").show();
+			$("#discontinued.errors").hide();
 			invalidate($(this));
 		}
 	});
@@ -56,7 +61,9 @@ $(function() {
 	$("#companyId").on("blur", function() {
 		if($("#companyId option").toArray().map(option => option.value).indexOf( $("#companyId").val()) == -1){
 			invalidate($(this));
-			$("#companyIdError").hide();
+			$("#companyIdError").show();
+			$("#companyId.errors").hide();
+
 		} else {
 			validate($(this));
 			$("#companyIdError").hide();
@@ -64,15 +71,19 @@ $(function() {
 	})
 	
 	function invalidate(obj){
-		obj.parent().addClass('has-error')
-		obj.parent().removeClass('has-success')
-		$("form input[type='submit']").first().addClass('disabled')
+		obj.parent().addClass('has-error');
+		obj.parent().removeClass('has-success');
+		$("form input[type='submit']").attr("disabled",true);
 	}
 	
 	function validate(obj){
-		obj.parent().removeClass('has-error')
-		obj.parent().addClass('has-success')
-		$("form input[type='submit']").first().removeClass('disabled')
+		obj.parent().removeClass('has-error');
+		obj.parent().addClass('has-success');
+		
+		if ($("#introducedError").is(":hidden") && $("#discontinuedError").is(":hidden") 
+			&& $("#companyIdError").is(":hidden") && $("#nameError").is(":hidden") ) {
+			$("form input[type='submit']").attr("disabled",false);
+		}
 	}
 	
 	function stringToDate(stringDate) {

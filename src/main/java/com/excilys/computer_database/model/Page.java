@@ -14,17 +14,20 @@ public class Page<T> {
 	private static List<Integer> sizeList = Arrays.asList(new Integer[]{10,20,50,100});
 	
 	public enum orderEnum {
-        NAME_ASC("nameAsc","ORDER BY c.name ASC"), 
-        NAME_DESC("nameDesc","ORDER BY c.name DESC"), 
+		
+		DEFAULT("","c.id ASC"),
+		
+        NAME_ASC("nameAsc","c.name ASC"), 
+        NAME_DESC("nameDesc","c.name DESC"), 
         
-        INTRO_ASC("introAsc","ORDER BY c.introduced IS NULL, c.introduced ASC"), 
-        INTRO_DESC("introDesc","ORDER BY c.introduced DESC"), 
+        INTRO_ASC("introAsc","c.introduced IS NULL, c.introduced ASC"), 
+        INTRO_DESC("introDesc","c.introduced DESC"), 
         
-        DISCON_ASC("disconAsc","ORDER BY c.discontinued IS NULL, c.discontinued ASC"), 
-        DISCON_DESC("disconDesc","ORDER BY c.discontinued  DESC"), 
+        DISCON_ASC("disconAsc","c.discontinued IS NULL, c.discontinued ASC"), 
+        DISCON_DESC("disconDesc","c.discontinued  DESC"), 
         
-        COMPANY_ASC("companyAsc","ORDER BY cName IS NULL, cName ASC"), 
-        COMPANY_DESC("companyDesc","ORDER BY cName DESC");
+        COMPANY_ASC("companyAsc","cName IS NULL, cName ASC"), 
+        COMPANY_DESC("companyDesc","cName DESC");
 		
 		private String tag;
 		private String value;

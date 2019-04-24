@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.computer_database.dto.CompanyDto;
@@ -32,20 +33,54 @@ import com.excilys.computer_database.service.ComputerService;
 import validation.DtoComputerValidation;
 
 @Controller
-public class EditComputerController {
-
+@RequestMapping(value = "/computer")
+public class ComputerController {
+	
 	static final String VIEW_EDIT_COMPUTER = "editComputer";
 	static final String VIEW_ERROR_500 = "500";
-	static final String VIEW_LIST_COMPUTERS = "redirect:dashboard";
-	
-	private final Logger logger = LoggerFactory.getLogger(DashBoardController.class);
+	static final String VIEW_LIST_COMPUTERS = "dashboard";
+	static final String VIEW_ADD_COMPUTERS = "addComputer";
+	static final String VIEW_LIST_COMPUTERS_REDIRECT = "redirect:dashboard";
 
-	
+	private final Logger logger = LoggerFactory.getLogger(ComputerController.class);
+
 	@Autowired
 	private ComputerService computerService;
 	
 	@Autowired
 	private CompanyService companyService;
+	
+	@GetMapping({ "addComputer", "/addcomputer", "/AddComputer", "/Addcomputer" })
+	public String getAddComputer(Model model) {
+		logger.info("getAddComputer has been called");
+
+		ArrayList<CompanyDto> listCompanies = new ArrayList<>();
+		
+		listCompanies = companyService.listCompanies();
+		model.addAttribute("listCompanies", listCompanies);
+		model.addAttribute("computer" , new ComputerDto());
+		return VIEW_ADD_COMPUTERS;	
+	}
+
+	@PostMapping({ "/addComputer", "/addcomputer", "/AddComputer", "/Addcomputer" })
+	public String postAddComputer(@Validated @ModelAttribute("computer")ComputerDto dtoComputer, 
+		      BindingResult result, Model model) {
+		logger.info("postAddComputer has been called");
+		if (setStackTrace(model, result)) {
+			model.addAttribute("stackTrace", "dtoComputerValidation.validatorError");
+			return VIEW_ADD_COMPUTERS;
+		}
+		
+		try {
+			Computer computer = DtoComputerValidation.checkDataComputer(dtoComputer, this.companyService, false);
+			computerService.createComputer(computer);
+
+			return VIEW_LIST_COMPUTERS_REDIRECT;
+		} catch (DaoException | ValidationException e) {
+			model.addAttribute("stackTrace", e.getMessage());
+			return VIEW_ERROR_500;
+		}
+	}
 	
 	@PostMapping({ "/editComputer", "/editcomputer", "/Editcomputer", "/EditComputer" })
 	protected String postEditcomputer(@Validated @ModelAttribute("computer")ComputerDto dtoComputer, 
@@ -57,7 +92,7 @@ public class EditComputerController {
 		try {
 			Computer computer = DtoComputerValidation.checkDataComputer(dtoComputer, this.companyService, true);
 			computerService.updateComputer(computer);
-			return VIEW_LIST_COMPUTERS;
+			return VIEW_LIST_COMPUTERS_REDIRECT;
 		} catch (DaoException | ValidationException e) {
 			model.addAttribute("stackTrace", e.getMessage());
 			return VIEW_ERROR_500;
@@ -79,7 +114,7 @@ public class EditComputerController {
 			if (computer.isPresent()) {
 				model.addAttribute("computer", computer.get());
 			} else {
-				return VIEW_LIST_COMPUTERS;
+				return VIEW_LIST_COMPUTERS_REDIRECT;
 			}
 		} catch (DaoException | InvalidInputException e) {
 			model.addAttribute("stackTrace", e.getMessage());
@@ -98,7 +133,7 @@ public class EditComputerController {
 			StringBuilder stackTrace = new StringBuilder();
 			List<ObjectError> errors = res.getAllErrors();
 			errors.forEach(stackTrace::append);
-			model.addAttribute("stackTrace", stackTrace);
+			model.addAttribute("log", stackTrace);
 			return true;
 		}
 		return false;

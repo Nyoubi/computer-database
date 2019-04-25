@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 
@@ -17,13 +18,14 @@ import com.excilys.computer_database.exception.DaoException;
 import com.excilys.computer_database.service.CompanyService;
 
 public class companyServiceTest {
+	
+	@Autowired
 	static private CompanyService companyService;
 	static GenericApplicationContext context;
 	
 	@BeforeAll
 	public static void init() {
 		context = new AnnotationConfigApplicationContext(AppConfigTest.class);
-		companyService = context.getBean(CompanyService.class);
 	}
 
 	@Test

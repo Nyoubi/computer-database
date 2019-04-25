@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.excilys.computer_database.dto.CompanyDto;
 import com.excilys.computer_database.exception.DaoException;
+import com.excilys.computer_database.exception.InvalidInputException;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.CompanyBuilder;
@@ -35,24 +36,20 @@ public class CompanyService {
 	}
 	
 	public Optional<CompanyDto> findCompanyById(Integer id) throws DaoException {
-		Company company;
+		Optional<Company> company;
 		try {
-			company = daoCompany.getById(id);
+			company = daoCompany.findById(id);
 		} catch (EmptyResultDataAccessException e) {
 			throw new DaoException("daoException.findCompany");
 		}
-		Optional<CompanyDto> dtoCompany = Optional.empty();
-		dtoCompany = CompanyMapper.companyToDtoCompany(company);
-		return dtoCompany;
+		return company.isPresent() ? CompanyMapper.companyToDtoCompany(company.get()) : Optional.empty();
 	}
 	
-	public void deleteCompany(Integer id) throws DaoException {
-		if(daoCompany.delete(id) == 0) {
-			throw new DaoException("daoException.deleteCompany");
-		}
+	public void deleteCompany(Integer id) throws InvalidInputException {
+			daoCompany.deleteById(id);
 	}
 	
-	public void resetAutoxœIncrement(Integer id) throws DaoException {
+	public void resetAutoIncrement(Integer id) throws DaoException {
 		daoCompany.resetAutoIncrement(id);
 	}
 	

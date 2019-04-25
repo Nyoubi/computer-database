@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 
@@ -20,6 +21,7 @@ import com.excilys.computer_database.persistence.DaoCompany;
 
 public class DaoCompanyTest {
 
+	@Autowired
 	static private DaoCompany daoCompany;
 	
 	private Company company;
@@ -30,7 +32,6 @@ public class DaoCompanyTest {
 	@BeforeAll
 	public static void init() {
 		context = new AnnotationConfigApplicationContext(AppConfigTest.class);
-		daoCompany = context.getBean(DaoCompany.class);
 	}
 	
 	@BeforeEach
@@ -65,7 +66,7 @@ public class DaoCompanyTest {
 	public void testDeleteCompany() {
 		company.setId(3);
 		company.setName("Test Delete");
-		daoCompany.insert(company);
+		daoCompany.save(company);
 		daoCompany.deleteById(3);
 		assertEquals(daoCompany.findById(3), Optional.empty());
 		daoCompany.resetAutoIncrement(3);		

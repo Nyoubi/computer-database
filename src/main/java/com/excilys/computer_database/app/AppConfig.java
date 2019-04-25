@@ -1,5 +1,7 @@
 package com.excilys.computer_database.app;
 
+import java.util.TimeZone;
+
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -26,6 +28,10 @@ public class AppConfig {
 	@Autowired
 	Environment env;
 
+	static {
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+	}
+	
 	@Bean(destroyMethod = "close")
 	public DataSource DataSource() {
 		DataSource dataSource = DataSourceBuilder

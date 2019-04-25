@@ -9,8 +9,11 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import com.excilys.computer_database.appTest.AppConfigTest;
 import com.excilys.computer_database.dto.ComputerDto;
@@ -27,22 +30,25 @@ import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.util.Util;
 
 public class computerServiceTest {
+	
+	@Autowired
 	static private ComputerService computerService;
+	
+	@Autowired
 	static private DaoComputer daoComputer;
+	
 	static GenericApplicationContext context;
 	
 	@BeforeAll
 	public static void init() {
 		context = new AnnotationConfigApplicationContext(AppConfigTest.class);
-		computerService = context.getBean(ComputerService.class);
-		daoComputer = context.getBean(DaoComputer.class);
 	}
 
 	@Test
 	public void testListComputers() {
 		List<ComputerDto> computers = new ArrayList<>();
 		try {
-			computers = computerService.listAllComputer("");
+			computers = computerService.listAllComputer("",PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC,"id")));
 		} catch (DaoException e) {
 			fail();
 		}
@@ -53,7 +59,7 @@ public class computerServiceTest {
 	public void testListComputersSearch() {
 		List<ComputerDto> computers = new ArrayList<>();
 		try {
-			computers = computerService.listAllComputer("test","");
+			computers =  computerService.listAllComputer("test",PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC,"id")));
 		} catch (DaoException e) {
 			fail();
 		}
@@ -114,8 +120,8 @@ public class computerServiceTest {
 	
 	@Test
 	public void testGetOrder() {
-		assertTrue(computerService.getOrder(null) == "");
-		assertTrue(computerService.getOrder("nameAsc") == "ORDER BY c.name ASC");
+		assertTrue(computerService.getOrder(null) ==  Sort.by(Sort.Direction.ASC,"id"));
+		assertTrue(computerService.getOrder("nameAsc") == Sort.by(Sort.Direction.ASC,"name"));
 	}
 	
 	@Test

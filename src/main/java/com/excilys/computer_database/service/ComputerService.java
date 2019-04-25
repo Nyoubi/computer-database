@@ -6,6 +6,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.excilys.computer_database.dto.ComputerDto;
@@ -26,13 +30,9 @@ public class ComputerService {
 	@Autowired
 	private DaoComputer daoComputer;
 
-	public List<ComputerDto> listAllComputer(String order)  throws DaoException{
-		return daoComputer.findAll(order).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
-	}
 	
-	public List<ComputerDto> listAllComputer(String search, String order)  throws DaoException{
-		return daoComputer.findAll("%"+search+"%",order).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
-
+	public List<ComputerDto> listAllComputer(String search, Pageable page)  throws DaoException{
+		return daoComputer.findAllByNameContains(search,page).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
 	}
 	
 	public Optional<ComputerDto> showDetails(String id)  throws DaoException, InvalidInputException {
@@ -49,8 +49,8 @@ public class ComputerService {
 		}
 	}
 
-	public void deleteComputer(String id) throws DaoException, InvalidInputException {
-
+	
+	public void deleteComputer(String id) throws InvalidInputException {
 		Optional<Integer> ident = Util.parseInt(id);
 		if (Util.checkOptional(ident) != null) {
 			daoComputer.deleteById(ident.get());
@@ -58,51 +58,44 @@ public class ComputerService {
 			throw new InvalidInputException("This id : " + id + " is invalid.");
 		}
 	}
-
-	public void createComputer(Computer computer) throws DaoException {
-			if(daoComputer.insert(computer) == 0) {
-				throw new DaoException("daoException.insertComputer");
-			}
+	
+	public Computer createComputer(Computer computer) throws DaoException {
+		try {
+			return daoComputer.save(computer);
+		} catch (DataAccessException e) {
+			throw new DaoException("daoException.insertComputer");
+		}
 	}
 
-
-	public void updateComputer(Computer computer) throws DaoException {
-		if(daoComputer.update(computer) == 0) {
+	public Computer updateComputer(Computer computer) throws DaoException {
+		try {
+			return daoComputer.save(computer);
+		} catch (DataAccessException e) {
 			throw new DaoException("daoException.updateComputer");
 		}
 	}
 
 	public Page<ComputerDto> pageDtoComputer(String url, String index, String size, String search, String order) throws ValidationException, DaoException {
 		List<ComputerDto> result = new ArrayList<>();
-		String orderBy = getOrder(order);
-		if (search == null || search.equals("")) {
-			if ("".equals(orderBy)) {
-				result = listAllComputer("");
-			} else {
-				result = listAllComputer(orderBy);
-			}
-		} else {
-			if ("".equals(orderBy)) {
-				result = listAllComputer(search,"");
-			} else {
-				result = listAllComputer(search,orderBy);
-			}
-		}
 		
 		Optional<Integer> optIndex = Util.parseInt(index);
 		Optional<Integer> optSize = Util.parseInt(size);
+		
+		result = listAllComputer(search, PageRequest.of(optIndex.isPresent() ? optIndex.get()-1 : 0, optIndex.isPresent() ? optSize.get() : 10, getOrder(order)));
 
+		Integer count = (int) daoComputer.count();
+		
 		PageBuilder<ComputerDto> builder = checkPage(url,
 													 result,
-													 optIndex.isPresent() ? optIndex.get() : null,
-													 optIndex.isPresent() ? optSize.get() : null,
+													 count,
+													 optIndex.isPresent() ? optIndex.get() : 0,
+													 optSize.isPresent() ? optSize.get() : 10,
 													 search,order);
 		Page<ComputerDto> page = builder.build();
 		return page;		
 	}
 
-	public String getOrder(String order) {
-	
+	public Sort getOrder(String order) {
 		for (orderEnum o : Page.orderEnum.values()) {
 			if (o.getTag().equals(order)) {
 				return o.getValue();
@@ -111,7 +104,7 @@ public class ComputerService {
 		return Page.orderEnum.DEFAULT.getValue();
 	}
 	
-	public PageBuilder<ComputerDto> checkPage(String url, List<ComputerDto> content, Integer index, Integer size, String search, String order) throws ValidationException{
+	public PageBuilder<ComputerDto> checkPage(String url, List<ComputerDto> content,Integer count, Integer index, Integer size, String search, String order) throws ValidationException{
 		PageBuilder<ComputerDto> pageBuilder = new PageBuilder<ComputerDto>();
 
 		if(index == null) {
@@ -133,6 +126,7 @@ public class ComputerService {
 		pageBuilder.setSize(size)
 		.setUrl(url)
 		.setSearch(search)
+		.setTotalSize(count)
 		.setOrder(order)
 		.setContent(content)
 		.setIndex(index);

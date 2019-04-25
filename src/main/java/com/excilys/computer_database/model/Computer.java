@@ -6,16 +6,12 @@ import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 
 @Entity
@@ -26,20 +22,16 @@ public class Computer {
     @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 	
-	@Column(updatable = false, nullable = false)
+	@Column(nullable = false)
 	private String name;
 	
 	private Timestamp introduced;
 	
 	private Timestamp discontinued;
 	
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true, targetEntity = Company.class)
 	@JoinColumn(name = "company_id",
-				nullable=true,
-				table = "computer",
-				referencedColumnName = "id",
-				foreignKey = @ForeignKey(name="fk_computer_company_1"))
+				referencedColumnName = "id")
 	private Company company;
 
 	public Computer(Integer id, String name, Timestamp introduced, Timestamp discontinued, Company company) {

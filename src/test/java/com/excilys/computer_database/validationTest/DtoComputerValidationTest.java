@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 
@@ -19,6 +20,7 @@ import validation.DtoComputerValidation;
 
 public class DtoComputerValidationTest {
 	
+	@Autowired
 	static private CompanyService companyService;
 	static GenericApplicationContext context;
 	
@@ -26,7 +28,6 @@ public class DtoComputerValidationTest {
 	@BeforeAll
 	public static void init() {
 		context = new AnnotationConfigApplicationContext(AppConfigTest.class);
-		companyService = context.getBean(CompanyService.class);
 	}
 	
 	@Test

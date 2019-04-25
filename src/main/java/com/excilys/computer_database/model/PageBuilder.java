@@ -7,12 +7,13 @@ public class PageBuilder<T> {
 	private List<T> content;
 	private Integer index;
 	private Integer size;
+	private Integer totalSize;
 	private String url;
 	private String search;
 	private String order;
 	
 	public Page<T> build(){
-		return new Page<T>(url,content,index,size,search,order);
+		return new Page<T>(url,content,totalSize,index,size,search,order);
 	}
 	
 	public PageBuilder<T> setContent(List<T> list) {
@@ -41,6 +42,11 @@ public class PageBuilder<T> {
 	}
 	public PageBuilder<T> setOrder(String order) {
 		this.order = order;
+		return this;
+	}
+	
+	public PageBuilder<T> setTotalSize(Integer totalSize) {
+		this.totalSize = totalSize;
 		return this;
 	}
 	

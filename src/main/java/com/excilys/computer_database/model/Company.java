@@ -1,17 +1,21 @@
 package com.excilys.computer_database.model;
 
+import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.CascadeType;
 
 @Entity
 @Table(name="company")
 public class Company {
-	
 	
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -20,6 +24,9 @@ public class Company {
 	@Basic(optional = false)
 	@Column(nullable = false)
 	private String name;
+	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "company", cascade = CascadeType.REMOVE)
+	private List<Computer> computers;
 
 	public Company(Integer id, String name) {
 		this.id = id;

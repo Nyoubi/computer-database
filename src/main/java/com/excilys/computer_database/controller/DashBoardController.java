@@ -52,8 +52,8 @@ public class DashBoardController {
 		model.addAttribute("search", search);
 		model.addAttribute("order", order);
 		model.addAttribute("computerPage", showComputers);
-		model.addAttribute("computerData", showComputers.getPageContent());
-		model.addAttribute("numberComputer", showComputers.getContent().size());
+		model.addAttribute("computerData", showComputers.getContent());
+		model.addAttribute("numberComputer", showComputers.getTotalSize());
 
 		return VIEW_LIST_COMPUTERS;
 	}
@@ -68,7 +68,7 @@ public class DashBoardController {
 			for (String id : computers) {
 				try {
 					computerService.deleteComputer(id);
-				} catch (DaoException | InvalidInputException e) {
+				} catch (InvalidInputException e) {
 					model.addAttribute("stackTrace", e.getMessage());
 					return VIEW_ERROR_500;
 				}

@@ -3,36 +3,40 @@ package com.excilys.computer_database.model;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
+
+
 public class Page<T> {
 	private List<T> content;
 	private Integer index;
 	private Integer size;
+	private Integer totalSize;
 	private String url;
 	private String search;
 	private String order;
 	
 	private static List<Integer> sizeList = Arrays.asList(new Integer[]{10,20,50,100});
-	
+		
 	public enum orderEnum {
 		
-		DEFAULT("","c.id ASC"),
+		DEFAULT("",Sort.by(Sort.Direction.ASC,"id")),
 		
-        NAME_ASC("nameAsc","c.name ASC"), 
-        NAME_DESC("nameDesc","c.name DESC"), 
+        NAME_ASC("nameAsc",Sort.by(Sort.Direction.ASC, "name")), 
+        NAME_DESC("nameDesc",Sort.by(Sort.Direction.DESC, "name")), 
         
-        INTRO_ASC("introAsc","c.introduced IS NULL, c.introduced ASC"), 
-        INTRO_DESC("introDesc","c.introduced DESC"), 
+        INTRO_ASC("introAsc",Sort.by(Sort.Direction.ASC, "introduced")), 
+        INTRO_DESC("introDesc",Sort.by(Sort.Direction.DESC, "introduced")), 
         
-        DISCON_ASC("disconAsc","c.discontinued IS NULL, c.discontinued ASC"), 
-        DISCON_DESC("disconDesc","c.discontinued  DESC"), 
+        DISCON_ASC("disconAsc",Sort.by(Sort.Direction.ASC, "discontinued")), 
+        DISCON_DESC("disconDesc",Sort.by(Sort.Direction.DESC, "discontinued")), 
         
-        COMPANY_ASC("companyAsc","cName IS NULL, cName ASC"), 
-        COMPANY_DESC("companyDesc","cName DESC");
+        COMPANY_ASC("companyAsc",Sort.by(Sort.Direction.ASC, "company.name")),
+        COMPANY_DESC("companyDesc",Sort.by(Sort.Direction.DESC, "company.name"));
 		
 		private String tag;
-		private String value;
+		private Sort value;
 
-		orderEnum (String tag, String value) {
+		orderEnum (String tag, Sort value) {
 			this.tag = tag;
 			this.value=value;
 	}
@@ -41,15 +45,16 @@ public class Page<T> {
 			return this.tag;
 		}
 		
-		public String getValue() {
+		public Sort getValue() {
 			return this.value;
 		}
 	}
 
-	public Page(String url, List<T> content,Integer index,Integer size, String search, String order) {
+	public Page(String url, List<T> content,Integer totalSize, Integer index,Integer size, String search, String order) {
 		
 		this.url = url;
 		this.content = content;
+		this.totalSize = totalSize;
 		this.index = Math.max(index,1);
 		this.size = Math.max(size,1);
 		this.search = search;
@@ -62,14 +67,14 @@ public class Page<T> {
 	}
 	
 	public String nextPage(){
-		if(index*size < content.size()) {
+		if(index*size < totalSize) {
 			return formatUrl(index+1,size,search,order);
 		}
 		return formatUrl(index,size,search,order);
 	}
 	
 	public Integer nextIndex() {
-		if(index*size < content.size()) {
+		if(index*size < totalSize) {
 			return index+1;
 		}
 		return index;
@@ -135,14 +140,12 @@ public class Page<T> {
 		return content;
 	}
 	
-	public List<T> getPageContent(){
-		Integer from = Math.min(content.size()/size*size,(index-1)*size);
-		Integer to = Math.min(((index-1)*size)+size,content.size());
-		return content.subList(from,to);
+	public Integer getTotalSize() {
+		return this.totalSize;
 	}
 	
 	public Integer getStart () {
-		int value = (int) Math.ceil((double)content.size() / size);
+		int value = (int) Math.ceil((double)totalSize / size);
 		if (index <= 3) {
 			return 1;
 		} else if (index + 2 <= value) {
@@ -153,7 +156,7 @@ public class Page<T> {
 	}
 	
 	public Integer getEnd () {
-		int value = (int) Math.ceil((double)content.size() / size);
+		int value = (int) Math.ceil((double)totalSize / size);
 		if (value <= 4) {
 			return --value;
 		} else {

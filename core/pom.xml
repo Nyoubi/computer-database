@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+	<groupId>com.excilys</groupId>
+	<artifactId>computer-database</artifactId>
+	<version>${application.version}</version>
+  </parent>
+  
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>core</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
+
+  <name>core</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+  		<hibernate.core>5.4.1.Final</hibernate.core>
+  		<springdatajpa>2.1.6.RELEASE</springdatajpa>
+  		<javaxpersistence>2.2.1</javaxpersistence>
+  		<junit>4.12</junit>
+  		<selenium>3.141.59</selenium>
+  		<slf4j>1.7.26</slf4j>
+		<logclassic>1.2.3</logclassic>
+		<logcore>1.2.3</logcore>
+		<jupiterapi>5.5.0-M1</jupiterapi>
+  </properties> 
+  
+  <dependencies>
+    	<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<version>${javaxpersistence}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${springdatajpa}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.core}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logclassic}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>${logcore}</version>
+		</dependency>
+		
+  </dependencies>
+</project>

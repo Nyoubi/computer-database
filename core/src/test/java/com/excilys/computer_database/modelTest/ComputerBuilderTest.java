@@ -5,8 +5,8 @@ import java.sql.Timestamp;
 
 import org.junit.jupiter.api.Test;
 
-import com.excilys.computer_database.Company;
-import com.excilys.computer_database.ComputerBuilder;
+import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.model.ComputerBuilder;
 
 import junit.framework.TestCase;
 

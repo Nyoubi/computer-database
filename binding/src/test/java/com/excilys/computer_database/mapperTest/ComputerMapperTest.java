@@ -6,10 +6,10 @@ import java.sql.Timestamp;
 
 import org.junit.jupiter.api.Test;
 
-import com.excilys.computer_database.Company;
-import com.excilys.computer_database.Computer;
-import com.excilys.computer_database.dto.ComputerDto;
+import com.excilys.computer_database.binding_dto.ComputerDto;
 import com.excilys.computer_database.mapper.ComputerMapper;
+import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.model.Computer;
 
 public class ComputerMapperTest {
 

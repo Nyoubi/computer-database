@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.excilys.computer_database.Company;
+import com.excilys.computer_database.model.Company;
 
 import junit.framework.TestCase;
 

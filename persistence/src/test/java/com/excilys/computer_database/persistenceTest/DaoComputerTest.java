@@ -19,11 +19,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.excilys.computer_database.Company;
-import com.excilys.computer_database.Computer;
-import com.excilys.computer_database.ComputerBuilder;
 import com.excilys.computer_database.dao.DaoComputer;
-import com.excilys.computer_database.util.Util;
+import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.model.Computer;
+import com.excilys.computer_database.model.ComputerBuilder;
+import com.excilys.computer_database.utils.Util;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration

@@ -8,8 +8,8 @@ import java.sql.Timestamp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.excilys.computer_database.Company;
-import com.excilys.computer_database.Computer;
+import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.model.Computer;
 
 import junit.framework.TestCase;
 

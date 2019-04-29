@@ -2,11 +2,11 @@ package com.excilys.computer_database.mapper;
 
 import java.util.Optional;
 
-import com.excilys.computer_database.Computer;
-import com.excilys.computer_database.dto.CompanyDto;
-import com.excilys.computer_database.dto.ComputerDto;
-import com.excilys.computer_database.dto.ComputerDtoBuilder;
-import com.excilys.computer_database.util.Util;
+import com.excilys.computer_database.binding_dto.CompanyDto;
+import com.excilys.computer_database.binding_dto.ComputerDto;
+import com.excilys.computer_database.binding_dto.ComputerDtoBuilder;
+import com.excilys.computer_database.model.Computer;
+import com.excilys.computer_database.utils.Util;
 
 public class ComputerMapper{
 

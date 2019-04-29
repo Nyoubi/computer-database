@@ -12,9 +12,9 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.excilys.computer_database.dto.CompanyDto;
-import com.excilys.computer_database.dto.CompanyDtoBuilder;
-import com.excilys.computer_database.exception.DaoException;
+import com.excilys.computer_database.binding_dto.CompanyDto;
+import com.excilys.computer_database.binding_dto.CompanyDtoBuilder;
+import com.excilys.computer_database.binding_exception.DaoException;
 import com.excilys.computer_database.service.CompanyService;
 
 @RunWith(SpringRunner.class)

@@ -7,16 +7,16 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.excilys.computer_database.Company;
-import com.excilys.computer_database.Computer;
-import com.excilys.computer_database.ComputerBuilder;
-import com.excilys.computer_database.dto.CompanyDto;
-import com.excilys.computer_database.dto.ComputerDto;
-import com.excilys.computer_database.exception.DaoException;
-import com.excilys.computer_database.exception.ValidationException;
+import com.excilys.computer_database.binding_dto.CompanyDto;
+import com.excilys.computer_database.binding_dto.ComputerDto;
+import com.excilys.computer_database.binding_exception.DaoException;
+import com.excilys.computer_database.binding_exception.ValidationException;
 import com.excilys.computer_database.mapper.CompanyMapper;
+import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.model.Computer;
+import com.excilys.computer_database.model.ComputerBuilder;
 import com.excilys.computer_database.service.CompanyService;
-import com.excilys.computer_database.util.Util;
+import com.excilys.computer_database.utils.Util;
 
 public class DtoComputerValidation implements Validator{
 	

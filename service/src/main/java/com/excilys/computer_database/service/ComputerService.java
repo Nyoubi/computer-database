@@ -12,17 +12,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.excilys.computer_database.Computer;
-import com.excilys.computer_database.Page;
-import com.excilys.computer_database.Page.orderEnum;
-import com.excilys.computer_database.PageBuilder;
+import com.excilys.computer_database.binding_dto.ComputerDto;
+import com.excilys.computer_database.binding_exception.DaoException;
+import com.excilys.computer_database.binding_exception.InvalidInputException;
+import com.excilys.computer_database.binding_exception.ValidationException;
 import com.excilys.computer_database.dao.DaoComputer;
-import com.excilys.computer_database.dto.ComputerDto;
-import com.excilys.computer_database.exception.DaoException;
-import com.excilys.computer_database.exception.InvalidInputException;
-import com.excilys.computer_database.exception.ValidationException;
 import com.excilys.computer_database.mapper.ComputerMapper;
-import com.excilys.computer_database.util.Util;
+import com.excilys.computer_database.model.Computer;
+import com.excilys.computer_database.model.Page;
+import com.excilys.computer_database.model.Page.orderEnum;
+import com.excilys.computer_database.model.PageBuilder;
+import com.excilys.computer_database.utils.Util;
 
 @Service
 public class ComputerService {

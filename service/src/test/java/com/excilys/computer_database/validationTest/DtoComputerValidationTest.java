@@ -10,10 +10,10 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.excilys.computer_database.dto.ComputerDto;
-import com.excilys.computer_database.dto.ComputerDtoBuilder;
-import com.excilys.computer_database.exception.DaoException;
-import com.excilys.computer_database.exception.ValidationException;
+import com.excilys.computer_database.binding_dto.ComputerDto;
+import com.excilys.computer_database.binding_dto.ComputerDtoBuilder;
+import com.excilys.computer_database.binding_exception.DaoException;
+import com.excilys.computer_database.binding_exception.ValidationException;
 import com.excilys.computer_database.service.CompanyService;
 import com.excilys.computer_database.validation.DtoComputerValidation;
 

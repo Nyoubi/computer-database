@@ -8,7 +8,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.computer_database.Computer;
+import com.excilys.computer_database.model.Computer;
 
 @Repository
 public interface DaoComputer extends PagingAndSortingRepository<Computer,Integer>{

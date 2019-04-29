@@ -8,10 +8,10 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
-import com.excilys.computer_database.Company;
-import com.excilys.computer_database.dto.CompanyDto;
-import com.excilys.computer_database.dto.CompanyDtoBuilder;
+import com.excilys.computer_database.binding_dto.CompanyDto;
+import com.excilys.computer_database.binding_dto.CompanyDtoBuilder;
 import com.excilys.computer_database.mapper.CompanyMapper;
+import com.excilys.computer_database.model.Company;
 
 public class companyMapperTest {
 	

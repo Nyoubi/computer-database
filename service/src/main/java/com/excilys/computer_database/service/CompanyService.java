@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import com.excilys.computer_database.Company;
-import com.excilys.computer_database.CompanyBuilder;
+import com.excilys.computer_database.binding_dto.CompanyDto;
+import com.excilys.computer_database.binding_exception.DaoException;
+import com.excilys.computer_database.binding_exception.InvalidInputException;
 import com.excilys.computer_database.dao.DaoCompany;
-import com.excilys.computer_database.dto.CompanyDto;
-import com.excilys.computer_database.exception.DaoException;
-import com.excilys.computer_database.exception.InvalidInputException;
 import com.excilys.computer_database.mapper.CompanyMapper;
+import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.model.CompanyBuilder;
 
 
 @Service

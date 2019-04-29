@@ -21,12 +21,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.excilys.computer_database.Computer;
-import com.excilys.computer_database.dto.CompanyDto;
-import com.excilys.computer_database.dto.ComputerDto;
-import com.excilys.computer_database.exception.DaoException;
-import com.excilys.computer_database.exception.InvalidInputException;
-import com.excilys.computer_database.exception.ValidationException;
+import com.excilys.computer_database.binding_dto.CompanyDto;
+import com.excilys.computer_database.binding_dto.ComputerDto;
+import com.excilys.computer_database.binding_exception.DaoException;
+import com.excilys.computer_database.binding_exception.InvalidInputException;
+import com.excilys.computer_database.binding_exception.ValidationException;
+import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.service.CompanyService;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.validation.DtoComputerValidation;

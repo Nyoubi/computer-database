@@ -3,7 +3,7 @@ package com.excilys.computer_database.dtoTest;
 
 import org.junit.jupiter.api.Test;
 
-import com.excilys.computer_database.dto.ComputerDtoBuilder;
+import com.excilys.computer_database.binding_dto.ComputerDtoBuilder;
 
 import junit.framework.TestCase;
 

@@ -16,23 +16,23 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.excilys.computer_database.Company;
-import com.excilys.computer_database.Computer;
-import com.excilys.computer_database.ComputerBuilder;
-import com.excilys.computer_database.Page;
-import com.excilys.computer_database.config.AppConfigTest;
+import com.excilys.computer_database.binding_dto.ComputerDto;
+import com.excilys.computer_database.binding_dto.ComputerDtoBuilder;
+import com.excilys.computer_database.binding_exception.DaoException;
+import com.excilys.computer_database.binding_exception.InvalidInputException;
+import com.excilys.computer_database.binding_exception.ValidationException;
 import com.excilys.computer_database.dao.DaoComputer;
-import com.excilys.computer_database.dto.ComputerDto;
-import com.excilys.computer_database.dto.ComputerDtoBuilder;
-import com.excilys.computer_database.exception.DaoException;
-import com.excilys.computer_database.exception.InvalidInputException;
-import com.excilys.computer_database.exception.ValidationException;
+import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.model.Computer;
+import com.excilys.computer_database.model.ComputerBuilder;
+import com.excilys.computer_database.model.Page;
 import com.excilys.computer_database.service.ComputerService;
-import com.excilys.computer_database.util.Util;
+import com.excilys.computer_database.service_config_test.SpringServiceConfigurationTest;
+import com.excilys.computer_database.utils.Util;
 
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {AppConfigTest.class})
+@ContextConfiguration(classes = {SpringServiceConfigurationTest.class})
 public class computerServiceTest {
 	
 	@Autowired

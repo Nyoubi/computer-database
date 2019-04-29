@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.excilys.computer_database.Page;
-import com.excilys.computer_database.dto.ComputerDto;
-import com.excilys.computer_database.exception.DaoException;
-import com.excilys.computer_database.exception.InvalidInputException;
-import com.excilys.computer_database.exception.ValidationException;
+import com.excilys.computer_database.binding_dto.ComputerDto;
+import com.excilys.computer_database.binding_exception.DaoException;
+import com.excilys.computer_database.binding_exception.InvalidInputException;
+import com.excilys.computer_database.binding_exception.ValidationException;
+import com.excilys.computer_database.model.Page;
 import com.excilys.computer_database.service.ComputerService;
 
 @Controller

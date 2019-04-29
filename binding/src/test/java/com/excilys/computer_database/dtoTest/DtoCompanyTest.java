@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.excilys.computer_database.dto.CompanyDto;
+import com.excilys.computer_database.binding_dto.CompanyDto;
 
 import junit.framework.TestCase;
 

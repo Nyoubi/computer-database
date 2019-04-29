@@ -7,9 +7,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -17,10 +17,10 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.excilys.computer_database.Company;
-import com.excilys.computer_database.CompanyBuilder;
-import com.excilys.computer_database.config.AppConfigTest;
 import com.excilys.computer_database.dao.DaoCompany;
+import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.model.CompanyBuilder;
+import com.excilys.computer_database.persistence_config_test.SpringPersistenceConfigurationTest;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration
@@ -37,7 +37,7 @@ public class DaoCompanyTest {
 	
 	@BeforeAll
 	public static void init() {
-		context = new AnnotationConfigApplicationContext(AppConfigTest.class);
+		context = new AnnotationConfigApplicationContext(SpringPersistenceConfigurationTest.class);
 	}
 	
 	@BeforeEach

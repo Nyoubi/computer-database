@@ -32,12 +32,17 @@
 		<spring>5.1.6.RELEASE</spring>
 		<tomcatjuli>9.0.0.M6</tomcatjuli>
 		<springdatajpa>2.1.6.RELEASE</springdatajpa>
+		<springboot>2.1.4.RELEASE</springboot>
 		<javaxpersistence>2.2.1</javaxpersistence>
 		<hibernate.core>5.4.1.Final</hibernate.core>
 	</properties>
 
 	<dependencies>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot</artifactId>
+			<version>${springboot}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>

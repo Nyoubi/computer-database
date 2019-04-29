@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 import org.junit.jupiter.api.Test;
 
-import com.excilys.computer_database.util.Util;
+import com.excilys.computer_database.utils.Util;
 
 public class UtilTest {
 

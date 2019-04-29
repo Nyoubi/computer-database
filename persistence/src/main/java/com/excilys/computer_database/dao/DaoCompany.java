@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.computer_database.Company;
+import com.excilys.computer_database.model.Company;
 
 @Repository
 public interface DaoCompany extends JpaRepository<Company,Integer> {

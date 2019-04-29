@@ -2,10 +2,10 @@ package com.excilys.computer_database.mapper;
 
 import java.util.Optional;
 
-import com.excilys.computer_database.Company;
-import com.excilys.computer_database.CompanyBuilder;
-import com.excilys.computer_database.dto.CompanyDto;
-import com.excilys.computer_database.dto.CompanyDtoBuilder;
+import com.excilys.computer_database.binding_dto.CompanyDto;
+import com.excilys.computer_database.binding_dto.CompanyDtoBuilder;
+import com.excilys.computer_database.model.Company;
+import com.excilys.computer_database.model.CompanyBuilder;
 
 public class CompanyMapper {
 

@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import com.excilys.computer_database.dto.CompanyDtoBuilder;
+import com.excilys.computer_database.binding_dto.CompanyDtoBuilder;
 
 
 public class DtoCompanyBuilderTest {

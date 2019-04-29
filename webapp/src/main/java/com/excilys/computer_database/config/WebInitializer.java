@@ -1,4 +1,4 @@
-package com.excilys.computer_database.app;
+package com.excilys.computer_database.config;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -15,8 +15,8 @@ public class WebInitializer implements WebApplicationInitializer{
 	@Override
 	public void onStartup(ServletContext servletCtx) throws ServletException  {
 		ctx = new AnnotationConfigWebApplicationContext();
-		ctx.register(MvcConfig.class);
 		ctx.register(AppConfig.class);
+		ctx.register(MvcConfig.class);
 		ctx.setServletContext(servletCtx);
 		ctx.refresh();
 

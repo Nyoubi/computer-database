@@ -16,17 +16,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.excilys.computer_database.appTest.AppConfigTest;
+import com.excilys.computer_database.Company;
+import com.excilys.computer_database.Computer;
+import com.excilys.computer_database.ComputerBuilder;
+import com.excilys.computer_database.Page;
+import com.excilys.computer_database.config.AppConfigTest;
+import com.excilys.computer_database.dao.DaoComputer;
 import com.excilys.computer_database.dto.ComputerDto;
 import com.excilys.computer_database.dto.ComputerDtoBuilder;
 import com.excilys.computer_database.exception.DaoException;
 import com.excilys.computer_database.exception.InvalidInputException;
 import com.excilys.computer_database.exception.ValidationException;
-import com.excilys.computer_database.model.Company;
-import com.excilys.computer_database.model.Computer;
-import com.excilys.computer_database.model.ComputerBuilder;
-import com.excilys.computer_database.model.Page;
-import com.excilys.computer_database.persistence.DaoComputer;
 import com.excilys.computer_database.service.ComputerService;
 import com.excilys.computer_database.util.Util;
 

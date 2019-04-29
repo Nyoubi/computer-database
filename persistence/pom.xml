@@ -17,16 +17,24 @@
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
+
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot</artifactId>
-			<version>${springboot}</version>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>${hikari.cp}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.excilys</groupId>
 			<artifactId>binding</artifactId>
 			<version>1.0</version>
 		</dependency>
+
 	</dependencies>
+
 </project>

@@ -17,8 +17,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DataSource dataSource;
 	 
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) 
+	@Override
+	public void configure(AuthenticationManagerBuilder auth) 
 	  throws Exception {
 		auth.jdbcAuthentication().dataSource(dataSource)
 		.usersByUsernameQuery(
@@ -28,26 +28,27 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.passwordEncoder(new BCryptPasswordEncoder());
 	} 
 	
+	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 	    http.csrf().disable()
 	    .authorizeRequests()
-		    .antMatchers("/addComputer").hasAuthority("ADMIN")
-			.antMatchers("/editComputer").hasAuthority("ADMIN")
-			.antMatchers("/deleteComputer").hasAuthority("ADMIN")
+		    .antMatchers("/computer/addComputer").hasAuthority("ADMIN")
+			.antMatchers("/computer/editComputer").hasAuthority("ADMIN")
+			.antMatchers("/computer/deleteComputer").hasAuthority("ADMIN")
 			.antMatchers("/").authenticated()
-			.antMatchers("/dashboard").authenticated()
+			.antMatchers("/computer/dashboard").authenticated()
 			.antMatchers("/LoginProcess").permitAll()
 		.and()
 			.formLogin()
-			.loginPage("/Login")
+			.loginPage("/login")
 			.loginProcessingUrl("/LoginProcess")
 			.usernameParameter("username")
 			.passwordParameter("password")
-			.defaultSuccessUrl("/")
-			.failureForwardUrl("/Login?error")
+			.defaultSuccessUrl("/computer/dashboard")
+			.failureForwardUrl("/login?error")
 		.and()
 			.logout()
-			.logoutSuccessUrl("/Login?logout")
+			.logoutSuccessUrl("/login?logout")
 			.logoutUrl("/LogoutProcess");
 	}
 }

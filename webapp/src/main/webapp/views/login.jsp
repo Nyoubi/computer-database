@@ -23,7 +23,6 @@
 					<h1>
 						<spring:message code="login.title" />
 					</h1>
-
 					<c:if test="${error}">
 						<div>
 							<spring:message code="login.error" />

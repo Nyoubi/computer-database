@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Import;
 import com.excilys.computer_database.service_config.SpringServiceConfiguration;
 
 @Configuration
-@Import({SpringServiceConfiguration.class})
+@Import(SpringServiceConfiguration.class)
 @ComponentScan({"com.excilys.computer_database.servlet"})
 public class SpringWebAppConfiguration {
 

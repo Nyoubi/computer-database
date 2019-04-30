@@ -68,8 +68,10 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="<spring:message code="addComputer.add"/>" class="btn btn-primary"
-								id="btnAdd"> <spring:message code="addComputer.or"/> <a href=<c:url value ="/computer/dashboard"/>
+							<input type="submit" value="
+								<spring:message code="addComputer.add"/>" 
+								class="btn btn-primary" id="btnAdd"> 
+								<spring:message code="addComputer.or"/> <a href=<c:url value ="/computer/dashboard"/>
 								class="btn btn-default"><spring:message code="addComputer.cancel"/></a>
 						</div>
 					</form:form>

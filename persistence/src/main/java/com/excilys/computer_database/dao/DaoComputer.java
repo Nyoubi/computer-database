@@ -15,6 +15,8 @@ public interface DaoComputer extends PagingAndSortingRepository<Computer,Integer
 
 	Page<Computer> findAllByNameContains(String search, Pageable pageable);
 
+	Integer countByNameContains(String search);
+	
 	@Modifying
 	@Query(value = "ALTER TABLE computer AUTO_INCREMENT = :id", nativeQuery = true)
 	public int resetAutoIncrement(@Param("id") Integer id);

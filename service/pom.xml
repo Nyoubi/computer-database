@@ -1,7 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<parent> 
+	
+	<parent>
 		<groupId>com.excilys</groupId>
 		<artifactId>computer-database</artifactId>
 		<version>${application.version}</version>
@@ -10,7 +11,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>service</artifactId>
-	<version>1.0</version>
+	<version>${module.version}</version>
 	<packaging>jar</packaging>
 
 	<name>service</name>
@@ -20,23 +21,18 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
-			<version>${jstl}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${spring}</version>
+			<version>${jstl.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>${servlet.api}</version>
+			<version>${servlet.api.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.excilys</groupId>
 			<artifactId>persistence</artifactId>
-			<version>1.0</version>
+			<version>${module.version}</version>
 		</dependency>
 	</dependencies>
 </project>

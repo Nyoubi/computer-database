@@ -17,7 +17,11 @@
 </head>
 <body>
 	<%@include file="/views/imports/header.jsp"%>
-	
+	<div class="container">
+		<a class="btn btn-default" href="<c:url value="/LogoutProcess"/>">
+			<spring:message code="login.logoutButton" />
+		</a>
+	</div>
 	<section id="main">
 		<div class="container">
 			<c:choose>
@@ -60,7 +64,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="dashboard" method="POST">
+		<form id="deleteForm" action="<c:url value="deleteComputer"/>" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 

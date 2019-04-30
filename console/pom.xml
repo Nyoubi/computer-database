@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>console</artifactId>
-  <version>1.0</version>
+  <version>${module.version}</version>
   <packaging>jar</packaging>
 
   <name>console</name>
@@ -19,12 +19,12 @@
     <dependency>
     	<groupId>org.springframework</groupId>
     	<artifactId>spring-webmvc</artifactId>
-    	<version>${spring}</version>
+    	<version>${spring.version}</version>
     </dependency>
     <dependency>
     	<groupId>com.excilys</groupId>
     	<artifactId>service</artifactId>
-    	<version>1.0</version>
+    	<version>${module.version}</version>
     </dependency>
   </dependencies>
 </project>

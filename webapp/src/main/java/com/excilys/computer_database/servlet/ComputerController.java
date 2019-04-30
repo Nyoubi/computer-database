@@ -49,7 +49,7 @@ public class ComputerController {
 	@Autowired
 	private CompanyService companyService;
 	
-	@GetMapping({ "addComputer", "/addcomputer", "/AddComputer", "/Addcomputer" })
+	@GetMapping("/addComputer")
 	public String getAddComputer(Model model) {
 		logger.info("getAddComputer has been called");
 
@@ -61,7 +61,7 @@ public class ComputerController {
 		return VIEW_ADD_COMPUTERS;	
 	}
 
-	@PostMapping({ "/addComputer", "/addcomputer", "/AddComputer", "/Addcomputer" })
+	@PostMapping("/addComputer")
 	public String postAddComputer(@Validated @ModelAttribute("computer")ComputerDto dtoComputer, 
 		      BindingResult result, Model model) {
 		logger.info("postAddComputer has been called");
@@ -81,7 +81,7 @@ public class ComputerController {
 		}
 	}
 	
-	@PostMapping({ "/editComputer", "/editcomputer", "/Editcomputer", "/EditComputer" })
+	@PostMapping("/editComputer")
 	protected String postEditcomputer(@Validated @ModelAttribute("computer")ComputerDto dtoComputer, 
 		      BindingResult result, Model model) {
 		logger.info("postEditcomputer has been called");
@@ -98,7 +98,7 @@ public class ComputerController {
 		}
 	}
 	
-	@GetMapping({ "/editComputer", "/editcomputer", "/Editcomputer", "/EditComputer" })
+	@GetMapping("/editComputer")
 	protected String getEditComputer(Model model , @RequestParam(required = false) Map<String, String> param) {
 		logger.info("getEditComputer has been called");
 
@@ -120,6 +120,25 @@ public class ComputerController {
 			return VIEW_ERROR_500;
 		}
 		return VIEW_EDIT_COMPUTER;		
+	}
+	
+	@PostMapping("/deleteComputer")
+	public String deleteDashboard(Model model,
+			@RequestParam(name = "selection", required = false, defaultValue = "") String selection) {
+		logger.info("deleteDashboard has been called");
+
+		if (!"".equals(selection)) {
+			String[] computers = selection.split(",");
+			for (String id : computers) {
+				try {
+					computerService.deleteComputer(id);
+				} catch (InvalidInputException e) {
+					model.addAttribute("stackTrace", e.getMessage());
+					return VIEW_ERROR_500;
+				}
+			}
+		} 
+		return "redirect:"+VIEW_LIST_COMPUTERS;
 	}
 	
 	@InitBinder

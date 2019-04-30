@@ -83,7 +83,13 @@ public class ComputerService {
 		
 		result = listAllComputer(search, PageRequest.of(optIndex.isPresent() ? optIndex.get()-1 : 0, optIndex.isPresent() ? optSize.get() : 10, getOrder(order)));
 
-		Integer count = (int) daoComputer.count();
+		Integer count = 0;
+		
+		if ("".equals(search)) {
+			count = (int) daoComputer.count();
+		} else {
+			count = daoComputer.countByNameContains(search);
+		}
 		
 		PageBuilder<ComputerDto> builder = checkPage(url,
 													 result,

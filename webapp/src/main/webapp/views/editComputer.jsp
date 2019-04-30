@@ -18,7 +18,7 @@
 <body>
 
 	<%@include file="/views/imports/header.jsp"%>
-	
+	 
 	<%@include file="/views/imports/error.jsp"%>
 
 	<section id="main">

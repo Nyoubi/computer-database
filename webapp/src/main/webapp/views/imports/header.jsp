@@ -1,6 +1,6 @@
 <header class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
-		<a class="navbar-brand" href="dashboard"> 
+		<a class="navbar-brand" href="/webapp/computer/dashboard"> 
 		<spring:message code="dashboard.title" />
 		</a>
 	</div>

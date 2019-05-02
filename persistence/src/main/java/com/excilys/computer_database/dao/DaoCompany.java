@@ -12,8 +12,4 @@ import com.excilys.computer_database.model.Company;
 public interface DaoCompany extends JpaRepository<Company,Integer> {
 	
 	final String ALTER_AUTO_INCREMENTE = "ALTER TABLE company AUTO_INCREMENT = :id";
-	
-	@Modifying
-	@Query(value = ALTER_AUTO_INCREMENTE, nativeQuery = true)
-	public int resetAutoIncrement(@Param("id") Integer id);
 }

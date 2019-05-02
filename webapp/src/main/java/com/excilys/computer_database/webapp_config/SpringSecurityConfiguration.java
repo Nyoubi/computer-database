@@ -22,9 +22,9 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	  throws Exception {
 		auth.jdbcAuthentication().dataSource(dataSource)
 		.usersByUsernameQuery(
-			"select username,password from user where username = ?")
+			"SELECT username,password,enabled FROM user WHERE username = ?")
 		.authoritiesByUsernameQuery(
-			"select user_role.username username, role.name auhority from user_role join role on role.id = user_role.idRole where user_role.username = ?")
+			"SELECT user_role.username username, role.name auhority FROM user_role JOIN role ON role.id = user_role.idRole WHERE user_role.username = ?")
 		.passwordEncoder(new BCryptPasswordEncoder());
 	} 
 	
@@ -45,7 +45,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.usernameParameter("username")
 			.passwordParameter("password")
 			.defaultSuccessUrl("/computer/dashboard")
-			.failureForwardUrl("/login?error")
+			.failureUrl("/login?error")
 		.and()
 			.logout()
 			.logoutSuccessUrl("/login?logout")

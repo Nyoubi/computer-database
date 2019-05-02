@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,22 +50,25 @@
 							class="btn btn-primary" />
 					</form>
 				</div>
-				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer"
-						href=<c:url value ="/computer/addComputer"/>><spring:message
-							code="dashboard.add_computer" /></a> 
-						<a class="btn btn-default" id="editComputer" 
-							href="#" onclick="$.fn.toggleEditMode();"> <spring:message code="dashboard.edit"/>
+				<sec:authorize access="hasAuthority('ADMIN')">
+					<div class="pull-right">
+						<a class="btn btn-success" id="addComputer"
+							href=<c:url value ="/computer/addComputer"/>><spring:message
+								code="dashboard.add_computer" /></a> <a class="btn btn-default"
+							id="editComputer" href="#" onclick="$.fn.toggleEditMode();">
+							<spring:message code="dashboard.edit" />
+						</a> <a class="btn btn-default" id="viewComputer" href="#"
+							onclick="$.fn.toggleEditMode();" style="display: none"> <spring:message
+								code="dashboard.view" />
 						</a>
-						<a class="btn btn-default" id="viewComputer" 
-							href="#" onclick="$.fn.toggleEditMode();" style="display: none">
-							<spring:message code="dashboard.view"/>
-						</a>
-				</div>
+					</div>
+				</sec:authorize>
+
 			</div>
 		</div>
 
-		<form id="deleteForm" action="<c:url value="deleteComputer"/>" method="POST">
+		<form id="deleteForm" action="<c:url value="deleteComputer"/>"
+			method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -127,8 +131,13 @@
 							<tr>
 								<td class="editMode"><input type="checkbox" name="cb"
 									class="cb" value="${computer.getId()}"></td>
-								<td id="name"><a href="editComputer?id=${computer.getId()}"
-									onclick="">${computer.getName()}</a></td>
+								<td id="name">
+								<sec:authorize access="hasAuthority('ADMIN')">
+										<a href="editComputer?id=${computer.getId()}" onclick="">${computer.getName()}</a>
+								</sec:authorize> 
+								<sec:authorize access="hasAuthority('USER')">
+										${computer.getName()}
+								</sec:authorize></td>
 								<td>${computer.getIntroduced()}</td>
 								<td>${computer.getDiscontinued()}</td>
 								<td>${computer.getCompanyName()}</td>

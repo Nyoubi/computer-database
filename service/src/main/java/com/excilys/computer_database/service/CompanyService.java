@@ -50,9 +50,9 @@ public class CompanyService {
 			daoCompany.deleteById(id);
 	}
 	
-	public void resetAutoIncrement(Integer id) throws DaoException {
-		daoCompany.resetAutoIncrement(id);
-	}
+//	public void resetAutoIncrement(Integer id) throws DaoException {
+//		daoCompany.resetAutoIncrement(id);
+//	}
 	
 	public Company checkDataCreateCompany(String name) throws DaoException , ValidationException{
 		if (name == null || name == "") {

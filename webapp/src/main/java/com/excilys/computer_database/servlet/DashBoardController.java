@@ -4,6 +4,8 @@ package com.excilys.computer_database.servlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +47,6 @@ public class DashBoardController {
 			model.addAttribute("stackTrace", e.getMessage());
 			return VIEW_ERROR_500;
 		}
-
 		model.addAttribute("index", index);
 		model.addAttribute("size", size);
 		model.addAttribute("search", search);
@@ -53,7 +54,6 @@ public class DashBoardController {
 		model.addAttribute("computerPage", showComputers);
 		model.addAttribute("computerData", showComputers.getContent());
 		model.addAttribute("numberComputer", showComputers.getTotalSize());
-
 		return VIEW_LIST_COMPUTERS;
 	}
 }

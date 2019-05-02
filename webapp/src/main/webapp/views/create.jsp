@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <html>
 <head>
 <title><spring:message code="dashboard.title" /></title>
@@ -21,47 +23,34 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>
-						<spring:message code="login.title" />
+						<spring:message code="create.title" />
 					</h1>
 					<c:if test="${error}">
 						<div>
-							<spring:message code="login.error" />
+							<spring:message code="create.error" />
 						</div>
 					</c:if>
-					<c:if test="${logout}">
-						<div>
-							<spring:message code="login.logout" />
-						</div>
-					</c:if>
-					<c:if test="${created}">
-						<div>
-							<spring:message code="login.created" />
-						</div>
-					</c:if>
-					<form action="<c:url value="/LoginProcess" />" method="post">
+					<form:form modelAttribute="user" name="createForm" id="createForm"
+						action="createAccount" method="POST">
 						<fieldset>
 							<legend>
-								<spring:message code="login.information" />
+								<spring:message code="create.information" />
 							</legend>
 							<div class="form-group">
-								<label for="username"><spring:message
-										code="login.username" /></label> <input type="text" name="username" />
+								<form:label path="username" for="username"><spring:message
+										code="create.username" /></form:label> <form:input path="username" type="text" name="username" />
 							</div>
 							<div class="form-group">
-								<label for="password"><spring:message
-										code="login.password" /></label> <input type="password"
+								<form:label for="password" path="password"><spring:message
+										code="create.password" /></form:label> <form:input path="password" type="password"
 									name="password" />
 							</div>
 							<div class="form-group">
 								<input name="submit" type="submit"
-									value="<spring:message code="login.button"/>" /> 
-									<a
-									class="btn btn-success" id="create"
-									href=<c:url value ="/create"/>><spring:message
-										code="login.create" /></a>
+									value="<spring:message code="create.button"/>" />
 							</div>
 						</fieldset>
-					</form>
+					</form:form>
 				</div>
 			</div>
 		</div>

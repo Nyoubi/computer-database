@@ -20,7 +20,7 @@
 	<%@include file="/views/imports/header.jsp"%>
 	<div class="container">
 		<a class="btn btn-default" href="<c:url value="/LogoutProcess"/>">
-			<spring:message code="login.logoutButton" />
+			<strong><spring:message code="login.logoutButton" /></strong>
 		</a>
 	</div>
 	<section id="main">
@@ -73,8 +73,7 @@
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
-			<table class="table table-striped table-bordered"
-				style="text-align: center">
+			<table class="table table-striped table-bordered text-center">
 				<thead>
 					<tr>
 						<!-- Variable declarations for passing labels as parameters -->
@@ -87,7 +86,7 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th style="text-align: center"><spring:message
+						<th><spring:message
 								code="dashboard.computer_name" /><a
 							title="Order by name ascendant"
 							href="${computerPage.getOrder('nameAsc')}"><i
@@ -95,7 +94,7 @@
 							title="Order by name descendant"
 							href="${computerPage.getOrder('nameDesc')}"><i
 								class="fa fa-arrow-up"></i></a></th>
-						<th style="text-align: center"><spring:message
+						<th><spring:message
 								code="dashboard.introduced_date" /> <a
 							title="Order by introducted date ascendant"
 							href="${computerPage.getOrder('introAsc')}"><i
@@ -104,7 +103,7 @@
 							href="${computerPage.getOrder('introDesc')}"><i
 								class="fa fa-arrow-up"></i></a></th>
 						<!-- Table header for Discontinued Date -->
-						<th style="text-align: center"><spring:message
+						<th><spring:message
 								code="dashboard.discontinued_date" /> <a
 							title="Order by discontinued ascendant"
 							href="${computerPage.getOrder('disconAsc')}"><i
@@ -113,7 +112,7 @@
 							href="${computerPage.getOrder('disconDesc')}"><i
 								class="fa fa-arrow-up"></i></a></th>
 						<!-- Table header for Company -->
-						<th style="text-align: center"><spring:message
+						<th><spring:message
 								code="dashboard.company" /> <a
 							title="Order by company name ascendant"
 							href="${computerPage.getOrder('companyAsc')}"><i

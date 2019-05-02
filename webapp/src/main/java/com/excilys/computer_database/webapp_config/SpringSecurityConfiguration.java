@@ -45,10 +45,10 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.usernameParameter("username")
 			.passwordParameter("password")
 			.defaultSuccessUrl("/computer/dashboard")
-			.failureUrl("/login?error")
+			.failureUrl("/login?error=true")
 		.and()
 			.logout()
-			.logoutSuccessUrl("/login?logout")
+			.logoutSuccessUrl("/login?logout=true")
 			.logoutUrl("/LogoutProcess");
 	}
 }

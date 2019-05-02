@@ -19,15 +19,15 @@
 	<%@include file="/views/imports/header.jsp"%>
 
 	<section id="main">
-		<div class="container">
+		<div class="container text-center">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>
 						<spring:message code="create.title" />
 					</h1>
-					<c:if test="${error}">
-						<div>
-							<spring:message code="create.error" />
+					<c:if test="${param.error}">
+						<div class="alert alert-danger">
+							<strong><spring:message code="${param.error}" /></strong>
 						</div>
 					</c:if>
 					<form:form modelAttribute="user" name="createForm" id="createForm"
@@ -37,18 +37,24 @@
 								<spring:message code="create.information" />
 							</legend>
 							<div class="form-group">
-								<form:label path="username" for="username"><spring:message
-										code="create.username" /></form:label> <form:input path="username" type="text" name="username" />
+								<form:label path="username" for="username">
+									<spring:message code="create.username" />
+								</form:label>
+								<form:input path="username" type="text" name="username" />
 							</div>
 							<div class="form-group">
-								<form:label for="password" path="password"><spring:message
-										code="create.password" /></form:label> <form:input path="password" type="password"
-									name="password" />
+								<form:label for="password" path="password">
+									<spring:message code="create.password" />
+								</form:label>
+								<form:input path="password" type="password" name="password" />
 							</div>
 							<div class="form-group">
-								<input name="submit" type="submit"
-									value="<spring:message code="create.button"/>" />
-							</div>
+							<input type="submit" value="
+								<spring:message code="create.button"/>" 
+								class="btn btn-primary" name="submit"> 
+								<spring:message code="create.or"/> <a href=<c:url value ="/login"/>
+								class="btn btn-default"><spring:message code="create.cancel"/></a>
+						</div>
 						</fieldset>
 					</form:form>
 				</div>

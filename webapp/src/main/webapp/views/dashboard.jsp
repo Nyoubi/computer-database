@@ -1,7 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,12 +60,13 @@
 
 			</div>
 		</div>
+		<sec:authorize access="hasAuthority('ADMIN')">
 
-		<form id="deleteForm" action="<c:url value="deleteComputer"/>"
-			method="POST">
-			<input type="hidden" name="selection" value="">
-		</form>
-
+			<form id="deleteForm" action="<c:url value="deleteComputer"/>"
+				method="POST">
+				<input type="hidden" name="selection" value="">
+			</form>
+		</sec:authorize>
 		<div class="container" style="margin-top: 10px;">
 			<table class="table table-striped table-bordered text-center">
 				<thead>
@@ -82,16 +81,14 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><spring:message
-								code="dashboard.computer_name" /><a
+						<th><spring:message code="dashboard.computer_name" /><a
 							title="Order by name ascendant"
 							href="${computerPage.getOrder('nameAsc')}"><i
 								class="fa fa-arrow-down"></i></a> <a
 							title="Order by name descendant"
 							href="${computerPage.getOrder('nameDesc')}"><i
 								class="fa fa-arrow-up"></i></a></th>
-						<th><spring:message
-								code="dashboard.introduced_date" /> <a
+						<th><spring:message code="dashboard.introduced_date" /> <a
 							title="Order by introducted date ascendant"
 							href="${computerPage.getOrder('introAsc')}"><i
 								class="fa fa-arrow-down"></i></a> <a
@@ -99,8 +96,7 @@
 							href="${computerPage.getOrder('introDesc')}"><i
 								class="fa fa-arrow-up"></i></a></th>
 						<!-- Table header for Discontinued Date -->
-						<th><spring:message
-								code="dashboard.discontinued_date" /> <a
+						<th><spring:message code="dashboard.discontinued_date" /> <a
 							title="Order by discontinued ascendant"
 							href="${computerPage.getOrder('disconAsc')}"><i
 								class="fa fa-arrow-down"></i></a> <a
@@ -108,8 +104,7 @@
 							href="${computerPage.getOrder('disconDesc')}"><i
 								class="fa fa-arrow-up"></i></a></th>
 						<!-- Table header for Company -->
-						<th><spring:message
-								code="dashboard.company" /> <a
+						<th><spring:message code="dashboard.company" /> <a
 							title="Order by company name ascendant"
 							href="${computerPage.getOrder('companyAsc')}"><i
 								class="fa fa-arrow-down"></i></a> <a
@@ -126,11 +121,9 @@
 							<tr>
 								<td class="editMode"><input type="checkbox" name="cb"
 									class="cb" value="${computer.getId()}"></td>
-								<td id="name">
-								<sec:authorize access="hasAuthority('ADMIN')">
+								<td id="name"><sec:authorize access="hasAuthority('ADMIN')">
 										<a href="editComputer?id=${computer.getId()}" onclick="">${computer.getName()}</a>
-								</sec:authorize> 
-								<sec:authorize access="hasAuthority('USER')">
+									</sec:authorize> <sec:authorize access="hasAuthority('USER')">
 										${computer.getName()}
 								</sec:authorize></td>
 								<td>${computer.getIntroduced()}</td>

@@ -19,13 +19,16 @@ public class DtoUserValidation {
 	
 	private static void checkUsername(String username, UserService userService) throws ValidationException, DaoException {
 		if (userService.findUserByName(username).isPresent()) {
-			throw new ValidationException("Username already used");
+			throw new ValidationException("userValidation.username");
+		}
+		if ("".equals(username) || "".equals(username.trim())){
+			throw new ValidationException("userValidation.empty");
 		}
 	}
 	
 	private static void checkPassword(String password) throws ValidationException {
 		if (password.length() < 8) {
-			throw new ValidationException("Password must be at least 8 characters long");
+			throw new ValidationException("userValidation.password");
 		}
 	}
 }

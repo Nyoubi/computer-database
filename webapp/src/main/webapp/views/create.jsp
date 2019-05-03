@@ -25,9 +25,9 @@
 					<h1>
 						<spring:message code="create.title" />
 					</h1>
-					<c:if test="${param.error}">
+					<c:if test="${not empty errorMessage}">
 						<div class="alert alert-danger">
-							<strong><spring:message code="${param.error}" /></strong>
+							<strong><spring:message code="${errorMessage}" /></strong>
 						</div>
 					</c:if>
 					<form:form modelAttribute="user" name="createForm" id="createForm"

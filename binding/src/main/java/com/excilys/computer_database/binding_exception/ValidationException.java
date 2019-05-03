@@ -9,4 +9,8 @@ public class ValidationException extends Exception {
 	public ValidationException(String errorMessage) {
         this.errorMessage = errorMessage;
     }
+	
+	public String getMessage() {
+		return this.errorMessage;
+	}
 }

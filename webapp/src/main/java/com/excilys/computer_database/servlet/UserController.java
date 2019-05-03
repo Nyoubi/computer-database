@@ -21,7 +21,7 @@ import com.excilys.computer_database.validation.DtoUserValidation;
 @Controller
 public class UserController {
 	
-	static final String LOGIN = "redirect:login?created=true";
+	static final String LOGIN = "redirect:login";
 	static final String VIEW_CREATE = "create";
 
 	private final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -35,9 +35,10 @@ public class UserController {
 		try {
 			User user = DtoUserValidation.checkDataUser(userDto, userService);
 			userService.createUser(user);
+			model.addAttribute("created", true);
 			return LOGIN;
 		} catch (DaoException | ValidationException e) {
-			model.addAttribute("error",true);
+			model.addAttribute("errorMessage", e.getMessage());
 			return VIEW_CREATE;
 		}
 	}

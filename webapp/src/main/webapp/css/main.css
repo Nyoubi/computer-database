@@ -28,14 +28,13 @@ input[type='checkbox'] {
     white-space: nowrap;
 }
 
-#lang {
-	margin-right : 5%;
-}
-
 .lang-flag {
 	width: 32px;
 	height: auto;
-	margin-left : 10px;
-	float: right;
-	margin-top : -31px
+	margin-top:8px;
+}
+
+.logout {
+	margin-top:8px;
+	margin-right:10px;
 }

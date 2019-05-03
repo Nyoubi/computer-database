@@ -18,11 +18,7 @@
 </head>
 <body>
 	<%@include file="/views/imports/header.jsp"%>
-	<div class="container">
-		<a class="btn btn-default" href="<c:url value="/LogoutProcess"/>">
-			<strong><spring:message code="login.logoutButton" /></strong>
-		</a>
-	</div>
+
 	<section id="main">
 		<div class="container">
 			<c:choose>

@@ -9,4 +9,8 @@ public class DaoException extends Exception {
 	public DaoException(String errorMessage) {
         this.errorMessage = errorMessage;
     }
+	
+	public String getMessage() {
+		return this.errorMessage;
+	}
 }

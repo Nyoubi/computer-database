@@ -30,8 +30,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-	    http.csrf().disable()
-	    .authorizeRequests()
+	    http.authorizeRequests()
 		    .antMatchers("/computer/addComputer").hasAuthority("ADMIN")
 			.antMatchers("/computer/editComputer").hasAuthority("ADMIN")
 			.antMatchers("/computer/deleteComputer").hasAuthority("ADMIN")

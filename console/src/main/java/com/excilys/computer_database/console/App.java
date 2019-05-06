@@ -14,6 +14,7 @@ public class App {
 	
 	private static Logger logger = LoggerFactory.getLogger(App.class); 
 
+	static int a [][];
 	public static void main( String[] args )
 	{
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));

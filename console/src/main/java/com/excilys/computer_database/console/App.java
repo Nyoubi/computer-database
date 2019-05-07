@@ -19,9 +19,7 @@ public class App {
 	{
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		logger.info("App starting");
-		GenericApplicationContext context = new AnnotationConfigApplicationContext(SpringConsoleConfiguration.class);
-		CliController controler = context.getBean(CliController.class);
+		CliController controler = new CliController();
 		controler.run();
-		context.close();
 	}
 }

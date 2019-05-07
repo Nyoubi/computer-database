@@ -29,6 +29,7 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysql.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.excilys</groupId>
 			<artifactId>binding</artifactId>

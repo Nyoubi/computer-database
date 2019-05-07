@@ -2,8 +2,9 @@ package com.excilys.computer_database.console_view;
 
 public enum MenuOptionsView {
 	ERROR(-1),
-	DELETE_COMPANY(1),
-	EXIT(2);
+	SHOW_COMPUTER(1),
+	DELETE_COMPANY(2),
+	EXIT(3);
 	
 	private final Integer id;
 	

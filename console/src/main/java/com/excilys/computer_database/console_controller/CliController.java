@@ -9,18 +9,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.excilys.computer_database.binding_exception.InvalidInputException;
+import com.excilys.computer_database.console.RestClient;
 import com.excilys.computer_database.console_view.DeleteCompanyView;
 import com.excilys.computer_database.console_view.MenuOptionsView;
 import com.excilys.computer_database.console_view.MenuView;
+import com.excilys.computer_database.console_view.ShowComputerView;
 import com.excilys.computer_database.service.CompanyService;
 import com.excilys.computer_database.utils.Util;
 
 @Controller
 public class CliController {
-	
+
 	@Autowired
 	private CompanyService companyService;
-	
+
 	/**
 	 * Controller logger, used to trace logs
 	 */
@@ -35,26 +37,35 @@ public class CliController {
 	 */
 	public void run() {
 		boolean run = true;
+		RestClient client = new RestClient();
 		while (run) {
 			String input = MenuView.show();
 			switch(MenuOptionsView.getById(Util.parseInt(input).get())) {
 			
+			case SHOW_COMPUTER: 
+				Optional<Integer> id = Util.parseInt(ShowComputerView.show());
+				if (id.isPresent()) {
+					System.out.println(client.showDetails(id.get()));
+				} else {
+					logger.info("Wrong input, try again.");
+				}
+				break;
 			case DELETE_COMPANY:
-			Optional<Integer> idd = Util.parseInt(DeleteCompanyView.show());
-			if (idd.isPresent()) {
-				deleteAndShowView(idd.get());
-			} else {
-				logger.info("Wrong input, try again.");
-			}
-			break;
-			
+				Optional<Integer> idd = Util.parseInt(DeleteCompanyView.show());
+				if (idd.isPresent()) {
+					deleteAndShowView(idd.get());
+				} else {
+					logger.info("Wrong input, try again.");
+				}
+				break;
+
 			case EXIT:
 				logger.info("Goodbye :3");
 				run = false;
 				break;
-				
+
 			case ERROR: logger.info("This options doesn't exist.");
-				break;
+			break;
 			default: logger.error("Somethings bad happened");
 			break;
 			}

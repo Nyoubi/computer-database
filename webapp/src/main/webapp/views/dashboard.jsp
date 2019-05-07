@@ -60,27 +60,27 @@
 
 			</div>
 		</div>
-		<sec:authorize access="hasAuthority('ADMIN')">
-
-			<form id="deleteForm" action="<c:url value="deleteComputer"/>"
-				method="POST">
-				<input type="hidden" name="selection" value="">
-			</form>
-		</sec:authorize>
+		<form id="deleteForm" action="<c:url value="deleteComputer"/>"
+			method="POST">
+			<input type="hidden" name="selection" value="">
+		</form>
 		<div class="container" style="margin-top: 10px;">
 			<table class="table table-striped table-bordered text-center">
 				<thead>
 					<tr>
 						<!-- Variable declarations for passing labels as parameters -->
 						<!-- Table header for Computer Name -->
+						<sec:authorize access="hasAuthority('ADMIN')">
 
-						<th class="editMode" style="width: 60px; height: 22px;"><input
-							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="#"
-								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
-									class="fa fa-trash-o fa-lg"></i>
-							</a>
-						</span></th>
+							<th class="editMode" style="width: 60px; height: 22px;"><input
+								type="checkbox" id="selectall" /> <span
+								style="vertical-align: top;"> - <a href="#"
+									id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
+										class="fa fa-trash-o fa-lg"></i>
+								</a>
+							</span></th>
+						</sec:authorize>
+
 						<th><spring:message code="dashboard.computer_name" /><a
 							title="Order by name ascendant"
 							href="${computerPage.getOrder('nameAsc')}"><i
@@ -119,8 +119,8 @@
 					<c:if test="${computerData != null}">
 						<c:forEach items="${computerData}" var="computer">
 							<tr>
-								<td class="editMode"><input type="checkbox" name="cb"
-									class="cb" value="${computer.getId()}"></td>
+									<td class="editMode"><input type="checkbox" name="cb"
+										class="cb" value="${computer.getId()}"></td>
 								<td id="name"><sec:authorize access="hasAuthority('ADMIN')">
 										<a href="editComputer?id=${computer.getId()}" onclick="">${computer.getName()}</a>
 									</sec:authorize> <sec:authorize access="hasAuthority('USER')">

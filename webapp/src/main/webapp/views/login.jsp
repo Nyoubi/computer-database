@@ -43,7 +43,7 @@
 							<legend>
 								<spring:message code="login.information" />
 							</legend>
-							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+<%-- 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> --%>
 							<div class="form-group">
 								<label for="username"><spring:message
 										code="login.username" /></label> <input type="text" name="username" />

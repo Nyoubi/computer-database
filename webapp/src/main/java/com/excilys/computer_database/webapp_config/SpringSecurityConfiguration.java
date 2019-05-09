@@ -17,6 +17,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DataSource dataSource;
 	 
+	static final String admin = "ADMIN";
+	
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) 
 	  throws Exception {
@@ -31,9 +33,9 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 	    http.csrf().disable().authorizeRequests()
-		    .mvcMatchers("/computer/addComputer").hasAuthority("ADMIN")
-			.mvcMatchers("/computer/editComputer").hasAuthority("ADMIN")
-			.mvcMatchers("/computer/deleteComputer").hasAuthority("ADMIN")
+		    .mvcMatchers("/computer/addComputer").hasAuthority(admin)
+			.mvcMatchers("/computer/editComputer").hasAuthority(admin)
+			.mvcMatchers("/computer/deleteComputer").hasAuthority(admin)
 			.mvcMatchers("/").authenticated()
 			.mvcMatchers("/computer/dashboard").authenticated()
 			.mvcMatchers("/LoginProcess").permitAll()

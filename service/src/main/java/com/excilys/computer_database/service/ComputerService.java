@@ -1,6 +1,5 @@
 package com.excilys.computer_database.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,7 +30,7 @@ public class ComputerService {
 	private DaoComputer daoComputer;
 
 	
-	public List<ComputerDto> listAllComputer(String search, Pageable page)  throws DaoException{
+	public List<ComputerDto> listAllComputer(String search, Pageable page) {
 		return daoComputer.findAllByNameContains(search,page).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
 	}
 	
@@ -76,7 +75,7 @@ public class ComputerService {
 	}
 
 	public Page<ComputerDto> pageDtoComputer(String url, String index, String size, String search, String order) throws ValidationException, DaoException {
-		List<ComputerDto> result = new ArrayList<>();
+		List<ComputerDto> result;
 		
 		Optional<Integer> optIndex = Util.parseInt(index);
 		Optional<Integer> optSize = Util.parseInt(size);
@@ -97,8 +96,8 @@ public class ComputerService {
 													 optIndex.isPresent() ? optIndex.get() : 0,
 													 optSize.isPresent() ? optSize.get() : 10,
 													 search,order);
-		Page<ComputerDto> page = builder.build();
-		return page;		
+
+		return builder.build();		
 	}
 
 	public Sort getOrder(String order) {
@@ -111,7 +110,7 @@ public class ComputerService {
 	}
 	
 	public PageBuilder<ComputerDto> checkPage(String url, List<ComputerDto> content,Integer count, Integer index, Integer size, String search, String order) throws ValidationException{
-		PageBuilder<ComputerDto> pageBuilder = new PageBuilder<ComputerDto>();
+		PageBuilder<ComputerDto> pageBuilder = new PageBuilder<>();
 
 		if(index == null) {
 			index = Integer.valueOf(1);

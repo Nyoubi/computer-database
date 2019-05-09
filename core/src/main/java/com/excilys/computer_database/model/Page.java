@@ -15,7 +15,7 @@ public class Page<T> {
 	private String search;
 	private String order;
 	
-	private static List<Integer> sizeList = Arrays.asList(new Integer[]{10,20,50,100});
+	private static List<Integer> sizeList = Arrays.asList(10,20,50,100);
 		
 	public enum orderEnum {
 		

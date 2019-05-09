@@ -10,15 +10,18 @@ public class MenuView {
 	protected static Scanner input;
 	protected static Logger logger = LoggerFactory.getLogger(MenuView.class);
 	
+	//Private constructor
+	private MenuView () {}
+	
 	public static String show() {
 		String value;
 		input = new Scanner(System.in);
-		System.out.println("\n==========================");
-		System.out.println("Choose an option");
-		System.out.println(MenuOptionsView.SHOW_COMPUTER.getId() + " - Show details of a computer");
-		System.out.println(MenuOptionsView.DELETE_COMPANY.getId() + " - Delete a company");
-		System.out.println(MenuOptionsView.EXIT.getId() + " - Exit");
-		System.out.println("==========================\n");
+		logger.info("\n==========================");
+		logger.info("Choose an option");
+		logger.info(MenuOptionsView.SHOW_COMPUTER.getId() + " - Show details of a computer");
+		logger.info(MenuOptionsView.DELETE_COMPANY.getId() + " - Delete a company");
+		logger.info(MenuOptionsView.EXIT.getId() + " - Exit");
+		logger.info("==========================\n");
 
 		value = input.nextLine();
 		

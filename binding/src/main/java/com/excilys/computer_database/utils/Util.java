@@ -9,13 +9,17 @@ import org.slf4j.LoggerFactory;
 public abstract class Util {
 
 	private static Logger logger = LoggerFactory.getLogger(Util.class);
+	
+	//Private constructor
+	private Util () {}
+	
 	public static Optional<Integer> parseInt(String input) {
 		if (!"".equals(input))
 		{
 			try {
 				return Optional.of(Integer.valueOf(input));
 			} catch (NumberFormatException e){
-				logger.error("Error when parsing " + input + " to an Integer");
+				logger.error(String.format("Error when parsing %s to an Integer", input));
 			}
 		}
 		return Optional.empty();

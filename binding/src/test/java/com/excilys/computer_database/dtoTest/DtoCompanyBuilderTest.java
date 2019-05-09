@@ -16,8 +16,8 @@ public class DtoCompanyBuilderTest {
 		dtoCompanyBuilder = dtoCompanyBuilder.setId(1)
 									   .setName("Name");
 		
-		assertEquals((int)dtoCompanyBuilder.getId(),1);
-		assertEquals(dtoCompanyBuilder.getName(),"Name");
+		assertEquals(1,(int)dtoCompanyBuilder.getId());
+		assertEquals("Name",dtoCompanyBuilder.getName());
 
 	}
 }

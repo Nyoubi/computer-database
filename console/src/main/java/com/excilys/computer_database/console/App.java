@@ -4,10 +4,7 @@ import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.GenericApplicationContext;
 
-import com.excilys.computer_database.console_config.SpringConsoleConfiguration;
 import com.excilys.computer_database.console_controller.CliController;
 
 public class App {

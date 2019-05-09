@@ -7,8 +7,11 @@ import com.excilys.computer_database.binding_dto.CompanyDtoBuilder;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.CompanyBuilder;
 
-public class CompanyMapper {
+public abstract class CompanyMapper {
 
+	//Private constructor
+	private CompanyMapper () {}
+	
 	public static Optional<CompanyDto> companyToDtoCompany(Company company){
 		Optional<CompanyDto> dtoCompany = Optional.empty();
 		if (company != null) {

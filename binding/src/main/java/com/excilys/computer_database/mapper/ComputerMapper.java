@@ -8,7 +8,7 @@ import com.excilys.computer_database.binding_dto.ComputerDtoBuilder;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.utils.Util;
 
-public class ComputerMapper{
+public abstract class ComputerMapper{
 
 
 	public static ComputerDto computerToDtoComputer(Computer computer){
@@ -23,7 +23,7 @@ public class ComputerMapper{
 		Optional<CompanyDto> dtoCompany = CompanyMapper.companyToDtoCompany(computer.getCompany());
 
 		if (dtoCompany.isPresent()) {
-			dtoComputerBuilder.setCompanyName(dtoCompany.get().getName().toString())
+			dtoComputerBuilder.setCompanyName(dtoCompany.get().getName())
 							  .setCompanyId(dtoCompany.get().getId());
 		}
 		return dtoComputerBuilder.build();

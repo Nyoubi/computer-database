@@ -21,11 +21,11 @@ public class ComputerMapperTest {
 		ComputerDto dtoComputer = new ComputerDto();
 		dtoComputer = ComputerMapper.computerToDtoComputer(computer);
 
-		assertEquals((int)dtoComputer.getId(), 1);
-		assertEquals(dtoComputer.getName(),"Computer name");
-		assertEquals(dtoComputer.getIntroduced(),"2010-09-11 11:11:11.0");
-		assertEquals(dtoComputer.getDiscontinued(),"2011-10-11 11:11:11.0");
-		assertEquals(dtoComputer.getCompanyId(),1);
-		assertEquals(dtoComputer.getCompanyName(), "Company name");
+		assertEquals(1,(int)dtoComputer.getId());
+		assertEquals("Computer name", dtoComputer.getName());
+		assertEquals("2010-09-11 11:11:11.0", dtoComputer.getIntroduced());
+		assertEquals("2011-10-11 11:11:11.0", dtoComputer.getDiscontinued());
+		assertEquals(1,dtoComputer.getCompanyId());
+		assertEquals("Company name", dtoComputer.getCompanyName());
 	}
 }

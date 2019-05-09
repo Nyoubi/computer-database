@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import com.excilys.computer_database.binding_exception.InvalidInputException;
 import com.excilys.computer_database.console.RestClient;
 import com.excilys.computer_database.console_view.DeleteCompanyView;
 import com.excilys.computer_database.console_view.MenuOptionsView;
@@ -45,7 +44,7 @@ public class CliController {
 			case SHOW_COMPUTER: 
 				Optional<Integer> id = Util.parseInt(ShowComputerView.show());
 				if (id.isPresent()) {
-					System.out.println(client.showDetails(id.get()));
+					logger.info(client.showDetails(id.get()).toString());
 				} else {
 					logger.info("Wrong input, try again.");
 				}
@@ -74,11 +73,7 @@ public class CliController {
 	}
 
 	private void deleteAndShowView(Integer id) {
-		try {
-			companyService.deleteCompany(id);
-		} catch (InvalidInputException e) {
-			logger.error("Id must be a number");
-		}
+		companyService.deleteCompany(id);
 		DeleteCompanyView.exec(true);
 	}
 

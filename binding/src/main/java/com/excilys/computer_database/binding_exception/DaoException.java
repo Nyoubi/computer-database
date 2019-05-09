@@ -5,11 +5,12 @@ public class DaoException extends Exception {
 
 	private static final long serialVersionUID = -6977007286685678554L;
 	
-	public String errorMessage;
+	public final String errorMessage;
 	public DaoException(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 	
+	@Override
 	public String getMessage() {
 		return this.errorMessage;
 	}

@@ -38,7 +38,7 @@ public class SpringPersistenceConfiguration {
 	    vendorAdapter.setGenerateDdl(true);
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(dataSource);
-		em.setPackagesToScan(new String[] { "com.excilys.computer_database" });
+		em.setPackagesToScan("com.excilys.computer_database");
 		em.setJpaVendorAdapter(vendorAdapter);
 		return em;
 	}

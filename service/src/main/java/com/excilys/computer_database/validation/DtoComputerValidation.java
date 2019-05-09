@@ -37,7 +37,7 @@ public class DtoComputerValidation implements Validator{
 	
 	
 	public static Computer checkDataComputer(ComputerDto computerDto, CompanyService companyService, boolean update) throws DaoException, ValidationException {
-		Integer id = new Integer(computerDto.getId());
+		Integer id = computerDto.getId();
 		
 		if (update && id == 0) {
 			throw new ValidationException("dtoValidatorError.idnullupdate");
@@ -45,12 +45,12 @@ public class DtoComputerValidation implements Validator{
 
 		Optional<Company> company = checkCompany(computerDto.getCompanyId(), companyService);
 
-		Optional<Timestamp> OptIntroduced = Util.stringToTimestamp(computerDto.getIntroduced());
-		Optional<Timestamp> OptDiscontinued = Util.stringToTimestamp(computerDto.getDiscontinued());
+		Optional<Timestamp> optIntroduced = Util.stringToTimestamp(computerDto.getIntroduced());
+		Optional<Timestamp> optDiscontinued = Util.stringToTimestamp(computerDto.getDiscontinued());
 
 		ComputerBuilder computerBuilder = new ComputerBuilder().setName(computerDto.getName())
-				.setIntroduced(OptIntroduced.isPresent() ? OptIntroduced.get() : null)
-				.setDiscontinued(OptDiscontinued.isPresent() ? OptDiscontinued.get() : null)
+				.setIntroduced(optIntroduced.isPresent() ? optIntroduced.get() : null)
+				.setDiscontinued(optDiscontinued.isPresent() ? optDiscontinued.get() : null)
 				.setCompany(company.isPresent() ? company.get() : null)
 				.setId(id);
 
@@ -63,14 +63,14 @@ public class DtoComputerValidation implements Validator{
 		}
 	}
 	private static void checkDate(ComputerDto computerDto, Errors errors) {
-		Optional<Timestamp> OptIntroduced = Util.stringToTimestamp(computerDto.getIntroduced());
-		Optional<Timestamp> OptDiscontinued = Util.stringToTimestamp(computerDto.getDiscontinued());
+		Optional<Timestamp> optIntroduced = Util.stringToTimestamp(computerDto.getIntroduced());
+		Optional<Timestamp> optDiscontinued = Util.stringToTimestamp(computerDto.getDiscontinued());
 
-		if (!OptIntroduced.isPresent() && OptDiscontinued.isPresent()) {
+		if (!optIntroduced.isPresent() && optDiscontinued.isPresent()) {
 			errors.rejectValue("discontinued", "dtoValidatorError.disconWithoutIntro");
 		}
-		if (OptIntroduced.isPresent() && OptDiscontinued.isPresent()
-				&& OptIntroduced.get().after(OptDiscontinued.get())) {
+		if (optIntroduced.isPresent() && optDiscontinued.isPresent()
+				&& optIntroduced.get().after(optDiscontinued.get())) {
 			errors.rejectValue("introduced", "dtoValidatorError.introAfterDiscon");
 		}
 		
@@ -87,7 +87,7 @@ public class DtoComputerValidation implements Validator{
 			return Optional.empty();
 		}
 		Optional<CompanyDto> dtoCompany = companyService.findCompanyById(companyId);
-		Optional<Company> company = Optional.empty();
+		Optional<Company> company;
 		if (dtoCompany.isPresent()) {
 			company = CompanyMapper.dtoCompanyToCompany(dtoCompany.get());
 			if (!company.isPresent()) {

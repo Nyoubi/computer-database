@@ -7,7 +7,10 @@ import com.excilys.computer_database.mapper.UserMapper;
 import com.excilys.computer_database.model.User;
 import com.excilys.computer_database.service.UserService;
 
-public class DtoUserValidation {
+public abstract class DtoUserValidation {
+	
+	//Private constructor
+	private DtoUserValidation () {}
 	
 	public static User checkDataUser(UserDto userDto, UserService userService) throws DaoException, ValidationException {
 

@@ -24,8 +24,8 @@ public class companyMapperTest {
 		if (!dtoCompany.isPresent()) {
 			fail();
 		}
-		assertEquals(dtoCompany.get().getName(),"company 1");
-		assertEquals((int)dtoCompany.get().getId(), 1);
+		assertEquals("company 1", dtoCompany.get().getName());
+		assertEquals(1, (int)dtoCompany.get().getId());
 	}
 	
 	@Test
@@ -38,7 +38,7 @@ public class companyMapperTest {
 		if (!company.isPresent()) {
 			fail();
 		}
-		assertEquals(company.get().getName(),"test");
-		assertEquals((int)company.get().getId(), 1);
+		assertEquals("test", company.get().getName());
+		assertEquals(1, (int)company.get().getId());
 	}
 }

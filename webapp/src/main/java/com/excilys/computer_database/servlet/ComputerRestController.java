@@ -65,36 +65,37 @@ public class ComputerRestController {
 			}
 	}
 	
-	@PostMapping
+	@PutMapping
 	public ResponseEntity<HttpStatus> createComputer(@RequestBody ComputerDto dtoComputer) {
 		try {
 			Computer computer = DtoComputerValidation.checkDataComputer(dtoComputer, this.companyService, false);
 			computerService.createComputer(computer);
 
-			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (DaoException | ValidationException e) {
-			return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
 	}
 	
-	@PutMapping("/{id}")
+	@PostMapping("/{id}")
 	public ResponseEntity<HttpStatus> updateComputer(@RequestBody ComputerDto dtoComputer, @PathVariable Integer id) {
 		try {
 			Computer computer = DtoComputerValidation.checkDataComputer(dtoComputer, this.companyService, true);
 			computerService.updateComputer(computer);
-			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (DaoException | ValidationException e) {
-			return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpStatus> deleteById(@PathVariable Integer id){
 		try {
 			computerService.deleteComputer(id.toString());
-			return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (InvalidInputException e) {
-			return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

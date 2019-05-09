@@ -1,17 +1,17 @@
 package com.excilys.computer_database.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-
-import javax.xml.bind.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.computer_database.binding_dto.CompanyDto;
 import com.excilys.computer_database.binding_exception.DaoException;
-import com.excilys.computer_database.binding_exception.InvalidInputException;
+import com.excilys.computer_database.binding_exception.ValidationException;
 import com.excilys.computer_database.dao.DaoCompany;
 import com.excilys.computer_database.mapper.CompanyMapper;
 import com.excilys.computer_database.model.Company;
@@ -25,7 +25,7 @@ public class CompanyService {
 	@Autowired
 	private DaoCompany daoCompany;
 	
-	public ArrayList<CompanyDto> listCompanies() {
+	public List<CompanyDto> listCompanies() {
 		ArrayList<CompanyDto> result = new ArrayList<>();
 		for (Company company : daoCompany.findAll()) {
 			Optional<CompanyDto> dtoCompany = CompanyMapper.companyToDtoCompany(company);
@@ -46,11 +46,12 @@ public class CompanyService {
 		return company.isPresent() ? CompanyMapper.companyToDtoCompany(company.get()) : Optional.empty();
 	}
 	
-	public void deleteCompany(Integer id) throws InvalidInputException {
+	@Transactional
+	public void deleteCompany(Integer id) {
 			daoCompany.deleteById(id);
 	}
 	
-	public Company checkDataCreateCompany(String name) throws DaoException , ValidationException{
+	public Company checkDataCreateCompany(String name) throws ValidationException{
 		if (name == null || name == "") {
 			throw new ValidationException("Failed to create company : Invalid name");
 		}

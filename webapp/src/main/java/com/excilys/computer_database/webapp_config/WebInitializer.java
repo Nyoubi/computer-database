@@ -12,7 +12,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 @Configuration
 public class WebInitializer implements WebApplicationInitializer{
-	public static AnnotationConfigWebApplicationContext ctx;
+	public AnnotationConfigWebApplicationContext ctx;
 
 	@Override
 	public void onStartup(ServletContext servletCtx) throws ServletException  {

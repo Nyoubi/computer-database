@@ -1,6 +1,5 @@
 package com.excilys.computer_database.servlet;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -41,6 +40,8 @@ public class ComputerController {
 	static final String VIEW_ADD_COMPUTERS = "addComputer";
 	static final String VIEW_LIST_COMPUTERS_REDIRECT = "redirect:dashboard";
 
+	static final String stack = "stacktrace";
+	
 	private final Logger logger = LoggerFactory.getLogger(ComputerController.class);
 
 	@Autowired
@@ -53,10 +54,10 @@ public class ComputerController {
 	public String getAddComputer(Model model) {
 		logger.info("getAddComputer has been called");
 
-		ArrayList<CompanyDto> listCompanies = new ArrayList<>();
+		List<CompanyDto> companies;
 		
-		listCompanies = companyService.listCompanies();
-		model.addAttribute("listCompanies", listCompanies);
+		companies = companyService.listCompanies();
+		model.addAttribute("listCompanies", companies);
 		model.addAttribute("computer" , new ComputerDto());
 		return VIEW_ADD_COMPUTERS;	
 	}
@@ -66,7 +67,7 @@ public class ComputerController {
 		      BindingResult result, Model model) {
 		logger.info("postAddComputer has been called");
 		if (setStackTrace(model, result)) {
-			model.addAttribute("stackTrace", "dtoComputerValidation.validatorError");
+			model.addAttribute(stack, "dtoComputerValidation.validatorError");
 			return VIEW_ADD_COMPUTERS;
 		}
 		
@@ -76,7 +77,7 @@ public class ComputerController {
 
 			return VIEW_LIST_COMPUTERS_REDIRECT;
 		} catch (DaoException | ValidationException e) {
-			model.addAttribute("stackTrace", e.getMessage());
+			model.addAttribute(stack, e.getMessage());
 			return VIEW_ERROR_500;
 		}
 	}
@@ -93,7 +94,7 @@ public class ComputerController {
 			computerService.updateComputer(computer);
 			return VIEW_LIST_COMPUTERS_REDIRECT;
 		} catch (DaoException | ValidationException e) {
-			model.addAttribute("stackTrace", e.getMessage());
+			model.addAttribute(stack, e.getMessage());
 			return VIEW_ERROR_500;
 		}
 	}
@@ -103,11 +104,11 @@ public class ComputerController {
 		logger.info("getEditComputer has been called");
 
 		Optional<ComputerDto> computer = Optional.empty();		
-		ArrayList<CompanyDto> listCompanies = new ArrayList<>();
+		List<CompanyDto> companies;
 		
 		try {
-			listCompanies = companyService.listCompanies();
-			model.addAttribute("listCompanies", listCompanies);
+			companies = companyService.listCompanies();
+			model.addAttribute("listCompanies", companies);
 			computer = computerService.showDetails(param.get("id"));
 
 			if (computer.isPresent()) {
@@ -116,7 +117,7 @@ public class ComputerController {
 				return VIEW_LIST_COMPUTERS_REDIRECT;
 			}
 		} catch (DaoException | InvalidInputException e) {
-			model.addAttribute("stackTrace", e.getMessage());
+			model.addAttribute(stack, e.getMessage());
 			return VIEW_ERROR_500;
 		}
 		return VIEW_EDIT_COMPUTER;		
@@ -133,7 +134,7 @@ public class ComputerController {
 				try {
 					computerService.deleteComputer(id);
 				} catch (InvalidInputException e) {
-					model.addAttribute("stackTrace", e.getMessage());
+					model.addAttribute(stack, e.getMessage());
 					return VIEW_ERROR_500;
 				}
 			}

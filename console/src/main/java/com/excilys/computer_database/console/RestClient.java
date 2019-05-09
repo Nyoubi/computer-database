@@ -20,4 +20,5 @@ public class RestClient {
           .request(MediaType.APPLICATION_JSON)
           .get(ComputerDto.class);
     }
+    
 }

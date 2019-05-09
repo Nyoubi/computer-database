@@ -3,7 +3,7 @@ package com.excilys.computer_database.serviceTest;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.excilys.computer_database.binding_dto.CompanyDto;
 import com.excilys.computer_database.binding_dto.CompanyDtoBuilder;
 import com.excilys.computer_database.binding_exception.DaoException;
+import com.excilys.computer_database.binding_exception.ValidationException;
 import com.excilys.computer_database.service.CompanyService;
 
 @RunWith(SpringRunner.class)
@@ -29,7 +30,7 @@ public class companyServiceTest {
 
 	@Test
 	public void testListCompany() {
-		ArrayList<CompanyDto> companies = new ArrayList<>();
+		List<CompanyDto> companies;
 		companies = companyService.listCompanies();
 		assertTrue((int)companies.size() == 2);
 	}
@@ -65,17 +66,18 @@ public class companyServiceTest {
 
 	@Test
 	public void testCheckCreateCompany() {
-		try {
-			companyService.checkDataCreateCompany("a");
-		} catch (DaoException | javax.xml.bind.ValidationException e) {
-			fail();
-		}
-		
-		try {
-			companyService.checkDataCreateCompany(null);
-		} catch (DaoException | javax.xml.bind.ValidationException e) {
-			assertTrue(true);
-		}
+			try {
+				companyService.checkDataCreateCompany("a");
+			} catch (ValidationException e) {
+				fail();
+			}
+
+			try {
+				companyService.checkDataCreateCompany(null);
+				fail();
+			} catch (ValidationException e) {
+				assertTrue(true);
+			}
 	}
 	
 

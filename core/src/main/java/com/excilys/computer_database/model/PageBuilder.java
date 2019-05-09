@@ -13,7 +13,7 @@ public class PageBuilder<T> {
 	private String order;
 	
 	public Page<T> build(){
-		return new Page<T>(url,content,totalSize,index,size,search,order);
+		return new Page<>(url,content,totalSize,index,size,search,order);
 	}
 	
 	public PageBuilder<T> setContent(List<T> list) {

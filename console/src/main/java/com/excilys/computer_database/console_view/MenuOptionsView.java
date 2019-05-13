@@ -2,9 +2,12 @@ package com.excilys.computer_database.console_view;
 
 public enum MenuOptionsView {
 	ERROR(-1),
-	SHOW_COMPUTER(1),
-	DELETE_COMPANY(2),
-	EXIT(3);
+	LIST_COMPUTER(1),
+	SHOW_COMPUTER(2),
+	CREATE_COMPUTER(3),
+	UPDATE_COMPUTER(4),
+	DELETE_COMPANY(5),
+	EXIT(4);
 	
 	private final Integer id;
 	
@@ -17,7 +20,7 @@ public enum MenuOptionsView {
 		Integer i = 0;
 		
 		while(i < options.length) {
-			if(options[i].getId() == id) {
+			if(options[i].getId().equals(id)) {
 				return options[i];
 			}else {
 				i ++;

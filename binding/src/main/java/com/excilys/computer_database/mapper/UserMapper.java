@@ -7,8 +7,11 @@ import com.excilys.computer_database.binding_dto.UserDtoBuilder;
 import com.excilys.computer_database.model.User;
 import com.excilys.computer_database.model.UserBuilder;
 
-public abstract class UserMapper {
+public class UserMapper {
 
+	//Private constructor
+	private UserMapper () {}
+	
 	public static Optional<UserDto> userToDtoUser(User user){
 		Optional<UserDto> userDto = Optional.empty();
 		if (user != null) {

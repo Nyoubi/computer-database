@@ -7,7 +7,7 @@ import com.excilys.computer_database.binding_dto.CompanyDtoBuilder;
 import com.excilys.computer_database.model.Company;
 import com.excilys.computer_database.model.CompanyBuilder;
 
-public abstract class CompanyMapper {
+public class CompanyMapper {
 
 	//Private constructor
 	private CompanyMapper () {}

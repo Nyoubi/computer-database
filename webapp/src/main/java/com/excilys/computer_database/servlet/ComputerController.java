@@ -40,7 +40,7 @@ public class ComputerController {
 	static final String VIEW_ADD_COMPUTERS = "addComputer";
 	static final String VIEW_LIST_COMPUTERS_REDIRECT = "redirect:dashboard";
 
-	static final String stack = "stacktrace";
+	static final String STACK = "stacktrace";
 	
 	private final Logger logger = LoggerFactory.getLogger(ComputerController.class);
 
@@ -67,7 +67,7 @@ public class ComputerController {
 		      BindingResult result, Model model) {
 		logger.info("postAddComputer has been called");
 		if (setStackTrace(model, result)) {
-			model.addAttribute(stack, "dtoComputerValidation.validatorError");
+			model.addAttribute(STACK, "dtoComputerValidation.validatorError");
 			return VIEW_ADD_COMPUTERS;
 		}
 		
@@ -77,13 +77,13 @@ public class ComputerController {
 
 			return VIEW_LIST_COMPUTERS_REDIRECT;
 		} catch (DaoException | ValidationException e) {
-			model.addAttribute(stack, e.getMessage());
+			model.addAttribute(STACK, e.getMessage());
 			return VIEW_ERROR_500;
 		}
 	}
 	
 	@PostMapping("/editComputer")
-	protected String postEditcomputer(@Validated @ModelAttribute("computer")ComputerDto dtoComputer, 
+	public String postEditcomputer(@Validated @ModelAttribute("computer")ComputerDto dtoComputer, 
 		      BindingResult result, Model model) {
 		logger.info("postEditcomputer has been called");
 		if (setStackTrace(model, result)) {
@@ -94,13 +94,13 @@ public class ComputerController {
 			computerService.updateComputer(computer);
 			return VIEW_LIST_COMPUTERS_REDIRECT;
 		} catch (DaoException | ValidationException e) {
-			model.addAttribute(stack, e.getMessage());
+			model.addAttribute(STACK, e.getMessage());
 			return VIEW_ERROR_500;
 		}
 	}
 	
 	@GetMapping("/editComputer")
-	protected String getEditComputer(Model model , @RequestParam(required = false) Map<String, String> param) {
+	public String getEditComputer(Model model , @RequestParam(required = false) Map<String, String> param) {
 		logger.info("getEditComputer has been called");
 
 		Optional<ComputerDto> computer = Optional.empty();		
@@ -117,7 +117,7 @@ public class ComputerController {
 				return VIEW_LIST_COMPUTERS_REDIRECT;
 			}
 		} catch (DaoException | InvalidInputException e) {
-			model.addAttribute(stack, e.getMessage());
+			model.addAttribute(STACK, e.getMessage());
 			return VIEW_ERROR_500;
 		}
 		return VIEW_EDIT_COMPUTER;		
@@ -134,7 +134,7 @@ public class ComputerController {
 				try {
 					computerService.deleteComputer(id);
 				} catch (InvalidInputException e) {
-					model.addAttribute(stack, e.getMessage());
+					model.addAttribute(STACK, e.getMessage());
 					return VIEW_ERROR_500;
 				}
 			}

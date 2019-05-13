@@ -1,6 +1,7 @@
 package com.excilys.computer_database.servlet;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,20 +48,24 @@ public class ComputerRestController {
 		try {
 			showComputers = computerService.pageDtoComputer("", index, size, search, order);
 
-		} catch (DaoException | ValidationException e) {
-			return new ResponseEntity<List<ComputerDto>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (ValidationException e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}		
-		return new ResponseEntity<List<ComputerDto>>(showComputers.getContent(), HttpStatus.OK);
+		return new ResponseEntity<>(showComputers.getContent(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<ComputerDto> findById(@PathVariable Integer id) {
-		ComputerDto computerDto;
+		Optional<ComputerDto> computerDto;
 			try {
-				computerDto = computerService.showDetails(id.toString()).get();
-				return new ResponseEntity<ComputerDto>(computerDto, HttpStatus.OK);
+				computerDto = computerService.showDetails(id.toString());
+				if (computerDto.isPresent()) {
+					return new ResponseEntity<>(computerDto.get(), HttpStatus.OK);
+				} else {
+					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+				}
 			} catch (DaoException | InvalidInputException e) {
-				return new ResponseEntity<ComputerDto>(HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
 			}
 	}

@@ -1,5 +1,7 @@
 package com.excilys.computer_database.validation;
 
+import java.util.Optional;
+
 import com.excilys.computer_database.binding_dto.UserDto;
 import com.excilys.computer_database.binding_exception.DaoException;
 import com.excilys.computer_database.binding_exception.ValidationException;
@@ -17,7 +19,13 @@ public abstract class DtoUserValidation {
 		checkUsername(userDto.getUsername(), userService);
 		checkPassword(userDto.getPassword());
 		
-		return UserMapper.userDtoToUser(userDto).get();
+		Optional<User> user = UserMapper.userDtoToUser(userDto);
+		
+		if (user.isPresent()) {
+			return user.get();
+		} else {
+			throw new ValidationException("Error with userMapper");
+		}
 	}
 	
 	private static void checkUsername(String username, UserService userService) throws ValidationException, DaoException {

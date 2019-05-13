@@ -1,5 +1,7 @@
 package com.excilys.computer_database.binding_dto;
 
+import java.util.Objects;
+
 public class ComputerDto {
 	private int id = 0;
 	private String name;
@@ -75,4 +77,28 @@ public class ComputerDto {
 	    		+ ", Discontinued: " + this.discontinued 
 	    		+ ", Company: (" + Integer.toString(this.companyId) + ", " + this.companyName + ")";
 	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(companyId, companyName, discontinued, id, introduced, name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		ComputerDto other = (ComputerDto) obj;
+		return companyId == other.companyId && Objects.equals(companyName, other.companyName)
+				&& Objects.equals(discontinued, other.discontinued) && id == other.id
+				&& Objects.equals(introduced, other.introduced) && Objects.equals(name, other.name);
+	}
+	
+	
 }

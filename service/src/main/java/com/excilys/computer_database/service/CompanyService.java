@@ -52,7 +52,7 @@ public class CompanyService {
 	}
 	
 	public Company checkDataCreateCompany(String name) throws ValidationException{
-		if (name == null || name == "") {
+		if ("".equals(name)) {
 			throw new ValidationException("Failed to create company : Invalid name");
 		}
 		CompanyBuilder companyBuilder = new CompanyBuilder().setName(name);

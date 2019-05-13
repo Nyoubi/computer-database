@@ -31,7 +31,10 @@ public class ComputerService {
 
 	
 	public List<ComputerDto> listAllComputer(String search, Pageable page) {
-		return daoComputer.findAllByNameContains(search,page).stream().map(computer -> ComputerMapper.computerToDtoComputer(computer)).collect(Collectors.toList());
+		return daoComputer.findAllByNameContains(search,page)
+				.stream()
+				.map(ComputerMapper::computerToDtoComputer)
+				.collect(Collectors.toList());
 	}
 	
 	public Optional<ComputerDto> showDetails(String id)  throws DaoException, InvalidInputException {
@@ -51,7 +54,7 @@ public class ComputerService {
 	
 	public void deleteComputer(String id) throws InvalidInputException {
 		Optional<Integer> ident = Util.parseInt(id);
-		if (Util.checkOptional(ident) != null) {
+		if (ident.isPresent() && Util.checkOptional(ident) != null) {
 			daoComputer.deleteById(ident.get());
 		} else {
 			throw new InvalidInputException("This id : " + id + " is invalid.");
@@ -74,13 +77,13 @@ public class ComputerService {
 		}
 	}
 
-	public Page<ComputerDto> pageDtoComputer(String url, String index, String size, String search, String order) throws ValidationException, DaoException {
+	public Page<ComputerDto> pageDtoComputer(String url, String index, String size, String search, String order) throws ValidationException {
 		List<ComputerDto> result;
 		
 		Optional<Integer> optIndex = Util.parseInt(index);
 		Optional<Integer> optSize = Util.parseInt(size);
 		
-		result = listAllComputer(search, PageRequest.of(optIndex.isPresent() ? optIndex.get()-1 : 0, optIndex.isPresent() ? optSize.get() : 10, getOrder(order)));
+		result = listAllComputer(search, PageRequest.of(optIndex.isPresent() ? optIndex.get()-1 : 0, optSize.isPresent() ? optSize.get() : 10, getOrder(order)));
 
 		Integer count = 0;
 		

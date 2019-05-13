@@ -47,22 +47,6 @@ public class companyServiceTest {
 			fail();
 		}
 	}
-	
-//	@Test
-//	public void testDeleteCompany() {
-//		try {
-//			companyService.createCompany("delete");
-//
-//			companyService.deleteCompany(3);
-//
-//			assertFalse(companyService.findCompanyById(3).isPresent());
-//
-//			companyService.resetAutoIncrement(Integer.valueOf(2));
-//
-//		} catch (ExceptionModel|ExceptionDao e) {
-//			fail();
-//		}
-//	}
 
 	@Test
 	public void testCheckCreateCompany() {

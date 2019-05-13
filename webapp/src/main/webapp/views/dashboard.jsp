@@ -75,42 +75,42 @@
 							<th class="editMode" style="width: 60px; height: 22px;"><input
 								type="checkbox" id="selectall" /> <span
 								style="vertical-align: top;"> - <a href="#"
-									id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
-										class="fa fa-trash-o fa-lg"></i>
+									id="deleteSelected" onclick="$.fn.deleteSelected();"> <em
+										class="fa fa-trash-o fa-lg"></em>
 								</a>
 							</span></th>
 						</sec:authorize>
 
 						<th><spring:message code="dashboard.computer_name" /><a
 							title="Order by name ascendant"
-							href="${computerPage.getOrder('nameAsc')}"><i
-								class="fa fa-arrow-down"></i></a> <a
+							href="${computerPage.getOrder('nameAsc')}"><em
+								class="fa fa-arrow-down"></em></a> <a
 							title="Order by name descendant"
-							href="${computerPage.getOrder('nameDesc')}"><i
-								class="fa fa-arrow-up"></i></a></th>
+							href="${computerPage.getOrder('nameDesc')}"><em
+								class="fa fa-arrow-up"></em></a></th>
 						<th><spring:message code="dashboard.introduced_date" /> <a
 							title="Order by introducted date ascendant"
-							href="${computerPage.getOrder('introAsc')}"><i
-								class="fa fa-arrow-down"></i></a> <a
+							href="${computerPage.getOrder('introAsc')}"><em
+								class="fa fa-arrow-down"></em></a> <a
 							title="Order by introducted date descendant"
-							href="${computerPage.getOrder('introDesc')}"><i
-								class="fa fa-arrow-up"></i></a></th>
+							href="${computerPage.getOrder('introDesc')}"><em
+								class="fa fa-arrow-up"></em></a></th>
 						<!-- Table header for Discontinued Date -->
 						<th><spring:message code="dashboard.discontinued_date" /> <a
 							title="Order by discontinued ascendant"
-							href="${computerPage.getOrder('disconAsc')}"><i
-								class="fa fa-arrow-down"></i></a> <a
+							href="${computerPage.getOrder('disconAsc')}"><em
+								class="fa fa-arrow-down"></em></a> <a
 							title="Order by discontinued descendant"
-							href="${computerPage.getOrder('disconDesc')}"><i
-								class="fa fa-arrow-up"></i></a></th>
+							href="${computerPage.getOrder('disconDesc')}"><em
+								class="fa fa-arrow-up"></em></a></th>
 						<!-- Table header for Company -->
 						<th><spring:message code="dashboard.company" /> <a
 							title="Order by company name ascendant"
-							href="${computerPage.getOrder('companyAsc')}"><i
-								class="fa fa-arrow-down"></i></a> <a
+							href="${computerPage.getOrder('companyAsc')}"><em
+								class="fa fa-arrow-down"></em></a> <a
 							title="Order by company name descendant"
-							href="${computerPage.getOrder('companyDesc')}"><i
-								class="fa fa-arrow-up"></i></a></th>
+							href="${computerPage.getOrder('companyDesc')}"><em
+								class="fa fa-arrow-up"></em></a></th>
 
 					</tr>
 				</thead>

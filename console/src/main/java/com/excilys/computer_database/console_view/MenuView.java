@@ -16,11 +16,14 @@ public class MenuView {
 	public static String show() {
 		String value;
 		input = new Scanner(System.in);
-		logger.info("\n==========================");
+		logger.info("\n========================");
 		logger.info("Choose an option");
-		logger.info(MenuOptionsView.SHOW_COMPUTER.getId() + " - Show details of a computer");
-		logger.info(MenuOptionsView.DELETE_COMPANY.getId() + " - Delete a company");
-		logger.info(MenuOptionsView.EXIT.getId() + " - Exit");
+		logger.info("{} - Show list computer", MenuOptionsView.LIST_COMPUTER.getId());
+		logger.info("{} - Show details of a computer", MenuOptionsView.SHOW_COMPUTER.getId());
+		logger.info("{} - Create a computer", MenuOptionsView.CREATE_COMPUTER.getId());
+		logger.info("{} - Update a computer", MenuOptionsView.UPDATE_COMPUTER.getId());
+		logger.info("{} - Delete a company", MenuOptionsView.DELETE_COMPANY.getId());
+		logger.info("{} - Exit", MenuOptionsView.EXIT.getId());
 		logger.info("==========================\n");
 
 		value = input.nextLine();

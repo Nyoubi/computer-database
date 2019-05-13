@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.computer_database.binding_dto.ComputerDto;
-import com.excilys.computer_database.binding_exception.DaoException;
 import com.excilys.computer_database.binding_exception.ValidationException;
 import com.excilys.computer_database.model.Page;
 import com.excilys.computer_database.service.ComputerService;
@@ -41,7 +40,7 @@ public class DashBoardController {
 		try {
 			showComputers = computerService.pageDtoComputer(VIEW_LIST_COMPUTERS, index, size, search, order);
 
-		} catch (DaoException | ValidationException e) {
+		} catch ( ValidationException e) {
 			model.addAttribute("stackTrace", e.getMessage());
 			return VIEW_ERROR_500;
 		}

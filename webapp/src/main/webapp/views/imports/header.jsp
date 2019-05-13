@@ -6,10 +6,10 @@
 		<a class="navbar-brand pull-left" href="/webapp/computer/dashboard">
 			<spring:message code="dashboard.title" />
 		</a> <span class="pull-right"> <a href="#"
-			onClick="changeLanguage('en')"> <img class="lang-flag"
+			onClick="changeLanguage('en')"> <img class="lang-flag" alt="<spring:message code='header.flagen'/>"
 				src="<c:url value="/assets/en.png" />" />
 		</a> <a href="#" onClick="changeLanguage('fr')"><img class="lang-flag"
-				src="<c:url value="/assets/fr.png" />" /> </a>
+				alt="<spring:message code='header.flagfr'/>" src="<c:url value="/assets/fr.png" />" /> </a>
 		</span>
 		<sec:authorize access="hasAnyAuthority('ADMIN','USER')">
 			<div class="pull-right logout">

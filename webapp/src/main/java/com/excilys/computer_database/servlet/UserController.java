@@ -30,7 +30,7 @@ public class UserController {
 	private UserService userService;
 	
 	@PostMapping("/createAccount")
-	protected String postCreate(@ModelAttribute("user")UserDto userDto, BindingResult result, Model model) {
+	public String postCreate(@ModelAttribute("user")UserDto userDto, BindingResult result, Model model) {
 		logger.info("postCreate has been called");
 		try {
 			User user = DtoUserValidation.checkDataUser(userDto, userService);

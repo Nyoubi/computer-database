@@ -25,11 +25,14 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<h1><spring:message code="editComputer.edit_computer"/> ${computer.getName()}</h1>
 					<form:form modelAttribute="computer" name="editForm" id="editForm" action="editComputer" method="POST">
 						<form:input path="id" type="hidden" value="${computer.getId()}"
 							id="idComputer" name="idComputer" />
 						<fieldset>
+						<legend>
+							<spring:message code="editComputer.edit_computer"/> ${computer.getName()}
+						</legend>
+						
 							<div class="form-group">
 								 <form:errors path="name" cssClass="alert alert-danger" element="p"/>
 				

@@ -8,9 +8,11 @@ import com.excilys.computer_database.binding_dto.ComputerDtoBuilder;
 import com.excilys.computer_database.model.Computer;
 import com.excilys.computer_database.utils.Util;
 
-public abstract class ComputerMapper{
+public class ComputerMapper{
 
-
+	//Private constructor
+	private ComputerMapper () {}
+	
 	public static ComputerDto computerToDtoComputer(Computer computer){
 		ComputerDtoBuilder dtoComputerBuilder = new ComputerDtoBuilder();
 

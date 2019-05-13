@@ -13,6 +13,7 @@ import com.excilys.computer_database.binding_dto.ComputerDto;
 import com.excilys.computer_database.console.RestClient;
 import com.excilys.computer_database.console_view.CreateComputerView;
 import com.excilys.computer_database.console_view.DeleteCompanyView;
+import com.excilys.computer_database.console_view.DeleteComputerView;
 import com.excilys.computer_database.console_view.MenuOptionsView;
 import com.excilys.computer_database.console_view.MenuView;
 import com.excilys.computer_database.console_view.ShowComputerView;
@@ -30,6 +31,7 @@ public class CliController {
 	 * Controller logger, used to trace logs
 	 */
 	private static Logger logger = LoggerFactory.getLogger(CliController.class);
+	private RestClient client = new RestClient();
 
 
 	/**
@@ -40,7 +42,6 @@ public class CliController {
 	 */
 	public void run() {
 		boolean run = true;
-		RestClient client = new RestClient();
 
 		while (run) {
 			String input = MenuView.show();
@@ -54,7 +55,7 @@ public class CliController {
 				break;
 
 			case SHOW_COMPUTER: 
-				show(client);
+				show();
 				break;
 			case DELETE_COMPANY:
 				Optional<Integer> id = Util.parseInt(DeleteCompanyView.show());
@@ -66,11 +67,15 @@ public class CliController {
 				break;
 
 			case CREATE_COMPUTER:
-				create(client);
+				create();
 				break;
-				
+
 			case UPDATE_COMPUTER:
-				update(client);
+				update();
+				break;
+
+			case DELETE_COMPUTER:
+				delete();
 				break;
 
 			case EXIT:
@@ -91,8 +96,8 @@ public class CliController {
 		companyService.deleteCompany(id);
 		DeleteCompanyView.exec(true);
 	}
-	
-	private void show(RestClient client) {
+
+	private void show() {
 		Optional<Integer> id = Util.parseInt(ShowComputerView.show());
 		if (id.isPresent()) {
 			String computer = client.showDetails(id.get()).toString();
@@ -101,8 +106,8 @@ public class CliController {
 			logger.info("Wrong input, try again.");
 		}
 	}
-	
-	private void create (RestClient client) {
+
+	private void create () {
 		ComputerDto data = CreateComputerView.show();
 		if (client.create(data) != 200){
 			logger.info("Wrong input");
@@ -112,7 +117,7 @@ public class CliController {
 		}
 	}
 
-	private void update (RestClient client) {
+	private void update () {
 		Optional<Integer> id = UpdateComputerView.showId();
 		if (id.isPresent()){
 			ComputerDto data = UpdateComputerView.show();
@@ -121,6 +126,21 @@ public class CliController {
 			}
 			else {
 				logger.info("Computer updated");
+			}
+		}
+		else {
+			logger.info("Wrong input");
+		}
+	}
+
+	private void delete () {
+		Optional<Integer> id = DeleteComputerView.show();
+		if (id.isPresent()){
+			if (client.delete(id.get()) != 200){
+				logger.info("Error delete");
+			}
+			else {
+				logger.info("Computer deleted");
 			}
 		}
 		else {

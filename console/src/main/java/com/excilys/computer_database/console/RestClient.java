@@ -45,4 +45,12 @@ public class RestClient {
 			  .put(Entity.json(computer))
 			  .getStatus();
 	}
+	
+	public int delete(int id) {
+		return client.target(URL)
+			  .path(String.valueOf(id))
+			  .request(MediaType.APPLICATION_JSON)
+			  .delete()
+			  .getStatus();
+	}
 }

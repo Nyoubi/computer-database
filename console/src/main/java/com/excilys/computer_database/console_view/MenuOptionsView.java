@@ -6,8 +6,9 @@ public enum MenuOptionsView {
 	SHOW_COMPUTER(2),
 	CREATE_COMPUTER(3),
 	UPDATE_COMPUTER(4),
-	DELETE_COMPANY(5),
-	EXIT(4);
+	DELETE_COMPUTER(5),
+	DELETE_COMPANY(6),
+	EXIT(7);
 	
 	private final Integer id;
 	
